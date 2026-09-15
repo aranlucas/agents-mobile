@@ -18,7 +18,7 @@ import {
   useRenderToolCall,
   type ToolCall,
 } from "@copilotkit/react-native/headless";
-import { NativeMarkdown, type NativeMarkdownStyle } from "@agents/native-markdown";
+import { NativeMarkdown, type NativeMarkdownStyle } from "@/native-markdown";
 import type { FitnessState, GroceryState, TripState, WellnessState } from "@agents/types";
 import type { AgentId } from "@/utils/agent-config";
 import { runWithCurrentClerkToken } from "@/utils/copilotkit-auth";

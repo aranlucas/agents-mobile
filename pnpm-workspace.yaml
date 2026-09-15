@@ -1,0 +1,19 @@
+packages:
+  - "packages/*"
+
+minimumReleaseAge: 0
+
+syncInjectedDepsAfterScripts:
+  - fmt
+
+overrides:
+  "react-native-markdown-display>markdown-it": "14.3.0"
+
+allowBuilds:
+  "@clerk/shared": true
+  "@sentry/cli": false
+  bufferutil: true
+  "core-js": true
+  "core-js-pure": true
+  esbuild: true
+  "utf-8-validate": true

@@ -57,6 +57,10 @@ export const Platform = {
   },
 };
 
+export const PixelRatio = {
+  getFontScale: () => 1,
+};
+
 export const Alert = {
   alert() {},
   prompt(

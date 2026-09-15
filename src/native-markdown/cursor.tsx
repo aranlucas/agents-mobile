@@ -1,8 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Animated } from "react-native";
 
 export function StreamingCursor() {
-  const opacity = useRef(new Animated.Value(1)).current;
+  const [opacity] = useState(() => new Animated.Value(1));
 
   useEffect(() => {
     const animation = Animated.loop(

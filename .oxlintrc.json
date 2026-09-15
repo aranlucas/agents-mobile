@@ -1,6 +1,6 @@
 {
-  "$schema": "../../node_modules/oxlint/configuration_schema.json",
-  "extends": ["../../packages/oxlint-config/base.json"],
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "extends": ["./packages/oxlint-config/base.json"],
   "plugins": ["import", "jsx-a11y", "react", "typescript", "unicorn"],
   "env": {
     "browser": true,

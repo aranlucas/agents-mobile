@@ -25,19 +25,21 @@ From the repository root:
 
 ```bash
 pnpm install
-pnpm --filter mobile start
-pnpm --filter mobile android
-pnpm --filter mobile ios
-pnpm --filter mobile web
+pnpm start
+pnpm android
+pnpm ios
+pnpm web
 ```
 
 Validate the app with:
 
 ```bash
-pnpm --filter mobile lint
-pnpm --filter mobile fmt:check
-pnpm --filter mobile typecheck
-pnpm --filter mobile test
+pnpm lint
+pnpm fmt:check
+pnpm typecheck
+pnpm test
 ```
 
 EAS build profiles live in `eas.json`. The custom Health Connect module requires a development client or native build; it is unavailable in Expo Go.
+
+The markdown renderer used by the agent chat is kept in `src/native-markdown` so this app is self-contained; it is no longer a workspace dependency.

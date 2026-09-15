@@ -3,7 +3,7 @@ export * from "./generated/agent-contracts";
 import type { OralBoardsSkill } from "./generated/agent-contracts";
 
 // UI-only contracts stay authored here. Agent identity and client-visible
-// backend state are generated from Go by `pnpm --filter agents contracts:generate`.
+// backend state are generated from Go in the upstream `agents` repository.
 
 // Artifact kinds rendered by the shared console artifact panel.
 export type ArtifactKind = "markdown" | "document" | "list" | "code" | "plan";
