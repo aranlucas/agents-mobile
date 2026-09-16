@@ -39,7 +39,7 @@ export const PixelRatio = {
 export const Animated = {
   Text: "Animated.Text",
   Value: class {
-    constructor(_value: number) {}
+    constructor(readonly value: number) {}
   },
   loop(animation: { start(): void; stop(): void }) {
     return animation;
