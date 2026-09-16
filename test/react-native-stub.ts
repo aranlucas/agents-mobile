@@ -1,5 +1,3 @@
-import type { ReactNode } from "react";
-import { Fragment, createElement } from "react";
 // Minimal `react-native` stub for running unit tests under Node. The host
 // component names keep react-test-renderer traversal simple.
 
@@ -10,32 +8,9 @@ export const Text = "Text";
 export const TextInput = "TextInput";
 export const Pressable = "Pressable";
 export const ScrollView = "ScrollView";
-export const Switch = "Switch";
 export const Image = "Image";
 export const ActivityIndicator = "ActivityIndicator";
 export const KeyboardAvoidingView = "KeyboardAvoidingView";
-export const TouchableWithoutFeedback = "TouchableWithoutFeedback";
-
-export function FlatList<T>({
-  data,
-  renderItem,
-  ListEmptyComponent,
-  ...props
-}: {
-  data?: T[];
-  renderItem?: (info: { item: T; index: number }) => ReactNode;
-  ListEmptyComponent?: ReactNode;
-}) {
-  return createElement(
-    "FlatList",
-    props,
-    data?.length
-      ? data.map((item, index) =>
-          createElement(Fragment, { key: index }, renderItem?.({ item, index })),
-        )
-      : ListEmptyComponent,
-  );
-}
 
 export const StyleSheet = {
   create<T extends Record<string, StyleObject>>(styles: T): T {
@@ -61,43 +36,25 @@ export const PixelRatio = {
   getFontScale: () => 1,
 };
 
-export const Alert = {
-  alert() {},
-  prompt(
-    _title: string,
-    _message?: string,
-    buttons?: Array<{ onPress?: (value?: string) => void }>,
-  ) {
-    buttons?.find((button) => button.onPress)?.onPress?.("Renamed");
+export const Animated = {
+  Text: "Animated.Text",
+  Value: class {
+    constructor(_value: number) {}
+  },
+  loop(animation: { start(): void; stop(): void }) {
+    return animation;
+  },
+  sequence(_animations: unknown[]) {
+    return { start() {}, stop() {} };
+  },
+  timing(_value: unknown, _config: unknown) {
+    return { start() {}, stop() {} };
   },
 };
-
-export const Linking = {
-  openURL: async () => undefined,
-};
-
-export const Keyboard = {
-  dismiss() {},
-};
-
-export const InteractionManager = {
-  createInteractionHandle: () => 1,
-  clearInteractionHandle() {},
-};
-
-export function useWindowDimensions() {
-  return { width: 390, height: 844, scale: 3, fontScale: 1 };
-}
 
 export function useColorScheme() {
   return "light";
 }
 
 export type ViewStyle = Record<string, unknown>;
-export type TextStyle = Record<string, unknown>;
-export type ImageStyle = Record<string, unknown>;
-export type StyleProp<T> = T | T[] | null | undefined;
 export type ColorValue = string;
-export type LayoutChangeEvent = { nativeEvent: { layout: { height: number; width: number } } };
-export type ViewProps = Record<string, unknown>;
-export type ImageProps = Record<string, unknown>;

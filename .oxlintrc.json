@@ -39,13 +39,7 @@
         "jsx-a11y/aria-role": "off",
         "jsx-a11y/heading-has-content": "off"
       }
-    },
-    {
-      "files": ["src/components/chat/conversation.tsx"],
-      "rules": {
-        "react-hooks/exhaustive-deps": "off"
-      }
     }
   ],
-  "ignorePatterns": [".expo/**", "uniwind-types.d.ts"]
+  "ignorePatterns": [".expo/**"]
 }

@@ -1,26 +1,28 @@
-export * from "./generated/agent-contracts";
+import { AGENT_BACKEND_PATHS as ALL_AGENT_BACKEND_PATHS } from "./generated/agent-contracts";
+import type { AgentId as AllAgentId } from "./generated/agent-contracts";
 
-import type { OralBoardsSkill } from "./generated/agent-contracts";
+export type {
+  FitnessState,
+  GroceryState,
+  TripState,
+  WellnessState,
+} from "./generated/agent-contracts";
 
-// UI-only contracts stay authored here. Agent identity and client-visible
-// backend state are generated from Go in the upstream `agents` repository.
+// Native screens only host these four agents. Keep the generated Go contracts
+// intact and filter identity here so regenerating from upstream cannot widen
+// the mobile public surface.
+export const AGENT_ORDER = [
+  "travel",
+  "grocery",
+  "fitness",
+  "wellness",
+] as const satisfies readonly AllAgentId[];
 
-// Artifact kinds rendered by the shared console artifact panel.
-export type ArtifactKind = "markdown" | "document" | "list" | "code" | "plan";
+export type AgentId = (typeof AGENT_ORDER)[number];
 
-// Display metadata for the three blueprint skill levels. The values are UI
-// copy; the OralBoardsSkill union itself is generated from the Go constants.
-export const OCE_SKILL_LEVELS: Record<OralBoardsSkill, { label: string; description: string }> = {
-  remember: {
-    label: "Remember",
-    description: "Recall facts, terms, and basic concepts.",
-  },
-  understand_apply: {
-    label: "Understand / Apply",
-    description: "Explain concepts and apply knowledge to the clinical situation.",
-  },
-  analyze_evaluate: {
-    label: "Analyze / Evaluate",
-    description: "Analyze, compare, and evaluate to reach and defend a decision.",
-  },
-};
+export const AGENT_BACKEND_PATHS = {
+  travel: ALL_AGENT_BACKEND_PATHS.travel,
+  grocery: ALL_AGENT_BACKEND_PATHS.grocery,
+  fitness: ALL_AGENT_BACKEND_PATHS.fitness,
+  wellness: ALL_AGENT_BACKEND_PATHS.wellness,
+} as const satisfies Record<AgentId, string>;
