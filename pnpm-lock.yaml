@@ -194,8 +194,8 @@ importers:
         specifier: ~57.0.12
         version: 57.0.12(expo@57.0.23)(react-native@0.86.3(@babel/core@7.29.7(supports-color@11.0.0))(@react-native/metro-config@0.86.3(@babel/core@7.29.7(supports-color@11.0.0))(bufferutil@4.1.0)(supports-color@11.0.0)(utf-8-validate@6.0.6))(@types/react@19.2.18)(bufferutil@4.1.0)(react@19.2.3)(supports-color@11.0.0)(utf-8-validate@6.0.6))(react@19.2.3)(supports-color@11.0.0)
       expo-build-properties:
-        specifier: ~57.0.20
-        version: 57.0.20(expo@57.0.23)
+        specifier: ~58.0.0
+        version: 58.0.3(expo@57.0.23)
       expo-constants:
         specifier: ~57.0.18
         version: 57.0.18(expo@57.0.23)(react-native@0.86.3(@babel/core@7.29.7(supports-color@11.0.0))(@react-native/metro-config@0.86.3(@babel/core@7.29.7(supports-color@11.0.0))(bufferutil@4.1.0)(supports-color@11.0.0)(utf-8-validate@6.0.6))(@types/react@19.2.18)(bufferutil@4.1.0)(react@19.2.3)(supports-color@11.0.0)(utf-8-validate@6.0.6))(supports-color@11.0.0)
@@ -1061,6 +1061,9 @@ packages:
 
   '@expo/schema-utils@57.0.2':
     resolution: {integrity: sha512-fMu/jyN0l1Wzv7XkeWR4IYCx1M8ryui3FdBNGrWwbRgJ7EhxXxK8E2jxP2W3pbgUwUY0V3hG8+GyfCZwny+Lxw==}
+
+  '@expo/schema-utils@58.0.0':
+    resolution: {integrity: sha512-uquoQiXlIxnyrvnRXOb7JRjqPiSWVM5Aci5Cqdp+YELOU3rVDrk1Tal2uc5XGs6fmQIhhwz25p9BzAWhbqBrkw==}
 
   '@expo/sdk-runtime-versions@1.0.0':
     resolution: {integrity: sha512-Doz2bfiPndXYFPMRwPyGa1k5QaKDVpY806UJj570epIiMzWaYyCtobasyfC++qfIXVb5Ocy7r3tP9d62hAQ7IQ==}
@@ -4248,8 +4251,8 @@ packages:
       react: '*'
       react-native: '*'
 
-  expo-build-properties@57.0.20:
-    resolution: {integrity: sha512-rQ3Xt5slDXJQL+vevO1AsYAiCQsIq8c8bz1JfSK/UstPr3Md8fypaS/wcp6f67yZu4CzQSuPFC0hR46raHLTzg==}
+  expo-build-properties@58.0.3:
+    resolution: {integrity: sha512-BcnplpKv1UA5WEZSFIB3ckCZRP2KtD0IrIi+1vrNzTv44adx3BIsfsSEUlURCHf+Cz0yP5Lc3nMvxoL9u2N3zw==}
     peerDependencies:
       expo: '*'
 
@@ -8546,6 +8549,8 @@ snapshots:
 
   '@expo/schema-utils@57.0.2': {}
 
+  '@expo/schema-utils@58.0.0': {}
+
   '@expo/sdk-runtime-versions@1.0.0': {}
 
   '@expo/spawn-async@1.8.0':
@@ -11892,9 +11897,9 @@ snapshots:
       - expo
       - supports-color
 
-  expo-build-properties@57.0.20(expo@57.0.23):
+  expo-build-properties@58.0.3(expo@57.0.23):
     dependencies:
-      '@expo/schema-utils': 57.0.2
+      '@expo/schema-utils': 58.0.0
       expo: 57.0.23(b55d9fc7a3c0589df3c4cde40f540e88)
       resolve-from: 5.0.0
       semver: 7.8.5
