@@ -1,4 +1,3 @@
-import { AGENT_BACKEND_PATHS as ALL_AGENT_BACKEND_PATHS } from "./generated/agent-contracts";
 import type { AgentId as AllAgentId } from "./generated/agent-contracts";
 
 export type {
@@ -19,10 +18,3 @@ export const AGENT_ORDER = [
 ] as const satisfies readonly AllAgentId[];
 
 export type AgentId = (typeof AGENT_ORDER)[number];
-
-export const AGENT_BACKEND_PATHS = {
-  travel: ALL_AGENT_BACKEND_PATHS.travel,
-  grocery: ALL_AGENT_BACKEND_PATHS.grocery,
-  fitness: ALL_AGENT_BACKEND_PATHS.fitness,
-  wellness: ALL_AGENT_BACKEND_PATHS.wellness,
-} as const satisfies Record<AgentId, string>;
