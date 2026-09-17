@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, View } from "react-native";
-import { ToolCallStatus, useRenderTool } from "@copilotkit/react-native/headless";
+import { ToolCallStatus, useFrontendTool } from "@copilotkit/react-native/headless";
 import { z } from "zod";
 
 export const PRODUCT_RESULTS_TOOL_NAME = "show_product_results";
@@ -115,7 +115,7 @@ export function ProductResultsCard({
 }
 
 export function GroceryProductResultsTool() {
-  useRenderTool(
+  useFrontendTool(
     {
       name: PRODUCT_RESULTS_TOOL_NAME,
       agentId: "grocery",

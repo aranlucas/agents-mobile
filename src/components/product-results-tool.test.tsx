@@ -11,7 +11,7 @@ Object.defineProperty(globalThis, "IS_REACT_ACT_ENVIRONMENT", {
   value: true,
 });
 
-vi.mock("@copilotkit/react-native", () => ({ useRenderTool: vi.fn() }));
+vi.mock("@copilotkit/react-native", () => ({ useFrontendTool: vi.fn() }));
 
 async function render(element: React.ReactElement) {
   let tree: ReactTestRenderer;
