@@ -19,7 +19,7 @@ function normalizeLocalhostForPlatform(value: string, os: string) {
 }
 
 function nonEmpty(value: string | undefined) {
-  // eslint-disable-next-line typescript/prefer-nullish-coalescing
+  // oxlint-disable-next-line typescript/prefer-nullish-coalescing
   return value?.trim() || undefined;
 }
 
