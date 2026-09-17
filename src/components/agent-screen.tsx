@@ -11,6 +11,7 @@ import {
   TextInput,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "@clerk/expo";
 import {
   useAgent,
@@ -37,6 +38,8 @@ type AgentScreenConfig<TState extends AgentState> = {
 type Props<TState extends AgentState> = {
   config: AgentScreenConfig<TState>;
   initialState: TState;
+  /** Skip top inset when a parent already wraps this column. */
+  safeArea?: boolean;
 };
 
 type DisplayMessage = { id: string; role: "user" | "assistant"; content: string };
@@ -85,7 +88,11 @@ function toDisplayItems(m: unknown, index: number): DisplayItem[] {
   return items;
 }
 
-export function AgentScreen<TState extends AgentState>({ config, initialState }: Props<TState>) {
+export function AgentScreen<TState extends AgentState>({
+  config,
+  initialState,
+  safeArea = true,
+}: Props<TState>) {
   const [input, setInput] = useState("");
   const scrollRef = useRef<ScrollView>(null);
 
@@ -126,83 +133,85 @@ export function AgentScreen<TState extends AgentState>({ config, initialState }:
   const summary = config.renderSummary(state);
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
-      <View style={[styles.header, { borderTopColor: config.accentColor }]}>
-        {/* eslint-disable-next-line typescript/prefer-nullish-coalescing */}
-        {summary ? (
-          summary
-        ) : (
-          <View style={styles.emptyState}>
-            <Text selectable style={styles.emptyTitle}>
-              {config.title}
-            </Text>
-            <Text selectable style={styles.emptySubtitle}>
-              {config.subtitle}
-            </Text>
-          </View>
-        )}
-      </View>
-
-      <ScrollView
-        ref={scrollRef}
-        style={styles.messageList}
-        contentContainerStyle={styles.messageContent}
-        onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: true })}
+    <SafeAreaView style={styles.container} edges={safeArea ? ["top"] : []}>
+      <KeyboardAvoidingView
+        style={styles.fill}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        {messages.map((m, index) => {
-          if ("kind" in m) {
-            const rendered = renderToolCall({ toolCall: m.toolCall });
-            return rendered ? (
-              <View key={m.id} style={styles.toolCall}>
-                {rendered}
-              </View>
-            ) : null;
-          }
-          return (
-            <View
-              key={m.id}
-              style={[styles.bubble, m.role === "user" ? styles.userBubble : styles.agentBubble]}
-            >
-              {m.role === "user" ? (
-                <Text selectable style={[styles.bubbleText, styles.userText]}>
-                  {m.content}
-                </Text>
-              ) : (
-                <NativeMarkdown
-                  isStreaming={isLoading && index === messages.length - 1}
-                  style={markdownStyle}
-                >
-                  {m.content}
-                </NativeMarkdown>
-              )}
+        <View style={[styles.header, { borderTopColor: config.accentColor }]}>
+          {/* eslint-disable-next-line typescript/prefer-nullish-coalescing */}
+          {summary ? (
+            summary
+          ) : (
+            <View style={styles.emptyState}>
+              <Text selectable style={styles.emptyTitle}>
+                {config.title}
+              </Text>
+              <Text selectable style={styles.emptySubtitle}>
+                {config.subtitle}
+              </Text>
             </View>
-          );
-        })}
-        {isLoading && <ActivityIndicator style={styles.loading} />}
-      </ScrollView>
+          )}
+        </View>
 
-      <View style={styles.inputRow}>
-        <TextInput
-          style={styles.input}
-          value={input}
-          onChangeText={setInput}
-          placeholder={config.placeholder}
-          placeholderTextColor="#777"
-          onSubmitEditing={onSend}
-          returnKeyType="send"
-          multiline
-        />
-        <Pressable
-          style={[styles.sendButton, { backgroundColor: config.accentColor }]}
-          onPress={onSend}
+        <ScrollView
+          ref={scrollRef}
+          style={styles.messageList}
+          contentContainerStyle={styles.messageContent}
+          onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: true })}
         >
-          <Text style={styles.sendText}>Send</Text>
-        </Pressable>
-      </View>
-    </KeyboardAvoidingView>
+          {messages.map((m, index) => {
+            if ("kind" in m) {
+              const rendered = renderToolCall({ toolCall: m.toolCall });
+              return rendered ? (
+                <View key={m.id} style={styles.toolCall}>
+                  {rendered}
+                </View>
+              ) : null;
+            }
+            return (
+              <View
+                key={m.id}
+                style={[styles.bubble, m.role === "user" ? styles.userBubble : styles.agentBubble]}
+              >
+                {m.role === "user" ? (
+                  <Text selectable style={[styles.bubbleText, styles.userText]}>
+                    {m.content}
+                  </Text>
+                ) : (
+                  <NativeMarkdown
+                    isStreaming={isLoading && index === messages.length - 1}
+                    style={markdownStyle}
+                  >
+                    {m.content}
+                  </NativeMarkdown>
+                )}
+              </View>
+            );
+          })}
+          {isLoading && <ActivityIndicator style={styles.loading} />}
+        </ScrollView>
+
+        <View style={styles.inputRow}>
+          <TextInput
+            style={styles.input}
+            value={input}
+            onChangeText={setInput}
+            placeholder={config.placeholder}
+            placeholderTextColor="#777"
+            onSubmitEditing={onSend}
+            returnKeyType="send"
+            multiline
+          />
+          <Pressable
+            style={[styles.sendButton, { backgroundColor: config.accentColor }]}
+            onPress={onSend}
+          >
+            <Text style={styles.sendText}>Send</Text>
+          </Pressable>
+        </View>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
@@ -225,6 +234,7 @@ export function SummaryCard({ children }: { children: ReactNode }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fff" },
+  fill: { flex: 1 },
   header: {
     borderTopWidth: 4,
     borderBottomWidth: 1,

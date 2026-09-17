@@ -1,5 +1,6 @@
 import type { FitnessState } from "@agents/types";
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { AgentScreen, Field, SummaryCard } from "@/components/agent-screen";
 import { useHealthDataSync } from "@/hooks/use-health-data-sync";
 
@@ -23,10 +24,10 @@ const FITNESS_CONFIG = {
 
 export default function FitnessScreen() {
   return (
-    <View style={styles.screen}>
+    <SafeAreaView style={styles.screen} edges={["top"]}>
       <HealthConnectCard />
-      <AgentScreen<FitnessState> config={FITNESS_CONFIG} initialState={{}} />
-    </View>
+      <AgentScreen<FitnessState> config={FITNESS_CONFIG} initialState={{}} safeArea={false} />
+    </SafeAreaView>
   );
 }
 

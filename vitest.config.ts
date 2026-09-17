@@ -12,6 +12,10 @@ export default defineConfig({
       },
       { find: "expo/fetch", replacement: resolve(__dirname, "./test/expo-fetch-stub.ts") },
       { find: "react-native", replacement: resolve(__dirname, "./test/react-native-stub.ts") },
+      {
+        find: "react-native-safe-area-context",
+        replacement: resolve(__dirname, "./test/safe-area-context-stub.ts"),
+      },
       // Deprecated CJS polyfill (see test/text-encoding-stub.ts): no ESM named
       // exports for Node to bind. Redirected to node:util globals.
       { find: /^text-encoding$/, replacement: resolve(__dirname, "./test/text-encoding-stub.ts") },
