@@ -36,22 +36,6 @@ export const PixelRatio = {
   getFontScale: () => 1,
 };
 
-export const Animated = {
-  Text: "Animated.Text",
-  Value: class {
-    constructor(readonly value: number) {}
-  },
-  loop(animation: { start(): void; stop(): void }) {
-    return animation;
-  },
-  sequence(_animations: unknown[]) {
-    return { start() {}, stop() {} };
-  },
-  timing(_value: unknown, _config: unknown) {
-    return { start() {}, stop() {} };
-  },
-};
-
 export function useColorScheme() {
   return "light";
 }

@@ -6,6 +6,7 @@ import "@/shims/node-crypto";
 // oxlint-disable-next-line import/no-unassigned-import
 import "@copilotkit/react-native/polyfills";
 import * as SecureStore from "expo-secure-store";
+import { StatusBar } from "expo-status-bar";
 import { AppProviders } from "@/components/app-providers";
 import { AppTabs } from "@/components/app-tabs";
 import { Sentry } from "@/utils/sentry";
@@ -23,6 +24,7 @@ function RootLayout() {
   return (
     <AppProviders tokenCache={tokenCache}>
       <AppTabs />
+      <StatusBar style="auto" />
     </AppProviders>
   );
 }

@@ -66,12 +66,3 @@ export function splitMarkdownBlocks(markdown: string): string[] {
   commit();
   return blocks;
 }
-
-/**
- * Truncates markdown to its first `maxBlocks` top-level blocks without
- * corrupting fenced code blocks or list continuations.
- */
-export function limitMarkdownBlocks(markdown: string, maxBlocks?: number): string {
-  if (!maxBlocks || maxBlocks < 1) return markdown;
-  return splitMarkdownBlocks(markdown.trim()).slice(0, maxBlocks).join("\n\n");
-}

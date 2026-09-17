@@ -8,7 +8,6 @@ import Markdown, {
 import remend from "remend";
 
 import { splitMarkdownBlocks } from "./blocks";
-import { StreamingCursor } from "./cursor";
 import { createMarkdownRules, markdownRules } from "./rules";
 import { taskListPlugin } from "./task-list-plugin";
 
@@ -16,9 +15,7 @@ export type NativeMarkdownStyle = NonNullable<MarkdownProps["style"]>;
 
 export type NativeMarkdownProps = {
   children: string;
-  cursor?: boolean;
   isStreaming?: boolean;
-  maxBlocks?: number;
   onLinkPress?: (url: string) => boolean;
   selectable?: boolean;
   style?: NativeMarkdownStyle;
@@ -49,17 +46,15 @@ const MarkdownBlock = memo(function MarkdownBlock({
 
 export const NativeMarkdown = memo(function NativeMarkdown({
   children,
-  cursor = false,
   isStreaming = false,
-  maxBlocks,
   onLinkPress = safeLink,
   selectable = true,
   style,
 }: NativeMarkdownProps) {
   const mergedStyle = useMemo(() => mergeStyles(style), [style]);
   const blocks = useMemo(
-    () => prepareMarkdownBlocks(children, maxBlocks, isStreaming),
-    [children, isStreaming, maxBlocks],
+    () => prepareMarkdownBlocks(children, isStreaming),
+    [children, isStreaming],
   );
   const rules = selectable ? markdownRules : nonSelectableMarkdownRules;
 
@@ -77,21 +72,15 @@ export const NativeMarkdown = memo(function NativeMarkdown({
           {block}
         </MarkdownBlock>
       ))}
-      {isStreaming && cursor ? <StreamingCursor /> : null}
     </View>
   );
 });
 
-export function prepareMarkdownBlocks(
-  markdown: string,
-  maxBlocks?: number,
-  isStreaming = false,
-): string[] {
+export function prepareMarkdownBlocks(markdown: string, isStreaming = false): string[] {
   const blocks = splitMarkdownBlocks(markdown);
-  const visibleBlocks = maxBlocks && maxBlocks > 0 ? blocks.slice(0, maxBlocks) : blocks;
-  if (!isStreaming || visibleBlocks.length === 0) return visibleBlocks;
+  if (!isStreaming || blocks.length === 0) return blocks;
 
-  const repairedBlocks = [...visibleBlocks];
+  const repairedBlocks = [...blocks];
   const lastIndex = repairedBlocks.length - 1;
   repairedBlocks[lastIndex] = remend(repairedBlocks[lastIndex] ?? "");
   return repairedBlocks;
