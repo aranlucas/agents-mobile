@@ -303,4 +303,32 @@ describe("mobile real feature surface", () => {
       tree.unmount();
     });
   });
+
+  it("insets agent chrome and the fitness health card below the status bar", async () => {
+    const { StatusBar } = await import("expo-status-bar");
+    const { default: NativeLayout } = await import("./app/_layout");
+    const { default: TravelScreen } = await import("./app/travel");
+    const { default: FitnessScreen } = await import("./app/fitness");
+
+    const native = await render(<NativeLayout />);
+    const travel = await render(<TravelScreen />);
+    const fitness = await render(<FitnessScreen />);
+
+    expect(native.root.findAllByType(StatusBar)).toHaveLength(1);
+
+    const travelSafe = travel.root.findAllByType("SafeAreaView");
+    expect(travelSafe).toHaveLength(1);
+    expect(travelSafe[0]?.props.edges).toEqual(["top"]);
+
+    expect(fitness.root.findAllByType("SafeAreaView").map((node) => node.props.edges)).toEqual([
+      ["top"],
+      [],
+    ]);
+
+    await act(async () => {
+      native.unmount();
+      travel.unmount();
+      fitness.unmount();
+    });
+  });
 });
