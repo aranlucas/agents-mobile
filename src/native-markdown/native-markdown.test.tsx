@@ -206,11 +206,11 @@ describe("NativeMarkdown rendering rules", () => {
 
 describe("NativeMarkdown streaming preparation", () => {
   it("applies remend to the last block only while streaming", () => {
-    expect(prepareMarkdownBlocks("**complete**\n\n**partial", undefined, true)).toEqual([
+    expect(prepareMarkdownBlocks("**complete**\n\n**partial", true)).toEqual([
       "**complete**",
       "**partial**",
     ]);
-    expect(prepareMarkdownBlocks("**complete**\n\n**partial", undefined, false)).toEqual([
+    expect(prepareMarkdownBlocks("**complete**\n\n**partial", false)).toEqual([
       "**complete**",
       "**partial",
     ]);

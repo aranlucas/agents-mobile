@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { limitMarkdownBlocks, splitMarkdownBlocks } from "./blocks";
+import { splitMarkdownBlocks } from "./blocks";
 
 describe("splitMarkdownBlocks", () => {
   it("keeps fenced code with interior blank lines together", () => {
@@ -36,19 +36,5 @@ describe("splitMarkdownBlocks", () => {
 
   it("normalizes CRLF input", () => {
     expect(splitMarkdownBlocks("First\r\n\r\nSecond\r\nline")).toEqual(["First", "Second\nline"]);
-  });
-});
-
-describe("limitMarkdownBlocks", () => {
-  it("keeps markdown syntax intact when limiting a preview", () => {
-    expect(
-      limitMarkdownBlocks("**Meal Plan**\n\n**Thursday**\n\n- Breakfast\n- Lunch\n\n**Friday**", 2),
-    ).toBe("**Meal Plan**\n\n**Thursday**");
-  });
-
-  it("never cuts inside a fenced code block", () => {
-    expect(
-      limitMarkdownBlocks("Intro\n\n```ts\nconst one = 1;\n\nconst two = 2;\n```\n\nAfter", 2),
-    ).toBe("Intro\n\n```ts\nconst one = 1;\n\nconst two = 2;\n```");
   });
 });
