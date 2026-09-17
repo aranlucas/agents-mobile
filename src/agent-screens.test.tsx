@@ -64,16 +64,6 @@ vi.mock("@copilotkit/react-native/headless", () => ({
       });
     }
   },
-  useRenderTool: (tool: Record<string, unknown>) => {
-    frontendTools.push(tool);
-    if (typeof tool.name === "string") {
-      copilotkit.renderToolCalls.push({
-        name: tool.name,
-        agentId: tool.agentId as string | undefined,
-        render: tool.render as ComponentType<Record<string, unknown>>,
-      });
-    }
-  },
   useRenderToolCall:
     () =>
     ({ toolCall }: { toolCall: { id: string; function: { name: string; arguments: string } } }) => {

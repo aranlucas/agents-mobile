@@ -87,7 +87,7 @@ export function useHealthDataSync() {
 
       for (let pageIndex = 0; pageIndex < MAX_PAGES; pageIndex += 1) {
         // Health Connect page tokens are sequential; the next request depends on this result.
-        // eslint-disable-next-line no-await-in-loop
+        // oxlint-disable-next-line eslint/no-await-in-loop
         const page = await HealthData.readActivitiesAsync(
           after.toISOString(),
           before.toISOString(),
@@ -95,7 +95,7 @@ export function useHealthDataSync() {
           PAGE_SIZE,
         );
         // Persist each bounded page before requesting the next one.
-        // eslint-disable-next-line no-await-in-loop
+        // oxlint-disable-next-line eslint/no-await-in-loop
         const result = await postActivities(page.activities, token);
         totalAccepted += result.accepted;
         latestSyncedAt = result.synced_at;
