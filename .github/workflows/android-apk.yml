@@ -2,6 +2,7 @@ name: Android APK
 
 on:
   workflow_dispatch:
+  pull_request:
   push:
     branches: [main]
 
@@ -18,6 +19,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       EAS_BUILD_PLATFORM: android
+      # CI artifacts have no Sentry credentials; release uploads belong to EAS builds.
+      SENTRY_DISABLE_AUTO_UPLOAD: "true"
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -38,7 +41,7 @@ jobs:
         with:
           packages: platform-tools
       - name: Install NDK
-        run: $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "ndk;27.1.12297006"
+        run: '"$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "ndk;27.1.12297006"'
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Generate native Android project
