@@ -73,7 +73,7 @@
     "markdown-it": "^15.0.2",
     "oxfmt": "^0.68.0",
     "oxlint": "^1.83.0",
-    "oxlint-tsgolint": "^7.0.2001",
+    "oxlint-tsgolint": "^7.0.2002",
     "pnpm-sync-dependencies-meta-injected": "^0.0.15",
     "react-test-renderer": "19.3.0",
     "supports-color": "11.0.0",
