@@ -30,7 +30,7 @@
   "dependencies": {
     "@agents/types": "workspace:*",
     "@clerk/expo": "^4.6.8",
-    "@copilotkit/react-native": "1.72.0",
+    "@copilotkit/react-native": "1.73.0",
     "@expo/metro-runtime": "~57.0.15",
     "@sentry/react-native": "~8.27.0",
     "expo": "^57.0.24",
