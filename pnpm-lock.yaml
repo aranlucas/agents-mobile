@@ -189,13 +189,13 @@ importers:
         version: 57.0.24(86aeaf7caf587adf33e7cdd16ff36078)
       expo-asset:
         specifier: ~57.0.17
-        version: 57.0.17(expo@57.0.24)(react-native@0.86.3(@babel/core@7.29.7(supports-color@11.0.0))(@react-native/metro-config@0.87.1(@babel/core@7.29.7(supports-color@11.0.0))(bufferutil@4.1.0)(supports-color@11.0.0)(utf-8-validate@6.0.6))(@types/react@19.3.0)(bufferutil@4.1.0)(react@19.3.0)(supports-color@11.0.0)(utf-8-validate@6.0.6))(react@19.3.0)(supports-color@11.0.0)(typescript@6.0.3)
+        version: 57.0.18(expo@57.0.24)(react-native@0.86.3(@babel/core@7.29.7(supports-color@11.0.0))(@react-native/metro-config@0.87.1(@babel/core@7.29.7(supports-color@11.0.0))(bufferutil@4.1.0)(supports-color@11.0.0)(utf-8-validate@6.0.6))(@types/react@19.3.0)(bufferutil@4.1.0)(react@19.3.0)(supports-color@11.0.0)(utf-8-validate@6.0.6))(react@19.3.0)(supports-color@11.0.0)(typescript@6.0.3)
       expo-auth-session:
         specifier: ~57.0.12
         version: 57.0.12(expo@57.0.24)(react-native@0.86.3(@babel/core@7.29.7(supports-color@11.0.0))(@react-native/metro-config@0.87.1(@babel/core@7.29.7(supports-color@11.0.0))(bufferutil@4.1.0)(supports-color@11.0.0)(utf-8-validate@6.0.6))(@types/react@19.3.0)(bufferutil@4.1.0)(react@19.3.0)(supports-color@11.0.0)(utf-8-validate@6.0.6))(react@19.3.0)(supports-color@11.0.0)
       expo-build-properties:
-        specifier: ~57.0.21
-        version: 57.0.21(expo@57.0.24)
+        specifier: ~58.0.4
+        version: 58.0.6(expo@57.0.24)
       expo-constants:
         specifier: ~57.0.19
         version: 57.0.19(expo@57.0.24)(react-native@0.86.3(@babel/core@7.29.7(supports-color@11.0.0))(@react-native/metro-config@0.87.1(@babel/core@7.29.7(supports-color@11.0.0))(bufferutil@4.1.0)(supports-color@11.0.0)(utf-8-validate@6.0.6))(@types/react@19.3.0)(bufferutil@4.1.0)(react@19.3.0)(supports-color@11.0.0)(utf-8-validate@6.0.6))(supports-color@11.0.0)
@@ -1057,6 +1057,9 @@ packages:
 
   '@expo/schema-utils@57.0.2':
     resolution: {integrity: sha512-fMu/jyN0l1Wzv7XkeWR4IYCx1M8ryui3FdBNGrWwbRgJ7EhxXxK8E2jxP2W3pbgUwUY0V3hG8+GyfCZwny+Lxw==}
+
+  '@expo/schema-utils@58.0.0':
+    resolution: {integrity: sha512-uquoQiXlIxnyrvnRXOb7JRjqPiSWVM5Aci5Cqdp+YELOU3rVDrk1Tal2uc5XGs6fmQIhhwz25p9BzAWhbqBrkw==}
 
   '@expo/sdk-runtime-versions@1.0.0':
     resolution: {integrity: sha512-Doz2bfiPndXYFPMRwPyGa1k5QaKDVpY806UJj570epIiMzWaYyCtobasyfC++qfIXVb5Ocy7r3tP9d62hAQ7IQ==}
@@ -4319,13 +4322,6 @@ packages:
     peerDependencies:
       expo: '*'
 
-  expo-asset@57.0.17:
-    resolution: {integrity: sha512-qSdWZBSfEg06o3GJMwcj36tw0vXkB6eYjqkQistWmyJkHxhUOKnsKJnev6OraXxLdoI+KOd1+qgp/ENx8gcqYA==}
-    peerDependencies:
-      expo: '*'
-      react: '*'
-      react-native: '*'
-
   expo-asset@57.0.18:
     resolution: {integrity: sha512-zDIQkUr0NM2S7YRj98Zohf/OBuM1q0o4ctxLz1C1oe4/33lHNLjp+2v3qUtBWVwn0zKka8UGADmS8M+83Wi6pw==}
     peerDependencies:
@@ -4339,8 +4335,8 @@ packages:
       react: '*'
       react-native: '*'
 
-  expo-build-properties@57.0.21:
-    resolution: {integrity: sha512-IF5/FPU4SezMYMupB2gfH6eAu197/oKI6Bn0oOT9UQiAg70BNiiQJ499eV21kIWIOGGPdLHg6XqIV5Zq4Gnn7Q==}
+  expo-build-properties@58.0.6:
+    resolution: {integrity: sha512-seL8nr56XxsN187R1OOHbLQOWw+XuEEKHN9kBAlQ8Tx8xb0cHtG7pDaDSEKdtIA/c4vGXuLExzkAiRKMQIaaew==}
     peerDependencies:
       expo: '*'
 
@@ -8644,6 +8640,8 @@ snapshots:
 
   '@expo/schema-utils@57.0.2': {}
 
+  '@expo/schema-utils@58.0.0': {}
+
   '@expo/sdk-runtime-versions@1.0.0': {}
 
   '@expo/spawn-async@1.8.0':
@@ -12050,17 +12048,6 @@ snapshots:
     dependencies:
       expo: 57.0.24(86aeaf7caf587adf33e7cdd16ff36078)
 
-  expo-asset@57.0.17(expo@57.0.24)(react-native@0.86.3(@babel/core@7.29.7(supports-color@11.0.0))(@react-native/metro-config@0.87.1(@babel/core@7.29.7(supports-color@11.0.0))(bufferutil@4.1.0)(supports-color@11.0.0)(utf-8-validate@6.0.6))(@types/react@19.3.0)(bufferutil@4.1.0)(react@19.3.0)(supports-color@11.0.0)(utf-8-validate@6.0.6))(react@19.3.0)(supports-color@11.0.0)(typescript@6.0.3):
-    dependencies:
-      '@expo/image-utils': 0.11.5(supports-color@11.0.0)(typescript@6.0.3)
-      expo: 57.0.24(86aeaf7caf587adf33e7cdd16ff36078)
-      expo-constants: 57.0.19(expo@57.0.24)(react-native@0.86.3(@babel/core@7.29.7(supports-color@11.0.0))(@react-native/metro-config@0.87.1(@babel/core@7.29.7(supports-color@11.0.0))(bufferutil@4.1.0)(supports-color@11.0.0)(utf-8-validate@6.0.6))(@types/react@19.3.0)(bufferutil@4.1.0)(react@19.3.0)(supports-color@11.0.0)(utf-8-validate@6.0.6))(supports-color@11.0.0)
-      react: 19.3.0
-      react-native: 0.86.3(@babel/core@7.29.7(supports-color@11.0.0))(@react-native/metro-config@0.87.1(@babel/core@7.29.7(supports-color@11.0.0))(bufferutil@4.1.0)(supports-color@11.0.0)(utf-8-validate@6.0.6))(@types/react@19.3.0)(bufferutil@4.1.0)(react@19.3.0)(supports-color@11.0.0)(utf-8-validate@6.0.6)
-    transitivePeerDependencies:
-      - supports-color
-      - typescript
-
   expo-asset@57.0.18(expo@57.0.24)(react-native@0.86.3(@babel/core@7.29.7(supports-color@11.0.0))(@react-native/metro-config@0.87.1(@babel/core@7.29.7(supports-color@11.0.0))(bufferutil@4.1.0)(supports-color@11.0.0)(utf-8-validate@6.0.6))(@types/react@19.3.0)(bufferutil@4.1.0)(react@19.3.0)(supports-color@11.0.0)(utf-8-validate@6.0.6))(react@19.3.0)(supports-color@11.0.0)(typescript@6.0.3):
     dependencies:
       '@expo/image-utils': 0.11.5(supports-color@11.0.0)(typescript@6.0.3)
@@ -12086,9 +12073,9 @@ snapshots:
       - expo
       - supports-color
 
-  expo-build-properties@57.0.21(expo@57.0.24):
+  expo-build-properties@58.0.6(expo@57.0.24):
     dependencies:
-      '@expo/schema-utils': 57.0.2
+      '@expo/schema-utils': 58.0.0
       expo: 57.0.24(86aeaf7caf587adf33e7cdd16ff36078)
       resolve-from: 5.0.0
       semver: 7.8.5
