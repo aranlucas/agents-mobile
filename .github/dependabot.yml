@@ -19,3 +19,38 @@ updates:
       time: "06:00"
       timezone: America/Los_Angeles
     open-pull-requests-limit: 5
+    # Versions below are pinned by the Expo SDK; `expo install --fix` (run on
+    # postinstall) reverts any bump past them. Upgrade these with the SDK via
+    # `pnpm exec expo install expo@<sdk> --fix`.
+    ignore:
+      # Exact SDK pins: any bump is a mismatch.
+      - dependency-name: react
+      - dependency-name: react-dom
+      - dependency-name: react-native
+      - dependency-name: react-native-reanimated
+      - dependency-name: react-native-svg
+      - dependency-name: react-native-worklets
+      # Tilde SDK pins: patch bumps are fine.
+      - dependency-name: "@sentry/react-native"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      - dependency-name: "@types/react"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      - dependency-name: react-native-gesture-handler
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      - dependency-name: react-native-safe-area-context
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      - dependency-name: react-native-screens
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      - dependency-name: react-native-web
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      - dependency-name: typescript
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      # Majors of these track the SDK version.
+      - dependency-name: "@babel/core"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "expo"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "expo-*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@expo/*"
+        update-types: ["version-update:semver-major"]
