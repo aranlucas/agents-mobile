@@ -163,7 +163,13 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  react-native-markdown-display>markdown-it: 14.3.0
+  react-native-markdown-display>markdown-it: 14.3.1
+  '@solana/web3.js>jayson': 5.0.0
+  xcode@3>uuid: 11.1.1
+  query-string@7>decode-uri-component: 0.5.0
+
+patchedDependencies:
+  query-string@7.1.3: 883c3848bc3034b44889b28ac11587cd185894747348746b2691e89aa6a97cc8
 
 importers:
 
@@ -4066,9 +4072,9 @@ packages:
   decode-named-character-reference@1.3.0:
     resolution: {integrity: sha512-GtpQYB283KrPp6nRw50q3U9/VfOutZOe103qlN7BPP6Ad27xYnOIWv4lPzo8HCAL+mMZofJ9KEy30fq6MfaK6Q==}
 
-  decode-uri-component@0.2.2:
-    resolution: {integrity: sha512-FqUYQ+8o158GyGTrMFJms9qh3CqTKvAqgqsTnkLI8sKu0028orqBhxNMFkFen0zGyg6epACD32pjVk58ngIErQ==}
-    engines: {node: '>=0.10'}
+  decode-uri-component@0.5.0:
+    resolution: {integrity: sha512-1BiQVoK8C9gUbQU6NzAtO/tkz2qOFpEObMWpcFvhx4fYnj4Oc5yzaJN/LD36ihkVUdXyh5ZekzX+yM+ty/SrPg==}
+    engines: {node: '>=14.16'}
 
   deepmerge@4.3.1:
     resolution: {integrity: sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==}
@@ -4129,8 +4135,8 @@ packages:
     resolution: {integrity: sha512-cgwlv/1iFQiFnU96XXgROh8xTeetsnJiDsTc7TYCLFd9+/WNkIqPTxiM/8pSd8VIrhXGTf1Ny1q1hquVqDJB5w==}
     engines: {node: '>= 4'}
 
-  dompurify@3.4.15:
-    resolution: {integrity: sha512-EUBjM+B+lkDE41iE82DDSCfkoPGfXx8IxFxPMjNzm/Uk4xDet77rTN9wqlxlVg71kK7XGuUMv6wUxJUwwv+Xyw==}
+  dompurify@3.4.16:
+    resolution: {integrity: sha512-sqo+pNp3qRhCIpbgRi1y8Tgk27Bo2Ry7w0dC1NBeNTdZChWjz9Xb/KOoZbRP/R6pQZ80Qw8YhXw13hWWBbMRnQ==}
 
   domutils@3.2.2:
     resolution: {integrity: sha512-6kZKyUajlDuqlHKVX1w7gyslj9MPIXzIFiz/rGu35uC1wMi+kMhQwGhl4lt9unC9Vb9INnY9Z3/ZA3+FhASLaw==}
@@ -4495,10 +4501,6 @@ packages:
 
   extend@3.0.2:
     resolution: {integrity: sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==}
-
-  eyes@0.1.8:
-    resolution: {integrity: sha512-GipyPsXO1anza0AOZdy69Im7hGFCNB7Y/NGjDlZGJ3GJJLtwNSb2vrzYrTYJRrRloVx7pl+bhUaTB8yiccPvFQ==}
-    engines: {node: '> 0.1.90'}
 
   fast-deep-equal@3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
@@ -4961,9 +4963,9 @@ packages:
     peerDependencies:
       ws: '*'
 
-  jayson@4.3.0:
-    resolution: {integrity: sha512-AauzHcUcqs8OBnCHOkJY280VaTiCm57AbuO7lqzcw7JapGj50BisE3xhksye4zlTSR1+1tAz67wLTl8tEH1obQ==}
-    engines: {node: '>=8'}
+  jayson@5.0.0:
+    resolution: {integrity: sha512-FghxOWlJB5ZPsRsuMF1U4GFHjkJfOEYSlIHpI6Wt6MXIzvqWVo0Kpl7/SMfY36vWggA+b+L09zRGP6m4ROVnKg==}
+    engines: {node: '>=20'}
     hasBin: true
 
   jest-get-type@29.6.3:
@@ -5235,8 +5237,8 @@ packages:
     resolution: {integrity: sha512-hdN1wVrZbb29eBGiGjJbeP8JbKjq1urkHJ/LIP/NY48MZ1QVXUsQBV1G1zvYFHn1XE06cwjBsOI2K3Ulnj1YXQ==}
     engines: {node: '>=8'}
 
-  markdown-it@14.3.0:
-    resolution: {integrity: sha512-RCEsPjR+sr0x+AuYp601tKTkgFG4YEPLCzHST3cQ/fhlJkqAkz1L2/Qbp1j9qw5SBwQHFBoW8+hoN5xssOF0Tw==}
+  markdown-it@14.3.1:
+    resolution: {integrity: sha512-4Ej49aYTDFIQ+uBkfX8GBvJGccoARxxPep+7aWTs55ozbjQJpW9M26Fe53vnGgvLeVzva/amzjQQaQu9w0vMhA==}
     hasBin: true
 
   markdown-it@15.0.2:
@@ -6682,12 +6684,6 @@ packages:
     resolution: {integrity: sha512-uyQK/mx5QjHun80FLJTfaWE7JtwfRMKBLkMne6udYOmvH0CawotVa7TfgYHzAnpphn4+TweIx1QKMnRIbipmUg==}
     engines: {node: '>= 0.10.0'}
 
-  stream-chain@2.2.5:
-    resolution: {integrity: sha512-1TJmBx6aSWqZ4tx7aTpBDXK0/e2hhcNSTV8+CbFJtDjbb+I1mZ8lHit0Grw9GRT+6JbIrrDd8esncgBi8aBXGA==}
-
-  stream-json@1.9.1:
-    resolution: {integrity: sha512-uWkjJ+2Nt/LO9Z/JyKZbMusL8Dkh97uUBTv3AJQ74y07lVahLY4eEFsPsE97pxYBwr8nnjMAIch5eqI0gPShyw==}
-
   streamdown@1.6.11:
     resolution: {integrity: sha512-Y38fwRx5kCKTluwM+Gf27jbbi9q6Qy+WC9YrC1YbCpMkktT3PsRBJHMWiqYeF8y/JzLpB1IzDoeaB6qkQEDnAA==}
     peerDependencies:
@@ -7060,16 +7056,6 @@ packages:
 
   uuid@14.0.2:
     resolution: {integrity: sha512-xZe/16rV4aa+HGSOCiY2YeLT1OybRLrrkL/Rqaq7p7GMVXjFh+6wN4oMYgjFmnSnhY8t6Xpdl2l9qmnHYuMHwQ==}
-    hasBin: true
-
-  uuid@7.0.3:
-    resolution: {integrity: sha512-DPSke0pXhTZgoF/d+WSt2QaKMCFSfx7QegxEWT+JOuHF5aWrKEn0G+ztjuJg/gG8/ItK+rbPCD/yNv8yyih6Cg==}
-    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
-    hasBin: true
-
-  uuid@8.3.2:
-    resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
-    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
     hasBin: true
 
   uvu@0.5.6:
@@ -10562,7 +10548,7 @@ snapshots:
       bs58: 4.0.1
       buffer: 6.0.3
       fast-stable-stringify: 1.0.0
-      jayson: 4.3.0(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+      jayson: 5.0.0(bufferutil@4.1.0)(utf-8-validate@6.0.6)
       node-fetch: 2.7.0
       rpc-websockets: 9.3.9
       superstruct: 2.0.2
@@ -11775,7 +11761,7 @@ snapshots:
     dependencies:
       character-entities: 2.0.2
 
-  decode-uri-component@0.2.2: {}
+  decode-uri-component@0.5.0: {}
 
   deepmerge@4.3.1: {}
 
@@ -11823,7 +11809,7 @@ snapshots:
     dependencies:
       domelementtype: 2.3.0
 
-  dompurify@3.4.15:
+  dompurify@3.4.16:
     optionalDependencies:
       '@types/trusted-types': 2.0.7
 
@@ -12092,7 +12078,7 @@ snapshots:
       fast-deep-equal: 3.1.3
       invariant: 2.2.4
       nanoid: 3.3.19
-      query-string: 7.1.3
+      query-string: 7.1.3(patch_hash=883c3848bc3034b44889b28ac11587cd185894747348746b2691e89aa6a97cc8)
       react: 19.2.3
       react-fast-compare: 3.2.2
       react-is: 19.3.0
@@ -12255,8 +12241,6 @@ snapshots:
       - supports-color
 
   extend@3.0.2: {}
-
-  eyes@0.1.8: {}
 
   fast-deep-equal@3.1.3: {}
 
@@ -12752,7 +12736,7 @@ snapshots:
     dependencies:
       ws: 8.21.0(bufferutil@4.1.0)(utf-8-validate@6.0.6)
 
-  jayson@4.3.0(bufferutil@4.1.0)(utf-8-validate@6.0.6):
+  jayson@5.0.0(bufferutil@4.1.0)(utf-8-validate@6.0.6):
     dependencies:
       '@types/connect': 3.4.38
       '@types/node': 12.20.55
@@ -12760,11 +12744,8 @@ snapshots:
       commander: 2.20.3
       delay: 5.0.0
       es6-promisify: 5.0.0
-      eyes: 0.1.8
       isomorphic-ws: 4.0.1(ws@7.5.13(bufferutil@4.1.0)(utf-8-validate@6.0.6))
       json-stringify-safe: 5.0.1
-      stream-json: 1.9.1
-      uuid: 8.3.2
       ws: 7.5.13(bufferutil@4.1.0)(utf-8-validate@6.0.6)
     transitivePeerDependencies:
       - bufferutil
@@ -13004,7 +12985,7 @@ snapshots:
 
   map-obj@4.3.0: {}
 
-  markdown-it@14.3.0:
+  markdown-it@14.3.1:
     dependencies:
       argparse: 2.0.1
       entities: 4.5.0
@@ -13275,7 +13256,7 @@ snapshots:
       d3-sankey: 0.12.3
       dagre-d3-es: 7.0.14
       dayjs: 1.11.23
-      dompurify: 3.4.15
+      dompurify: 3.4.16
       es-toolkit: 1.52.0
       fastdom: 1.0.12
       katex: 0.16.47
@@ -14445,9 +14426,9 @@ snapshots:
       es-define-property: 1.0.1
       side-channel: 1.1.1
 
-  query-string@7.1.3:
+  query-string@7.1.3(patch_hash=883c3848bc3034b44889b28ac11587cd185894747348746b2691e89aa6a97cc8):
     dependencies:
-      decode-uri-component: 0.2.2
+      decode-uri-component: 0.5.0
       filter-obj: 1.1.0
       split-on-first: 1.1.0
       strict-uri-encode: 2.0.0
@@ -14544,7 +14525,7 @@ snapshots:
   react-native-markdown-display@7.0.2(react-native@0.86.3(@babel/core@7.29.7(supports-color@11.0.0))(@react-native/metro-config@0.87.1(@babel/core@7.29.7(supports-color@11.0.0))(bufferutil@4.1.0)(supports-color@11.0.0)(utf-8-validate@6.0.6))(@types/react@19.2.18)(bufferutil@4.1.0)(react@19.2.3)(supports-color@11.0.0)(utf-8-validate@6.0.6))(react@19.2.3):
     dependencies:
       css-to-react-native: 3.2.0
-      markdown-it: 14.3.0
+      markdown-it: 14.3.1
       prop-types: 15.8.1
       react: 19.2.3
       react-native: 0.86.3(@babel/core@7.29.7(supports-color@11.0.0))(@react-native/metro-config@0.87.1(@babel/core@7.29.7(supports-color@11.0.0))(bufferutil@4.1.0)(supports-color@11.0.0)(utf-8-validate@6.0.6))(@types/react@19.2.18)(bufferutil@4.1.0)(react@19.2.3)(supports-color@11.0.0)(utf-8-validate@6.0.6)
@@ -15165,12 +15146,6 @@ snapshots:
 
   stream-buffers@2.2.0: {}
 
-  stream-chain@2.2.5: {}
-
-  stream-json@1.9.1:
-    dependencies:
-      stream-chain: 2.2.5
-
   streamdown@1.6.11(@types/mdast@4.0.4)(micromark-util-types@2.0.2)(micromark@4.0.2(supports-color@11.0.0))(react@19.2.3)(supports-color@11.0.0):
     dependencies:
       clsx: 2.1.1
@@ -15556,10 +15531,6 @@ snapshots:
 
   uuid@14.0.2: {}
 
-  uuid@7.0.3: {}
-
-  uuid@8.3.2: {}
-
   uvu@0.5.6:
     dependencies:
       dequal: 2.0.3
@@ -15757,7 +15728,7 @@ snapshots:
   xcode@3.0.1:
     dependencies:
       simple-plist: 1.3.1
-      uuid: 7.0.3
+      uuid: 11.1.1
 
   xml2js@0.6.0:
     dependencies:
