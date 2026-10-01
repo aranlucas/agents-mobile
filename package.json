@@ -72,7 +72,7 @@
     "bufferutil": "4.1.0",
     "concurrently": "^10.0.5",
     "markdown-it": "^15.0.2",
-    "oxfmt": "^0.70.0",
+    "oxfmt": "^0.71.0",
     "oxlint": "^1.86.0",
     "oxlint-tsgolint": "^7.0.2003",
     "pnpm-sync-dependencies-meta-injected": "^0.0.15",
