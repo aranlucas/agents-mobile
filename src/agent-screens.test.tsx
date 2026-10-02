@@ -12,6 +12,9 @@ const addMessage = vi.fn();
 const runAgent = vi.fn(async () => undefined);
 const setHeaders = vi.fn();
 const getToken = vi.fn(async () => "session-jwt");
+let userId = "user-123";
+const httpFetch = vi.fn();
+vi.mock("expo/fetch", () => ({ fetch: httpFetch }));
 
 const agent = {
   addMessage,
@@ -43,7 +46,7 @@ vi.mock("@/shims/node-crypto", () => ({}));
 
 vi.mock("@clerk/expo", () => ({
   ClerkProvider: ({ children }: { children: ReactNode }) => <>{children}</>,
-  useAuth: () => ({ getToken, userId: "user-123" }),
+  useAuth: () => ({ getToken, userId }),
 }));
 
 vi.mock("@copilotkit/react-native/headless", () => ({
@@ -165,9 +168,11 @@ describe("mobile real feature surface", () => {
     providerProps.length = 0;
     frontendTools.length = 0;
     copilotkit.renderToolCalls.length = 0;
+    userId = "user-123";
     addMessage.mockClear();
-    getToken.mockClear();
-    runAgent.mockClear();
+    getToken.mockReset().mockResolvedValue("session-jwt");
+    runAgent.mockReset().mockResolvedValue(undefined);
+    httpFetch.mockReset();
     setHeaders.mockClear();
   });
 
@@ -231,6 +236,152 @@ describe("mobile real feature surface", () => {
     await act(async () => {
       tree.unmount();
     });
+  });
+
+  it("reserves submission while auth is pending and preserves a newer draft", async () => {
+    let resolve!: (token: string) => void;
+    getToken.mockReturnValueOnce(
+      new Promise((done) => {
+        resolve = done;
+      }),
+    );
+    const { default: Screen } = await import("./app/travel");
+    const tree = await render(<Screen />);
+    const input = tree.root.findByType("TextInput");
+    await act(async () => {
+      input.props.onChangeText("First message");
+    });
+    let first!: Promise<void>;
+    await act(async () => {
+      first = input.props.onSubmitEditing();
+      await input.props.onSubmitEditing();
+    });
+    expect(getToken).toHaveBeenCalledOnce();
+    expect(runAgent).not.toHaveBeenCalled();
+    expect(tree.root.findByType("Pressable").props.disabled).toBe(true);
+    await act(async () => {
+      input.props.onChangeText("Next draft");
+    });
+    await act(async () => {
+      resolve("session-jwt");
+      await first;
+    });
+    expect(addMessage).toHaveBeenCalledOnce();
+    expect(runAgent).toHaveBeenCalledOnce();
+    expect(input.props.value).toBe("Next draft");
+    await act(async () => {
+      tree.unmount();
+    });
+  });
+
+  it("keeps an unsent draft and displays recovery when token refresh rejects", async () => {
+    getToken.mockRejectedValueOnce(new Error("Offline"));
+    const { default: Screen } = await import("./app/travel");
+    const tree = await render(<Screen />);
+    const input = tree.root.findByType("TextInput");
+    await act(async () => {
+      input.props.onChangeText("Keep this draft");
+    });
+    await act(async () => {
+      await input.props.onSubmitEditing();
+    });
+    expect(input.props.value).toBe("Keep this draft");
+    expect(addMessage).not.toHaveBeenCalled();
+    expect(runAgent).not.toHaveBeenCalled();
+    expect(JSON.stringify(tree.toJSON())).toContain("Your message was not sent.");
+    await act(async () => {
+      await input.props.onSubmitEditing();
+    });
+    expect(addMessage).toHaveBeenCalledOnce();
+    expect(runAgent).toHaveBeenCalledOnce();
+    expect(JSON.stringify(tree.toJSON())).not.toContain("Your message was not sent.");
+    await act(async () => {
+      tree.unmount();
+    });
+  });
+
+  it("shows an uncertain run outcome without re-adding or replaying the message", async () => {
+    runAgent.mockRejectedValueOnce(new Error("Connection dropped"));
+    const { default: Screen } = await import("./app/travel");
+    const tree = await render(<Screen />);
+    const input = tree.root.findByType("TextInput");
+    await act(async () => {
+      input.props.onChangeText("A single request");
+    });
+    await act(async () => {
+      await input.props.onSubmitEditing();
+    });
+    const originalMessage = addMessage.mock.calls[0]?.[0];
+    expect(originalMessage).toMatchObject({ content: "A single request" });
+    expect(input.props.value).toBe("");
+    expect(JSON.stringify(tree.toJSON())).toContain("reply could not be confirmed");
+    await act(async () => {
+      await input.props.onSubmitEditing();
+    });
+    expect(addMessage).toHaveBeenCalledOnce();
+    expect(runAgent).toHaveBeenCalledOnce();
+    expect(addMessage.mock.calls[0]?.[0]).toBe(originalMessage);
+    await act(async () => {
+      tree.unmount();
+    });
+  });
+
+  it("shows partial health sync, resumes page six, and isolates another account", async () => {
+    const { default: healthData } = await import("../modules/health-data");
+    const store = await import("expo-secure-store");
+    const saved = new Map<string, string>();
+    vi.mocked(store.getItemAsync).mockImplementation(async (key) => saved.get(key) ?? null);
+    vi.mocked(store.setItemAsync).mockImplementation(async (key, value) => {
+      saved.set(key, value);
+    });
+    vi.spyOn(healthData, "getAvailabilityAsync").mockResolvedValue({
+      status: "available",
+      providerPackage: "test",
+    });
+    vi.spyOn(healthData, "getPermissionStatusAsync").mockResolvedValue({
+      granted: true,
+      grantedPermissions: [],
+      requiredPermissions: [],
+    });
+    vi.spyOn(healthData, "readActivitiesAsync").mockImplementation(
+      async (_after, _before, token) => {
+        const index = Number(token ?? 0);
+        return { activities: [], nextPageToken: index < 5 ? String(index + 1) : undefined };
+      },
+    );
+    httpFetch.mockImplementation(async () => ({
+      ok: true,
+      json: async () => ({ accepted: 1, synced_at: "2026-10-02T00:00:00.000Z" }),
+    }));
+    const { default: Screen } = await import("./app/fitness");
+    const tree = await render(<Screen />);
+    const syncButton = () => tree.root.findAllByType("Pressable")[0];
+    await act(async () => {
+      syncButton().props.onPress();
+    });
+    expect(JSON.stringify(tree.toJSON())).toContain(
+      "5 workouts synced so far. More workouts remain.",
+    );
+    expect(JSON.stringify(tree.toJSON())).toContain("Continue sync");
+    await act(async () => {
+      syncButton().props.onPress();
+    });
+    expect(JSON.stringify(tree.toJSON())).toContain("6 workouts synced");
+    expect(httpFetch).toHaveBeenCalledTimes(6);
+    await act(async () => {
+      userId = "another-user";
+      tree.update(<Screen />);
+    });
+    expect(JSON.stringify(tree.toJSON())).toContain("Ready to sync the last 30 days");
+    expect(JSON.stringify(tree.toJSON())).not.toContain("6 workouts synced");
+    await act(async () => {
+      tree.unmount();
+    });
+    vi.spyOn(healthData, "getAvailabilityAsync").mockResolvedValue({
+      status: "unavailable",
+      providerPackage: "",
+    });
+    vi.mocked(store.getItemAsync).mockResolvedValue(null);
   });
 
   it("redirects the root route to travel", async () => {
