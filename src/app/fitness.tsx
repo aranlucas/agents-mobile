@@ -32,29 +32,43 @@ export default function FitnessScreen() {
 }
 
 function HealthConnectCard() {
-  const { accepted, availability, error, lastSyncedAt, phase, sync } = useHealthDataSync();
+  const { accepted, availability, canResume, error, lastSyncedAt, phase, sync } =
+    useHealthDataSync();
   const busy = phase === "checking" || phase === "syncing";
-  const label = phase === "permission_required" ? "Connect Health Connect" : "Sync workouts";
+  const label =
+    phase === "permission_required"
+      ? "Connect Health Connect"
+      : canResume
+        ? "Continue sync"
+        : "Sync workouts";
   const status =
-    phase === "unavailable"
-      ? availability?.status === "update_required"
-        ? "Health Connect needs an update"
-        : "Health Connect is unavailable"
-      : phase === "synced"
-        ? `${accepted} workouts synced`
-        : phase === "permission_required"
-          ? "Permission required"
-          : phase === "error"
-            ? error
-            : lastSyncedAt
-              ? `Last synced ${new Date(lastSyncedAt).toLocaleString()}`
-              : "Ready to sync the last 30 days";
+    phase === "checking"
+      ? "Checking Health Connect..."
+      : phase === "syncing"
+        ? "Syncing workouts..."
+        : phase === "unavailable"
+          ? availability?.status === "update_required"
+            ? "Health Connect needs an update"
+            : "Health Connect is unavailable"
+          : phase === "synced"
+            ? `${accepted} workouts synced`
+            : phase === "partial"
+              ? `${accepted} workouts synced so far. More workouts remain.`
+              : phase === "permission_required"
+                ? "Permission required"
+                : phase === "error"
+                  ? error
+                  : lastSyncedAt
+                    ? `Last synced ${new Date(lastSyncedAt).toLocaleString()}`
+                    : "Ready to sync the last 30 days";
 
   return (
     <View style={styles.healthCard}>
       <View style={styles.healthCopy}>
         <Text style={styles.healthTitle}>Google Fit via Health Connect</Text>
-        <Text style={styles.healthStatus}>{status}</Text>
+        <Text selectable style={styles.healthStatus}>
+          {status}
+        </Text>
       </View>
       {phase !== "unavailable" && (
         <Pressable

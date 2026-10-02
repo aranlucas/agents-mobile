@@ -94,6 +94,9 @@ export function AgentScreen<TState extends AgentState>({
   safeArea = true,
 }: Props<TState>) {
   const [input, setInput] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [sendError, setSendError] = useState<string>();
+  const submitting = useRef(false);
   const scrollRef = useRef<ScrollView>(null);
 
   const { agent } = useAgent({ agentId: config.id });
@@ -109,24 +112,38 @@ export function AgentScreen<TState extends AgentState>({
 
   const onSend = useCallback(async () => {
     const content = input.trim();
-    if (!content || isLoading || !agent) return;
+    if (!content || isLoading || submitting.current || !agent) return;
+    // Reserve synchronously: SDK isRunning does not cover the auth refresh.
+    submitting.current = true;
+    setIsSubmitting(true);
+    setSendError(undefined);
+    let added = false;
     try {
       await runWithCurrentClerkToken({
         copilotkit,
         getToken,
         userId,
         run: () => {
-          setInput("");
           agent.addMessage({
             id: `user_${Date.now()}_${Math.random().toString(36).slice(2)}`,
             role: "user",
             content,
           });
+          added = true;
+          // Do not erase a newer draft typed while authentication was pending.
+          setInput((current) => (current === input ? "" : current));
           return copilotkit.runAgent({ agent });
         },
       });
-    } catch (error) {
-      console.error("Unable to start authenticated agent run", error);
+    } catch {
+      setSendError(
+        added
+          ? "Your message is in the conversation, but the reply could not be confirmed. Check the conversation before sending it again."
+          : "Your message was not sent. Check your connection and sign-in, then try again.",
+      );
+    } finally {
+      submitting.current = false;
+      setIsSubmitting(false);
     }
   }, [input, isLoading, agent, copilotkit, getToken, userId]);
 
@@ -194,6 +211,11 @@ export function AgentScreen<TState extends AgentState>({
           {isLoading && <ActivityIndicator style={styles.loading} />}
         </ScrollView>
 
+        {sendError && (
+          <Text selectable accessibilityRole="alert" style={styles.sendError}>
+            {sendError}
+          </Text>
+        )}
         <View style={styles.inputRow}>
           <TextInput
             style={styles.input}
@@ -208,8 +230,10 @@ export function AgentScreen<TState extends AgentState>({
           <Pressable
             style={[styles.sendButton, { backgroundColor: config.accentColor }]}
             onPress={onSend}
+            accessibilityRole="button"
+            disabled={isSubmitting || isLoading}
           >
-            <Text style={styles.sendText}>Send</Text>
+            <Text style={styles.sendText}>{isSubmitting ? "Sending..." : "Send"}</Text>
           </Pressable>
         </View>
       </KeyboardAvoidingView>
@@ -255,6 +279,7 @@ const styles = StyleSheet.create({
   userText: { color: "#fff" },
   loading: { margin: 12 },
   toolCall: { alignSelf: "stretch", marginVertical: 6 },
+  sendError: { color: "#b91c1c", paddingHorizontal: 12, paddingVertical: 8 },
   inputRow: {
     flexDirection: "row",
     padding: 12,
