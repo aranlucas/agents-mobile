@@ -1,5 +1,7 @@
-import { Redirect } from "expo-router";
+import { useNavigation } from "@/runtime/navigation";
 
 export default function Index() {
+  const { Redirect } = useNavigation();
+
   return <Redirect href="/travel" />;
 }

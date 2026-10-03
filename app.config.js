@@ -14,6 +14,7 @@ module.exports = ({ config }) => {
     ...appJson.expo,
     ...config,
   };
+
   const baseExtra = {
     ...appJson.expo.extra,
     ...config.extra,

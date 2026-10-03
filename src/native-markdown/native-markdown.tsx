@@ -22,6 +22,7 @@ export type NativeMarkdownProps = {
 };
 
 const markdownIt = new MarkdownIt({ typographer: true }).use(taskListPlugin);
+
 const nonSelectableMarkdownRules = createMarkdownRules(false);
 
 type MarkdownBlockProps = {
@@ -52,10 +53,12 @@ export const NativeMarkdown = memo(function NativeMarkdown({
   style,
 }: NativeMarkdownProps) {
   const mergedStyle = useMemo(() => mergeStyles(style), [style]);
+
   const blocks = useMemo(
     () => prepareMarkdownBlocks(children, isStreaming),
     [children, isStreaming],
   );
+
   const rules = selectable ? markdownRules : nonSelectableMarkdownRules;
 
   if (blocks.length === 0) return null;
@@ -78,11 +81,13 @@ export const NativeMarkdown = memo(function NativeMarkdown({
 
 export function prepareMarkdownBlocks(markdown: string, isStreaming = false): string[] {
   const blocks = splitMarkdownBlocks(markdown);
+
   if (!isStreaming || blocks.length === 0) return blocks;
 
   const repairedBlocks = [...blocks];
   const lastIndex = repairedBlocks.length - 1;
   repairedBlocks[lastIndex] = remend(repairedBlocks[lastIndex] ?? "");
+
   return repairedBlocks;
 }
 
@@ -143,9 +148,11 @@ function mergeStyles(style?: NativeMarkdownStyle): NativeMarkdownStyle {
   if (!style) return baseStyle;
 
   const merged: NativeMarkdownStyle = { ...baseStyle };
+
   for (const [key, value] of Object.entries(style)) {
     merged[key] = StyleSheet.flatten([baseStyle[key], value]);
   }
+
   return merged;
 }
 

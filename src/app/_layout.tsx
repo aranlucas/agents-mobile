@@ -6,27 +6,7 @@ import "@/shims/node-crypto";
 // oxlint-disable-next-line import/no-unassigned-import
 import "@copilotkit/react-native/polyfills";
 import * as SecureStore from "expo-secure-store";
-import { StatusBar } from "expo-status-bar";
-import { AppProviders } from "@/components/app-providers";
-import { AppTabs } from "@/components/app-tabs";
-import { Sentry } from "@/utils/sentry";
+import { createRootLayout, createTokenCache } from "@/runtime/root-layout";
+import { productionBindings } from "@/runtime/production";
 
-const tokenCache = {
-  async getToken(key: string) {
-    return SecureStore.getItemAsync(key);
-  },
-  async saveToken(key: string, value: string) {
-    return SecureStore.setItemAsync(key, value);
-  },
-};
-
-function RootLayout() {
-  return (
-    <AppProviders tokenCache={tokenCache}>
-      <AppTabs />
-      <StatusBar style="auto" />
-    </AppProviders>
-  );
-}
-
-export default Sentry.wrap(RootLayout);
+export default createRootLayout(productionBindings, createTokenCache(SecureStore));

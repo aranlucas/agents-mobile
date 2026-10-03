@@ -4,15 +4,20 @@ import { runWithCurrentClerkToken } from "./copilotkit-auth";
 describe("runWithCurrentClerkToken", () => {
   it("refreshes Clerk auth before starting every agent run", async () => {
     const calls: string[] = [];
+
     const setHeaders = vi.fn((headers: Record<string, string | null | undefined>) => {
       calls.push(`headers:${headers.Authorization}:${headers["x-clerk-user-id"]}`);
     });
+
     const getToken = vi.fn(async () => {
       calls.push("token");
+
       return "fresh-session-jwt";
     });
+
     const run = vi.fn(async () => {
       calls.push("run");
+
       return "complete";
     });
 

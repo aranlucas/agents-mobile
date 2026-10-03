@@ -7,12 +7,14 @@ import type {
 } from "../../modules/health-data";
 
 const NOW = new Date("2026-10-02T00:00:00.000Z");
+
 const activity = (id: string): HealthDataActivity => ({
   id,
   source: "health_connect",
   name: "Run",
   start_date: "2026-10-01T00:00:00.000Z",
 });
+
 const permission = (granted: boolean) => ({
   granted,
   grantedPermissions: [],
@@ -22,6 +24,7 @@ const permission = (granted: boolean) => ({
 function fixture(pageCount = 1) {
   const data = new Map<string, string>();
   const acknowledged: string[] = [];
+
   const dependencies = {
     healthData: {
       getAvailabilityAsync: vi.fn(async (): Promise<HealthDataAvailability> => ({
@@ -38,6 +41,7 @@ function fixture(pageCount = 1) {
           _size: number,
         ): Promise<HealthDataActivityPage> => {
           const index = Number(token ?? 0);
+
           return {
             activities: [activity(String(index))],
             nextPageToken: index + 1 < pageCount ? String(index + 1) : undefined,
@@ -54,10 +58,12 @@ function fixture(pageCount = 1) {
     getToken: vi.fn(async (): Promise<string | null> => "test-token"),
     postActivities: vi.fn(async (activities: HealthDataActivity[], _token: string) => {
       acknowledged.push(...activities.map((item) => item.id));
+
       return { accepted: activities.length, synced_at: NOW.toISOString() };
     }),
     now: vi.fn(() => NOW),
   };
+
   return { dependencies, data, acknowledged, sync: createHealthSync("account-a", dependencies) };
 }
 
@@ -99,6 +105,7 @@ describe("bounded health sync", () => {
     const post = f.dependencies.postActivities.getMockImplementation()!;
     f.dependencies.postActivities.mockImplementation(async (activities, token) => {
       if (activities[0]?.id === "2") throw new Error("Gateway unavailable");
+
       return post(activities, token);
     });
     expect(await f.sync.sync()).toMatchObject({

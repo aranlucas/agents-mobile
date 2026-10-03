@@ -6,11 +6,16 @@ export function randomUUID() {
   return expoRandomUUID();
 }
 
-// Patch global.crypto so uuid and other libs can call crypto.getRandomValues directly.
-if (typeof global !== "undefined") {
-  // oxlint-disable-next-line typescript/no-unsafe-type-assertion, typescript/no-explicit-any
-  const g = global as any;
-  g.crypto ??= {};
-  g.crypto.getRandomValues ??= getRandomValues;
-  g.crypto.randomUUID ??= randomUUID;
+// Preserve an existing platform crypto object and its methods.
+if (!globalThis.crypto) {
+  Object.defineProperty(globalThis, "crypto", {
+    value: { getRandomValues, randomUUID },
+    writable: true,
+    configurable: true,
+  });
+} else {
+  if (globalThis.crypto.getRandomValues == null)
+    Object.assign(globalThis.crypto, { getRandomValues });
+
+  if (globalThis.crypto.randomUUID == null) Object.assign(globalThis.crypto, { randomUUID });
 }

@@ -1,19 +1,21 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const requireOptionalNativeModule = vi.hoisted(() => vi.fn());
+import {
+  createHealthDataAdapter,
+  type HealthDataModule,
+} from "../modules/health-data/src/health-data-adapter";
 
-vi.mock("expo", () => ({ requireOptionalNativeModule }));
+const requireOptionalNativeModule = vi.fn<(name: string) => HealthDataModule | null>();
 
 describe("HealthData module bridge", () => {
   beforeEach(() => {
-    vi.resetModules();
     requireOptionalNativeModule.mockReset();
   });
 
   it("provides an unavailable fallback when iOS has no native HealthData module", async () => {
     requireOptionalNativeModule.mockReturnValue(null);
 
-    const { default: healthData } = await import("../modules/health-data");
+    const healthData = createHealthDataAdapter(requireOptionalNativeModule);
 
     expect(requireOptionalNativeModule).toHaveBeenCalledWith("HealthData");
     await expect(healthData.getAvailabilityAsync()).resolves.toEqual({
@@ -47,9 +49,10 @@ describe("HealthData module bridge", () => {
       requestPermissionsAsync: vi.fn(),
       readActivitiesAsync: vi.fn(),
     };
+
     requireOptionalNativeModule.mockReturnValue(nativeModule);
 
-    const { default: healthData } = await import("../modules/health-data");
+    const healthData = createHealthDataAdapter(requireOptionalNativeModule);
 
     expect(healthData).toBe(nativeModule);
   });

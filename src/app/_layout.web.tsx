@@ -1,15 +1,4 @@
-import { StatusBar } from "expo-status-bar";
-import { AppProviders } from "@/components/app-providers";
-import { AppTabs } from "@/components/app-tabs";
-import { Sentry } from "@/utils/sentry";
+import { createRootLayout } from "@/runtime/root-layout";
+import { productionBindings } from "@/runtime/production";
 
-function RootLayout() {
-  return (
-    <AppProviders>
-      <AppTabs />
-      <StatusBar style="auto" />
-    </AppProviders>
-  );
-}
-
-export default Sentry.wrap(RootLayout);
+export default createRootLayout(productionBindings);

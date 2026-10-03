@@ -1,38 +1,34 @@
-import type { ReactElement } from "react";
+import { z } from "zod";
+import type { ReactElement, ReactNode } from "react";
 import { isValidElement } from "react";
 import type { ASTNode } from "react-native-markdown-display";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 
-vi.mock("react-native-markdown-display", async () => {
-  const { default: MarkdownIt } = await import("markdown-it");
-  const textStyleProps = ["color", "fontFamily", "fontSize", "fontWeight", "lineHeight"];
-  return {
-    default: () => null,
-    MarkdownIt,
-    removeTextStyleProps: (style: Record<string, unknown>) =>
-      Object.fromEntries(Object.entries(style).filter(([key]) => !textStyleProps.includes(key))),
-    textStyleProps,
-  };
-});
-
-import { prepareMarkdownBlocks } from "./native-markdown";
+import { act, create, type ReactTestRenderer } from "react-test-renderer";
+import { NativeMarkdown, prepareMarkdownBlocks } from "./native-markdown";
 import { createMarkdownRules, markdownRules } from "./rules";
 
 describe("NativeMarkdown table rendering", () => {
   it("wraps tables in a nested horizontal scroll view", () => {
-    const node = { key: "table-1" } as ASTNode;
+    const node = astNode("table", "table-1", "");
+
     const result = markdownRules.table?.(node, ["table contents"], [], {
       tableScroller: {},
       _VIEW_SAFE_table: {},
     });
 
     expect(isValidElement(result)).toBe(true);
-    const table = result as ReactElement<{
-      children: ReactElement;
-      horizontal: boolean;
-      nestedScrollEnabled: boolean;
-      style: unknown[];
-    }>;
+
+    const table = elementWithProps(
+      result,
+      z.object({
+        children: reactElement,
+        horizontal: z.boolean(),
+        nestedScrollEnabled: z.boolean(),
+        style: z.array(z.unknown()),
+      }),
+    );
+
     expect(table.type).toBe("ScrollView");
     expect(table.props.horizontal).toBe(true);
     expect(table.props.nestedScrollEnabled).toBe(true);
@@ -44,11 +40,13 @@ describe("NativeMarkdown table rendering", () => {
     const shortHeader = astNode("th", "short-header", "Item");
     const wideHeader = astNode("th", "wide-header", "Notes");
     const shortCell = astNode("td", "short-cell", "Milk");
+
     const wideCell = astNode(
       "td",
       "wide-cell",
       "A much longer description that needs additional column width",
     );
+
     const headerRow = astNode("tr", "header-row", "", [shortHeader, wideHeader]);
     const bodyRow = astNode("tr", "body-row", "", [shortCell, wideCell]);
     const head = astNode("thead", "head", "", [headerRow]);
@@ -65,7 +63,7 @@ describe("NativeMarkdown table rendering", () => {
 
     expect(headerDimensions).toEqual(cellDimensionsValue);
     expect(headerDimensions.minWidth).toBeGreaterThanOrEqual(112);
-    expect(wideDimensions.minWidth).toBeGreaterThan(headerDimensions.minWidth as number);
+    expect(wideDimensions.minWidth).toBeGreaterThan(z.number().parse(headerDimensions.minWidth));
     expect(wideDimensions.flexShrink).toBe(0);
   });
 
@@ -96,12 +94,15 @@ describe("NativeMarkdown table rendering", () => {
     const tableNode = astNode("table", "table", "", [head, body]);
     const styles = { _VIEW_SAFE_tr: {} };
 
-    const first = markdownRules.tr?.(firstRow, [], [body, tableNode], styles) as ReactElement<{
-      style: unknown[];
-    }>;
-    const last = markdownRules.tr?.(lastRow, [], [body, tableNode], styles) as ReactElement<{
-      style: unknown[];
-    }>;
+    const first = elementWithProps(
+      markdownRules.tr?.(firstRow, [], [body, tableNode], styles),
+      z.object({ style: z.array(z.unknown()) }),
+    );
+
+    const last = elementWithProps(
+      markdownRules.tr?.(lastRow, [], [body, tableNode], styles),
+      z.object({ style: z.array(z.unknown()) }),
+    );
 
     expect(first.props.style[1]).toBeFalsy();
     expect(last.props.style[1]).toEqual({ borderBottomWidth: 0 });
@@ -109,11 +110,13 @@ describe("NativeMarkdown table rendering", () => {
 
   it("widens columns for emoji and CJK content", () => {
     const styles = { _VIEW_SAFE_td: {} };
+
     const buildTable = (text: string, prefix: string) => {
       const cell = astNode("td", `${prefix}-cell`, text);
       const row = astNode("tr", `${prefix}-row`, "", [cell]);
       const body = astNode("tbody", `${prefix}-body`, "", [row]);
       const tableNode = astNode("table", `${prefix}-table`, "", [body]);
+
       return { cell, parents: [row, body, tableNode] };
     };
 
@@ -122,8 +125,8 @@ describe("NativeMarkdown table rendering", () => {
     const asciiCell = markdownRules.td?.(ascii.cell, [], ascii.parents, styles);
     const emojiCell = markdownRules.td?.(emoji.cell, [], emoji.parents, styles);
 
-    expect(cellDimensions(emojiCell).width as number).toBeGreaterThan(
-      cellDimensions(asciiCell).width as number,
+    expect(z.number().parse(cellDimensions(emojiCell).width)).toBeGreaterThan(
+      z.number().parse(cellDimensions(asciiCell).width),
     );
   });
 });
@@ -132,6 +135,7 @@ describe("NativeMarkdown rendering rules", () => {
   it("makes text selectable by default and supports opting out", () => {
     const node = astNode("textgroup", "textgroup", "");
     const selectable = markdownRules.textgroup?.(node, ["Text"], [], { textgroup: {} });
+
     const notSelectable = createMarkdownRules(false).textgroup?.(node, ["Text"], [], {
       textgroup: {},
     });
@@ -144,6 +148,7 @@ describe("NativeMarkdown rendering rules", () => {
     const checked = markdownRules.checkbox?.(astNode("checkbox", "checked", "true"), [], [], {
       checkbox: {},
     });
+
     const unchecked = markdownRules.checkbox?.(astNode("checkbox", "unchecked", "false"), [], [], {
       checkbox: {},
     });
@@ -157,22 +162,35 @@ describe("NativeMarkdown rendering rules", () => {
     const node = {
       ...astNode("fence", "fence", "const value = 1;\n"),
       sourceInfo: "typescript",
-    } as ASTNode;
+    };
+
     const result = markdownRules.fence?.(node, [], [], {
       codeLanguage: { fontSize: 12 },
       codeScroller: { maxWidth: "100%" },
       fence: { backgroundColor: "gray", fontFamily: "monospace", padding: 10 },
     });
-    const fence = result as ReactElement<{
-      children: ReactElement<Record<string, unknown>>[];
-      style: Record<string, unknown>;
-    }>;
-    const [label, scroller] = fence.props.children;
-    const code = scroller?.props.children as ReactElement<{
-      children: string;
-      selectable: boolean;
-      style: Record<string, unknown>[];
-    }>;
+
+    const fence = elementWithProps(
+      result,
+      z.object({ children: z.array(reactElement), style: z.unknown() }),
+    );
+
+    const [labelElement, scrollerElement] = fence.props.children;
+    const label = elementWithProps(labelElement, z.object({ children: z.string() }));
+
+    const scroller = elementWithProps(
+      scrollerElement,
+      z.object({
+        children: reactElement,
+        horizontal: z.boolean(),
+        nestedScrollEnabled: z.boolean(),
+      }),
+    );
+
+    const code = elementWithProps(
+      scroller.props.children,
+      z.object({ children: z.string(), selectable: z.boolean(), style: z.array(z.unknown()) }),
+    );
 
     expect(fence.type).toBe("View");
     expect(fence.props.style).toEqual({ backgroundColor: "gray", padding: 10 });
@@ -192,13 +210,20 @@ describe("NativeMarkdown rendering rules", () => {
     item.index = 0;
     item.markup = ".";
     const orderedList = astNode("ordered_list", "ordered", "", [], { start: "2" });
-    const result = markdownRules.list_item?.(item, ["Second"], [orderedList], {
+
+    const rendered = markdownRules.list_item?.(item, ["Second"], [orderedList], {
       _VIEW_SAFE_list_item: {},
       _VIEW_SAFE_ordered_list_content: {},
       list_item: {},
       ordered_list_icon: {},
-    }) as ReactElement<{ children: ReactElement<Record<string, unknown>>[] }>;
-    const icon = result.props.children[0];
+    });
+
+    const result = elementWithProps(rendered, z.object({ children: z.array(reactElement) }));
+
+    const icon = elementWithProps(
+      result.props.children[0],
+      z.object({ children: z.array(z.union([z.number(), z.string()])) }),
+    );
 
     expect(icon?.props.children).toEqual([2, "."]);
   });
@@ -237,11 +262,54 @@ function astNode(
   };
 }
 
-function cellDimensions(value: unknown): Record<string, unknown> {
-  const element = value as ReactElement<{ style: Record<string, unknown>[] }>;
-  return element.props.style[1];
+const reactElement = z.custom<ReactElement>(isValidElement);
+
+function elementWithProps<T extends z.ZodType>(value: ReactNode, schema: T) {
+  if (!isValidElement(value)) throw new Error("Expected a rendered React element");
+
+  return { type: value.type, props: schema.parse(value.props) };
 }
 
-function elementProps(value: unknown): Record<string, unknown> {
-  return (value as ReactElement<Record<string, unknown>>).props;
+function cellDimensions(value: ReactNode) {
+  const element = elementWithProps(value, z.object({ style: z.array(z.unknown()) }));
+
+  return z
+    .object({
+      minWidth: z.number().optional(),
+      width: z.number().optional(),
+      flexShrink: z.number().optional(),
+      alignItems: z.string().optional(),
+    })
+    .parse(element.props.style[1]);
 }
+
+function elementProps(value: ReactNode) {
+  return elementWithProps(
+    value,
+    z.object({ selectable: z.boolean().optional(), children: z.unknown().optional() }),
+  ).props;
+}
+
+it("renders images through the installed FitImage lifecycle without native networking", async () => {
+  let tree: ReactTestRenderer;
+  await act(async () => {
+    tree = create(
+      <NativeMarkdown>{"![Milk](https://images.example.test/milk.png)"}</NativeMarkdown>,
+    );
+  });
+  const image = tree!.root.findByType("Image");
+  expect(image.props.source).toEqual({ uri: "https://images.example.test/milk.png" });
+  expect(image.props.onLayout).toBeTypeOf("function");
+  await act(async () => {
+    image.props.onLayout({ nativeEvent: { layout: { width: 240 } } });
+    image.props.onLoadStart();
+  });
+  expect(tree!.root.findAllByType("ActivityIndicator")).toHaveLength(1);
+  await act(async () => {
+    image.props.onLoad();
+  });
+  expect(tree!.root.findAllByType("ActivityIndicator")).toHaveLength(0);
+  await act(async () => {
+    tree!.unmount();
+  });
+});

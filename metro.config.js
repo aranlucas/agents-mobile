@@ -1,4 +1,5 @@
 const { getDefaultConfig } = require("expo/metro-config");
+
 const path = require("node:path");
 
 /** @type {import('expo/metro-config').MetroConfig} */
@@ -9,6 +10,7 @@ const config = getDefaultConfig(__dirname);
 // on web, static SSR evaluates it against the node:crypto shim below and
 // crashes on promisify(crypto.verify).
 const STUB_EVERYWHERE = new Set(["@segment/analytics-node"]);
+
 // Node builtins stay real on web (static SSR resolves them to Node itself).
 const STUB_NATIVE_ONLY = new Set([
   "node:buffer",
@@ -27,15 +29,19 @@ config.resolver.resolveRequest = (context, moduleName, platform) => {
       filePath: path.resolve(__dirname, "src/shims/node-crypto.ts"),
     };
   }
+
   if (STUB_EVERYWHERE.has(moduleName)) {
     return { type: "empty" };
   }
+
   if (platform !== "web" && STUB_NATIVE_ONLY.has(moduleName)) {
     return { type: "empty" };
   }
+
   if (innerResolveRequest) {
     return innerResolveRequest(context, moduleName, platform);
   }
+
   return context.resolveRequest(context, moduleName, platform);
 };
 

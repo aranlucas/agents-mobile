@@ -16,6 +16,7 @@ function withHealthData(config) {
   return withAndroidManifest(config, (manifestConfig) => {
     const manifest = manifestConfig.modResults.manifest;
     manifest.queries = manifest.queries || [];
+
     if (
       !manifest.queries.some(
         (query) => query.package?.[0]?.$?.["android:name"] === "com.google.android.apps.healthdata",
@@ -29,6 +30,7 @@ function withHealthData(config) {
     const application = AndroidConfig.Manifest.getMainApplicationOrThrow(manifestConfig.modResults);
     const mainActivity = AndroidConfig.Manifest.getMainActivityOrThrow(manifestConfig.modResults);
     mainActivity["intent-filter"] = mainActivity["intent-filter"] ?? [];
+
     if (
       !mainActivity["intent-filter"].some((filter) =>
         filter.action?.some(
@@ -43,6 +45,7 @@ function withHealthData(config) {
     }
 
     application["activity-alias"] = application["activity-alias"] ?? [];
+
     if (
       !application["activity-alias"].some(
         (alias) => alias.$?.["android:name"] === "ViewPermissionUsageActivity",
@@ -63,6 +66,7 @@ function withHealthData(config) {
         ],
       });
     }
+
     return manifestConfig;
   });
 }

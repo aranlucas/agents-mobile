@@ -12,14 +12,17 @@ export function taskListPlugin(markdownIt: InstanceType<typeof MarkdownIt>): voi
         insideListItem = true;
         continue;
       }
+
       if (token.type === "list_item_close") {
         insideListItem = false;
         continue;
       }
+
       if (!insideListItem || token.type !== "inline" || !token.children) continue;
 
       const marker = TASK_MARKER.exec(token.content);
       const firstText = token.children.find((child) => child.type === "text");
+
       if (!marker || !firstText || !firstText.content.startsWith(marker[0])) continue;
 
       token.content = token.content.slice(marker[0].length);
@@ -30,6 +33,7 @@ export function taskListPlugin(markdownIt: InstanceType<typeof MarkdownIt>): voi
       checkbox.block = false;
       token.children.unshift(checkbox);
     }
+
     return true;
   });
 }

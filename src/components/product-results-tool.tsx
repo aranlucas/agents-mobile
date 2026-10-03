@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, View } from "react-native";
-import { ToolCallStatus, useFrontendTool } from "@copilotkit/react-native/headless";
+import { ToolCallStatus } from "@copilotkit/react-native/headless";
 import { z } from "zod";
+import { useAppRuntime } from "@/runtime/app-runtime";
 
 export const PRODUCT_RESULTS_TOOL_NAME = "show_product_results";
 
@@ -21,6 +22,7 @@ export const productResultsSchema = z.object({
 });
 
 export type ProductResults = z.infer<typeof productResultsSchema>;
+
 type Product = z.infer<typeof productSchema>;
 
 export function krogerProductImageUrl(upc: string): string {
@@ -29,6 +31,7 @@ export function krogerProductImageUrl(upc: string): string {
 
 function ProductCard({ product }: { product: Product }) {
   const [imageFailed, setImageFailed] = useState(false);
+
   const hasSale =
     product.price !== undefined &&
     product.regularPrice !== undefined &&
@@ -83,6 +86,7 @@ export function ProductResultsCard({
   loading?: boolean;
 }) {
   const parsed = productResultsSchema.safeParse(args);
+
   if (!parsed.success) {
     return (
       <View style={styles.fallback} accessibilityRole="alert">
@@ -115,22 +119,23 @@ export function ProductResultsCard({
 }
 
 export function GroceryProductResultsTool() {
-  useFrontendTool(
-    {
-      name: PRODUCT_RESULTS_TOOL_NAME,
-      agentId: "grocery",
-      description:
-        "Display Kroger product matches in native product cards after search_products succeeds. Copy exact product facts from the search result; never invent products or prices.",
-      parameters: productResultsSchema,
-      handler: async ({ products }) => ({ displayed: products.length }),
-      render: ({ args, status }) => (
-        <ProductResultsCard args={args} loading={status === ToolCallStatus.Executing} />
-      ),
-    },
-    [],
-  );
+  const { ProductTool } = useAppRuntime();
 
-  return null;
+  return (
+    <ProductTool
+      tool={{
+        name: PRODUCT_RESULTS_TOOL_NAME,
+        agentId: "grocery",
+        description:
+          "Display Kroger product matches in native product cards after search_products succeeds. Copy exact product facts from the search result; never invent products or prices.",
+        parameters: productResultsSchema,
+        handler: async ({ products }) => ({ displayed: products.length }),
+        render: ({ args, status }) => (
+          <ProductResultsCard args={args} loading={status === ToolCallStatus.Executing} />
+        ),
+      }}
+    />
+  );
 }
 
 const styles = StyleSheet.create({

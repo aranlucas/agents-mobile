@@ -66,6 +66,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
+    "@oxlint/plugins": "1.86.0",
     "@react-native/metro-config": "0.87.1",
     "@types/react": "~19.2.18",
     "@types/react-test-renderer": "^19.3.0",
@@ -73,13 +74,14 @@
     "concurrently": "^10.0.5",
     "markdown-it": "^15.0.2",
     "oxfmt": "^0.71.0",
-    "oxlint": "^1.86.0",
+    "oxlint": "1.86.0",
     "oxlint-tsgolint": "^7.0.2003",
     "pnpm-sync-dependencies-meta-injected": "^0.0.15",
     "react-test-renderer": "19.3.0",
     "supports-color": "11.0.0",
     "typescript": "~6.0.3",
     "utf-8-validate": "6.0.6",
+    "vite": "8.3.0",
     "vitest": "^5.0.2"
   },
   "packageManager": "pnpm@12.6.0"

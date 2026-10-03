@@ -1,8 +1,10 @@
+import { tripSummarySchema } from "@/utils/agent-summary-schemas";
 import type { TripState } from "@agents/types";
 import { AgentScreen, Field, SummaryCard } from "@/components/agent-screen";
 
 const TRAVEL_CONFIG = {
   id: "travel" as const,
+  summarySchema: tripSummarySchema,
   title: "Trip Planner",
   subtitle: "Tell me where you want to go.",
   placeholder: "Plan a trip...",

@@ -1,3 +1,4 @@
+import { z } from "zod";
 import Constants from "expo-constants";
 import { Platform } from "react-native";
 import {
@@ -9,17 +10,18 @@ import {
 const extra = Constants.expoConfig?.extra ?? {};
 
 const config: AgentRuntimeConfig = {
-  agentsBaseUrl: typeof extra.agentsBaseUrl === "string" ? extra.agentsBaseUrl : undefined,
-  copilotKitRuntimeUrl:
-    typeof extra.copilotKitRuntimeUrl === "string" ? extra.copilotKitRuntimeUrl : undefined,
+  agentsBaseUrl: z.string().optional().catch(undefined).parse(extra.agentsBaseUrl),
+  copilotKitRuntimeUrl: z.string().optional().catch(undefined).parse(extra.copilotKitRuntimeUrl),
 };
 
 /** Returns the CopilotKit runtime base URL for use with CopilotKitProvider. */
 export function getCopilotKitRuntimeUrl(): string {
   const runtimeUrl = getCopilotKitRuntimeBaseUrl(config, Platform.OS);
+
   if (!runtimeUrl) {
     throw new Error("EXPO_PUBLIC_COPILOTKIT_RUNTIME_URL is required");
   }
+
   return runtimeUrl;
 }
 
