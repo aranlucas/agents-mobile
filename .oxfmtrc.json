@@ -9,5 +9,5 @@
   "trailingComma": "all",
   "bracketSameLine": false,
   "singleAttributePerLine": false,
-  "ignorePatterns": ["pnpm-lock.yaml"]
+  "ignorePatterns": ["pnpm-lock.yaml", "tools/oxlint/anti-slop/**", ".agents/**", ".claude/**"]
 }

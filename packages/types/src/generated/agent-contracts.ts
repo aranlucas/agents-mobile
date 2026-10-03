@@ -86,6 +86,7 @@ export type InterviewCoachingStyle = "interview" | "guided";
 export type InterviewStatus = "idle" | "practicing" | "feedback" | "complete";
 
 export type TrendsCell = string | number | boolean | null;
+
 export type TrendsRow = Record<string, TrendsCell>;
 
 export type CartItem = {

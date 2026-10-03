@@ -1,3 +1,4 @@
+import { z } from "zod";
 import type { ReactNode } from "react";
 import { useCallback, useRef, useState } from "react";
 import {
@@ -12,13 +13,8 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useAuth } from "@clerk/expo";
-import {
-  useAgent,
-  useCopilotKit,
-  useRenderToolCall,
-  type ToolCall,
-} from "@copilotkit/react-native/headless";
+import { useAppRuntime, useConversation } from "@/runtime/app-runtime";
+import type { ToolCall, useAgent } from "@copilotkit/react-native/headless";
 import { NativeMarkdown, type NativeMarkdownStyle } from "@/native-markdown";
 import type { FitnessState, GroceryState, TripState, WellnessState } from "@agents/types";
 import type { AgentId } from "@/utils/agent-config";
@@ -28,6 +24,7 @@ type AgentState = TripState | GroceryState | FitnessState | WellnessState;
 
 type AgentScreenConfig<TState extends AgentState> = {
   id: AgentId;
+  summarySchema: z.ZodType<TState>;
   title: string;
   subtitle: string;
   placeholder: string;
@@ -43,52 +40,72 @@ type Props<TState extends AgentState> = {
 };
 
 type DisplayMessage = { id: string; role: "user" | "assistant"; content: string };
+
 type DisplayToolCall = {
   id: string;
   kind: "tool-call";
   toolCall: ToolCall;
 };
+
 type DisplayItem = DisplayMessage | DisplayToolCall;
 
-function toDisplayItems(m: unknown, index: number): DisplayItem[] {
-  if (typeof m !== "object" || m === null) return [];
-  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
-  const msg = m as Record<string, unknown>;
+type AgentMessage = NonNullable<ReturnType<typeof useAgent>["agent"]>["messages"][number];
+
+const messageSchema = z.object({
+  role: z.enum(["user", "assistant"]),
+  content: z.string().optional().catch(undefined),
+  id: z.string().optional().catch(undefined),
+  toolCalls: z.array(z.unknown()).optional().catch(undefined),
+});
+
+const toolCallSchema = z.object({
+  id: z.string().optional().catch(undefined),
+  function: z.object({
+    name: z.string(),
+    arguments: z.string().catch("{}"),
+  }),
+});
+
+function toDisplayItems(message: AgentMessage, index: number): DisplayItem[] {
+  const parsed = messageSchema.safeParse(message);
+
+  if (!parsed.success) return [];
+
+  const msg = parsed.data;
   const role = msg.role;
-  if (role !== "user" && role !== "assistant") return [];
-  const content = msg.content;
-  const id = typeof msg.id === "string" ? msg.id : `${role}-${index}`;
+  const id = msg.id ?? `${role}-${index}`;
   const items: DisplayItem[] = [];
-  if (typeof content === "string" && content.length > 0) {
-    items.push({ id, role, content });
-  }
-  if (role !== "assistant" || !Array.isArray(msg.toolCalls)) return items;
-  for (const [toolIndex, value] of msg.toolCalls.entries()) {
-    if (typeof value !== "object" || value === null) continue;
-    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
-    const toolCall = value as Record<string, unknown>;
-    const fn = toolCall.function;
-    if (typeof fn !== "object" || fn === null) continue;
-    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
-    const functionCall = fn as Record<string, unknown>;
-    if (typeof functionCall.name !== "string") continue;
-    const callId = typeof toolCall.id === "string" ? toolCall.id : `${id}-tool-${toolIndex}`;
-    // Arguments stay raw here; useRenderToolCall parses them and tolerates the
-    // partial JSON a streaming response produces.
-    const raw = {
-      id: callId,
-      type: "function",
-      function: {
-        name: functionCall.name,
-        arguments: typeof functionCall.arguments === "string" ? functionCall.arguments : "{}",
-      },
-    } as ToolCall;
+
+  if (msg.content) items.push({ id, role, content: msg.content });
+
+  if (role !== "assistant") return items;
+
+  for (const [toolIndex, value] of (msg.toolCalls ?? []).entries()) {
+    const parsedCall = toolCallSchema.safeParse(value);
+
+    if (!parsedCall.success) continue;
+
+    const call = parsedCall.data;
+    const callId = call.id ?? `${id}-tool-${toolIndex}`;
+    // Keep partial streaming JSON raw for the SDK's tolerant argument parser.
+    const raw: ToolCall = { id: callId, type: "function", function: call.function };
     items.push({ id: callId, kind: "tool-call", toolCall: raw });
   }
+
   return items;
 }
 
-export function AgentScreen<TState extends AgentState>({
+export function AgentScreen<TState extends AgentState>(props: Props<TState>) {
+  const { ConversationProvider } = useAppRuntime();
+
+  return (
+    <ConversationProvider agentId={props.config.id}>
+      <AgentScreenContent {...props} />
+    </ConversationProvider>
+  );
+}
+
+function AgentScreenContent<TState extends AgentState>({
   config,
   initialState,
   safeArea = true,
@@ -99,28 +116,29 @@ export function AgentScreen<TState extends AgentState>({
   const submitting = useRef(false);
   const scrollRef = useRef<ScrollView>(null);
 
-  const { agent } = useAgent({ agentId: config.id });
-  const { copilotkit } = useCopilotKit();
-  const renderToolCall = useRenderToolCall();
-  const { getToken, userId } = useAuth();
+  const { session } = useAppRuntime();
+  const { conversation: agent, renderToolCall } = useConversation();
+  const { getToken, userId } = session;
 
   const messages = (agent?.messages ?? []).flatMap(toDisplayItems);
 
-  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
-  const state = (agent?.state ?? initialState) as TState;
+  const parsedState = config.summarySchema.safeParse(agent?.state ?? initialState);
+  const state = parsedState.success ? parsedState.data : initialState;
   const isLoading = agent?.isRunning ?? false;
 
   const onSend = useCallback(async () => {
     const content = input.trim();
+
     if (!content || isLoading || submitting.current || !agent) return;
     // Reserve synchronously: SDK isRunning does not cover the auth refresh.
     submitting.current = true;
     setIsSubmitting(true);
     setSendError(undefined);
     let added = false;
+
     try {
       await runWithCurrentClerkToken({
-        copilotkit,
+        copilotkit: agent,
         getToken,
         userId,
         run: () => {
@@ -132,7 +150,8 @@ export function AgentScreen<TState extends AgentState>({
           added = true;
           // Do not erase a newer draft typed while authentication was pending.
           setInput((current) => (current === input ? "" : current));
-          return copilotkit.runAgent({ agent });
+
+          return agent.run();
         },
       });
     } catch {
@@ -145,7 +164,7 @@ export function AgentScreen<TState extends AgentState>({
       submitting.current = false;
       setIsSubmitting(false);
     }
-  }, [input, isLoading, agent, copilotkit, getToken, userId]);
+  }, [input, isLoading, agent, getToken, userId]);
 
   const summary = config.renderSummary(state);
 
@@ -182,12 +201,14 @@ export function AgentScreen<TState extends AgentState>({
           {messages.map((m, index) => {
             if ("kind" in m) {
               const rendered = renderToolCall({ toolCall: m.toolCall });
+
               return rendered ? (
                 <View key={m.id} style={styles.toolCall}>
                   {rendered}
                 </View>
               ) : null;
             }
+
             return (
               <View
                 key={m.id}

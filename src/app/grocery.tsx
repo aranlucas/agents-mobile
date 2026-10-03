@@ -1,9 +1,11 @@
+import { grocerySummarySchema } from "@/utils/agent-summary-schemas";
 import type { GroceryState } from "@agents/types";
 import { AgentScreen, Field, SummaryCard } from "@/components/agent-screen";
 import { GroceryProductResultsTool } from "@/components/product-results-tool";
 
 const GROCERY_CONFIG = {
   id: "grocery" as const,
+  summarySchema: grocerySummarySchema,
   title: "Grocery Planner",
   subtitle: "Ask me to plan meals or build a shopping list.",
   placeholder: "Plan meals, find deals...",

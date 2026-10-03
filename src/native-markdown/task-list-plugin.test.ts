@@ -6,6 +6,7 @@ import { taskListPlugin } from "./task-list-plugin";
 describe("taskListPlugin", () => {
   it("replaces task markers with checkbox tokens and strips their text", () => {
     const markdownIt = new MarkdownIt().use(taskListPlugin);
+
     const inlineTokens = markdownIt
       .parse("- [x] Done\n- [ ] Todo", {})
       .filter((token) => token.type === "inline");

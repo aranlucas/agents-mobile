@@ -6,6 +6,7 @@ import {
   Text,
   View,
   type ViewStyle,
+  type TextStyle,
 } from "react-native";
 import {
   removeTextStyleProps,
@@ -75,7 +76,7 @@ export function createMarkdownRules(selectable = true): RenderRules {
 
 function codeBlockRule(styleKey: "code_block" | "fence", selectable: boolean): RenderFunction {
   return (node, _children, _parentNodes, styles, inheritedStyles = {}) => {
-    const flattenedStyle: Record<string, unknown> = StyleSheet.flatten(styles[styleKey]) ?? {};
+    const flattenedStyle: TextStyle & ViewStyle = StyleSheet.flatten(styles[styleKey]) ?? {};
     const containerStyle = removeTextStyleProps(flattenedStyle);
     const textStyle = pickTextStyle(flattenedStyle);
     const language = styleKey === "fence" ? sourceInfo(node).trim() : "";
@@ -105,8 +106,8 @@ const listItemRule: RenderFunction = (
   styles,
   inheritedStyles = {},
 ) => {
-  const inherited: Record<string, unknown> = inheritedStyles;
-  const listItemStyle: Record<string, unknown> = StyleSheet.flatten(styles.list_item) ?? {};
+  const inherited: TextStyle & ViewStyle = inheritedStyles;
+  const listItemStyle: TextStyle & ViewStyle = StyleSheet.flatten(styles.list_item) ?? {};
   const refStyle = { ...inherited, ...listItemStyle };
   const inheritedTextStyle = pickTextStyle(refStyle);
 
@@ -122,8 +123,10 @@ const listItemRule: RenderFunction = (
   }
 
   const orderedList = parentNodes.find((parent) => parent.type === "ordered_list");
+
   if (orderedList) {
     const listItemNumber = Number(orderedList.attributes?.start ?? 1) + node.index;
+
     return (
       <View key={node.key} style={styles._VIEW_SAFE_list_item}>
         <Text style={[inheritedTextStyle, styles.ordered_list_icon]}>
@@ -146,14 +149,31 @@ function hasParent(parentNodes: ASTNode[], type: string): boolean {
   return parentNodes.some((parent) => parent.type === type);
 }
 
-function pickTextStyle(style: Record<string, unknown>): Record<string, unknown> {
+function pickTextStyle(style: TextStyle & ViewStyle): TextStyle {
   return Object.fromEntries(
     Object.entries(style).filter(([property]) => textStyleProps.includes(property)),
   );
 }
 
+function hasSourceInfo(node: ASTNode): node is ASTNode & { sourceInfo: string } {
+  return "sourceInfo" in node && typeof node.sourceInfo === "string";
+}
+
+function isString(value: unknown): value is string {
+  return typeof value === "string";
+}
+
+function hasFontSize(value: unknown): value is { fontSize: number } {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "fontSize" in value &&
+    typeof value.fontSize === "number"
+  );
+}
+
 function sourceInfo(node: ASTNode): string {
-  return ((node as ASTNode & { sourceInfo?: string }).sourceInfo ?? "").trim();
+  return hasSourceInfo(node) ? node.sourceInfo.trim() : "";
 }
 
 function trimTrailingNewline(content: string): string {
@@ -161,47 +181,65 @@ function trimTrailingNewline(content: string): string {
 }
 
 const MIN_TABLE_COLUMN_WIDTH = 112;
+
 const MAX_TABLE_COLUMN_WIDTH = 320;
+
 const CHARACTER_WIDTH_PER_FONT_SIZE = 0.5;
+
 const DEFAULT_BODY_FONT_SIZE = 15;
+
 const TABLE_CELL_HORIZONTAL_PADDING = 20;
+
 const tableScrollerLayoutStyle: ViewStyle = { flexGrow: 0 };
+
 const lastTableRowStyle: ViewStyle = { borderBottomWidth: 0 };
+
 const tableColumnWidthsCache = new WeakMap<ASTNode, number[]>();
 
 function tableCellStyle(
   node: ASTNode,
   parentNodes: ASTNode[],
-  styles: Record<string, unknown>,
+  styles: Record<string, TextStyle & ViewStyle>,
 ): ViewStyle {
   const row = parentNodes.find((parent) => parent.type === "tr");
   const table = parentNodes.find((parent) => parent.type === "table");
   const columnIndex = row?.children.findIndex((cell) => cell.key === node.key) ?? -1;
   const alignItems = cellAlignment(node);
+
   if (!table || columnIndex < 0) {
     return { alignItems, flexGrow: 0, flexShrink: 0, minWidth: MIN_TABLE_COLUMN_WIDTH };
   }
 
   const width = tableColumnWidths(table, styles)[columnIndex] ?? MIN_TABLE_COLUMN_WIDTH;
+
   return { alignItems, flexGrow: 0, flexShrink: 0, minWidth: width, width };
 }
 
 function cellAlignment(node: ASTNode): ViewStyle["alignItems"] {
   const styleAttribute = node.attributes?.style;
-  if (typeof styleAttribute !== "string") return undefined;
+
+  if (!isString(styleAttribute)) return undefined;
   const alignment = /text-align:\s*(center|right)/u.exec(styleAttribute)?.[1];
+
   if (alignment === "center") return "center";
+
   if (alignment === "right") return "flex-end";
+
   return undefined;
 }
 
-function tableColumnWidths(table: ASTNode, styles: Record<string, unknown>): number[] {
+function tableColumnWidths(
+  table: ASTNode,
+  styles: Record<string, TextStyle & ViewStyle>,
+): number[] {
   const cached = tableColumnWidthsCache.get(table);
+
   if (cached) return cached;
 
   const longestContentByColumn: number[] = [];
   visitTableRows(table, (row) => {
     const cells = row.children.filter((child) => child.type === "th" || child.type === "td");
+
     for (const [columnIndex, cell] of cells.entries()) {
       const longestLine = Math.max(
         0,
@@ -209,6 +247,7 @@ function tableColumnWidths(table: ASTNode, styles: Record<string, unknown>): num
           .split("\n")
           .map((line) => lineWidthUnits(line.trim())),
       );
+
       longestContentByColumn[columnIndex] = Math.max(
         longestContentByColumn[columnIndex] ?? 0,
         longestLine,
@@ -217,6 +256,7 @@ function tableColumnWidths(table: ASTNode, styles: Record<string, unknown>): num
   });
   const fontScale = PixelRatio.getFontScale();
   const characterWidth = bodyFontSize(styles) * CHARACTER_WIDTH_PER_FONT_SIZE * fontScale;
+
   const widths = longestContentByColumn.map((longestContent) =>
     Math.min(
       MAX_TABLE_COLUMN_WIDTH * fontScale,
@@ -226,7 +266,9 @@ function tableColumnWidths(table: ASTNode, styles: Record<string, unknown>): num
       ),
     ),
   );
+
   tableColumnWidthsCache.set(table, widths);
+
   return widths;
 }
 
@@ -234,38 +276,43 @@ const wideCharacterPattern = /[ᄀ-ᅟ⺀-꓏가-힣豈-﫿︰-﹏＀-｠￠-￦
 
 function lineWidthUnits(line: string): number {
   let units = 0;
+
   for (const character of line) units += wideCharacterPattern.test(character) ? 2 : 1;
+
   return units;
 }
 
-function bodyFontSize(styles: Record<string, unknown>): number {
+function bodyFontSize(styles: Record<string, TextStyle & ViewStyle>): number {
   const body = styles.body;
-  if (typeof body !== "object" || body === null || !("fontSize" in body)) {
-    return DEFAULT_BODY_FONT_SIZE;
-  }
-  return typeof body.fontSize === "number" ? body.fontSize : DEFAULT_BODY_FONT_SIZE;
+
+  return hasFontSize(body) ? body.fontSize : DEFAULT_BODY_FONT_SIZE;
 }
 
 function isLastTableRow(node: ASTNode, parentNodes: ASTNode[]): boolean {
   const table = parentNodes.find((parent) => parent.type === "table");
+
   if (!table) return false;
   let lastRow: ASTNode | undefined;
   visitTableRows(table, (row) => {
     lastRow = row;
   });
+
   return lastRow?.key === node.key;
 }
 
 function visitTableRows(node: ASTNode, visit: (row: ASTNode) => void): void {
   if (node.type === "tr") {
     visit(node);
+
     return;
   }
+
   for (const child of node.children) visitTableRows(child, visit);
 }
 
 function nodeText(node: ASTNode): string {
   if (node.content) return node.content;
+
   return node.children.map(nodeText).join("");
 }
 

@@ -1,8 +1,10 @@
+import { wellnessSummarySchema } from "@/utils/agent-summary-schemas";
 import type { WellnessState } from "@agents/types";
 import { AgentScreen, Field, SummaryCard } from "@/components/agent-screen";
 
 const WELLNESS_CONFIG = {
   id: "wellness" as const,
+  summarySchema: wellnessSummarySchema,
   title: "Wellness Planner",
   subtitle: "Coordinate grocery and fitness plans together.",
   placeholder: "Plan my week...",

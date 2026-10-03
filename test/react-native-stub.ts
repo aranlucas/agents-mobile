@@ -1,15 +1,34 @@
+import { createElement } from "react";
+import type { ImageProps, TextStyle, ViewStyle as NativeViewStyle } from "react-native";
 // Minimal `react-native` stub for running unit tests under Node. The host
 // component names keep react-test-renderer traversal simple.
 
-type StyleObject = Record<string, unknown>;
+type StyleObject = TextStyle & NativeViewStyle;
 
 export const View = "View";
+
 export const Text = "Text";
+
 export const TextInput = "TextInput";
+
 export const Pressable = "Pressable";
+
 export const ScrollView = "ScrollView";
-export const Image = "Image";
+
+// Native image sizing has no network implementation in Node. The real FitImage
+// lifecycle still runs and handles this native failure callback.
+export const Image = Object.assign((props: ImageProps) => createElement("Image", props), {
+  getSize(
+    _uri: string,
+    _success: (width: number, height: number) => void,
+    failure?: (error: Error) => void,
+  ) {
+    failure?.(new Error("Native image sizing is unavailable in the Node host"));
+  },
+});
+
 export const ActivityIndicator = "ActivityIndicator";
+
 export const KeyboardAvoidingView = "KeyboardAvoidingView";
 
 export const StyleSheet = {
@@ -18,9 +37,11 @@ export const StyleSheet = {
   },
   flatten(style?: StyleObject | StyleObject[] | null): StyleObject | undefined {
     if (!style) return undefined;
+
     if (Array.isArray(style)) {
       return Object.assign({}, ...style.filter(Boolean));
     }
+
     return style;
   },
 };
@@ -40,5 +61,6 @@ export function useColorScheme() {
   return "light";
 }
 
-export type ViewStyle = Record<string, unknown>;
+export type ViewStyle = NativeViewStyle;
+
 export type ColorValue = string;

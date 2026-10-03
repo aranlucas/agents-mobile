@@ -1,5 +1,5 @@
 import { act, create, type ReactTestRenderer } from "react-test-renderer";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
   krogerProductImageUrl,
   ProductResultsCard,
@@ -11,13 +11,12 @@ Object.defineProperty(globalThis, "IS_REACT_ACT_ENVIRONMENT", {
   value: true,
 });
 
-vi.mock("@copilotkit/react-native", () => ({ useFrontendTool: vi.fn() }));
-
 async function render(element: React.ReactElement) {
   let tree: ReactTestRenderer;
   await act(async () => {
     tree = create(element, { unstable_isConcurrent: false });
   });
+
   return tree!;
 }
 
@@ -52,10 +51,12 @@ describe("native product results frontend tool", () => {
         }}
       />,
     );
+
     const renderedText = products.root
       .findAllByType("Text")
       .flatMap((node) => node.props.children)
       .join(" ");
+
     expect(renderedText).toContain("Whole Milk");
     expect(renderedText.replaceAll(" ", "")).toContain("$5.49");
     expect(renderedText).toContain("Pickup available");

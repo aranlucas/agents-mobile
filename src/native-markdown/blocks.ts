@@ -1,19 +1,25 @@
 const FENCE_OPEN = /^ {0,3}(`{3,}|~{3,})(.*)$/u;
+
 type FenceState = { character: string; length: number };
 
 function fenceOpen(line: string): FenceState | null {
   const match = FENCE_OPEN.exec(line);
+
   if (!match) return null;
   const marker = match[1] ?? "";
   const character = marker[0] ?? "`";
+
   if (character === "`" && match[2]?.includes("`")) return null;
+
   return { character, length: marker.length };
 }
 
 function fenceClose(line: string, fence: FenceState): boolean {
   const match = /^ {0,3}(`{3,}|~{3,})[\t ]*$/u.exec(line);
+
   if (!match) return false;
   const marker = match[1] ?? "";
+
   return marker[0] === fence.character && marker.length >= fence.length;
 }
 
@@ -45,14 +51,18 @@ export function splitMarkdownBlocks(markdown: string): string[] {
   for (const line of lines) {
     if (fence) {
       current.push(line);
+
       if (fenceClose(line, fence)) fence = null;
       continue;
     }
+
     if (isBlank(line)) {
       if (current.length > 0) pendingBlank.push(line);
       continue;
     }
+
     const startsUnindented = !/^[\t ]/u.test(line);
+
     if (pendingBlank.length > 0) {
       if (startsUnindented) commit();
       else {
@@ -60,9 +70,12 @@ export function splitMarkdownBlocks(markdown: string): string[] {
         pendingBlank = [];
       }
     }
+
     current.push(line);
     fence = fenceOpen(line);
   }
+
   commit();
+
   return blocks;
 }

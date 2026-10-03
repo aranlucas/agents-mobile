@@ -1,22 +1,62 @@
+import {
+  AppRuntimeProvider,
+  ConversationProvider,
+  type AppRuntime,
+  type Conversation,
+  type ConversationValue,
+  type ProductTool,
+} from "./runtime/app-runtime";
+import { NavigationProvider, type Navigation } from "./runtime/navigation";
+import { createRootLayout, createTokenCache, type LayoutBindings } from "./runtime/root-layout";
+import { createPostActivities } from "./runtime/health-http";
+import { createHealthDataAdapter } from "../modules/health-data/src/health-data-adapter";
+import type { TripState, GroceryState, FitnessState, WellnessState } from "@agents/types";
+import { ToolCallStatus } from "@copilotkit/react-native/headless";
+
+import { productResultsSchema, type ProductResults } from "./components/product-results-tool";
 import type { ComponentType, ReactNode } from "react";
 import { createElement } from "react";
 import { act, create, type ReactTestRenderer } from "react-test-renderer";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-let currentState: Record<string, unknown> = {};
-let currentMessages: unknown[] = [];
-const providerProps: Array<Record<string, unknown>> = [];
-const frontendTools: Array<Record<string, unknown>> = [];
+let currentState: TripState | GroceryState | FitnessState | WellnessState = {};
+
+let currentMessages: Conversation["messages"] = [];
+
+type ProviderOptions = {
+  runtimeUrl?: string;
+  useSingleEndpoint?: boolean;
+  defaultThrottleMs?: number;
+};
+
+const providerProps: ProviderOptions[] = [];
+
+type ProductFrontendTool = ProductTool;
+
+const frontendTools: ProductFrontendTool[] = [];
+
+const toolRenderers: Pick<ProductFrontendTool, "name" | "agentId" | "render">[] = [];
 
 const addMessage = vi.fn();
-const runAgent = vi.fn(async () => undefined);
-const setHeaders = vi.fn();
-const getToken = vi.fn(async () => "session-jwt");
-let userId = "user-123";
-const httpFetch = vi.fn();
-vi.mock("expo/fetch", () => ({ fetch: httpFetch }));
 
-const agent = {
+const runAgent = vi.fn(async () => undefined);
+
+const setHeaders = vi.fn();
+
+const getToken = vi.fn(async () => "session-jwt");
+
+let userId = "user-123";
+
+const httpFetch = vi.fn<typeof globalThis.fetch>();
+
+const store = {
+  getItemAsync: vi.fn<(key: string) => Promise<string | null>>(async () => null),
+  setItemAsync: vi.fn<(key: string, value: string) => Promise<void>>(async () => undefined),
+};
+
+const healthData = createHealthDataAdapter(() => null);
+
+const conversation: Conversation = {
   addMessage,
   get isRunning() {
     return false;
@@ -24,91 +64,13 @@ const agent = {
   get messages() {
     return currentMessages;
   },
-  runAgent,
   get state() {
     return currentState;
   },
-};
-
-const copilotkit = {
+  run: runAgent,
   headers: { "x-client-version": "1" },
-  renderToolCalls: [] as Array<{
-    name: string;
-    agentId?: string;
-    render: ComponentType<Record<string, unknown>>;
-  }>,
-  runAgent,
   setHeaders,
-  subscribe: (_subscriber: unknown) => ({ unsubscribe: () => undefined }),
 };
-
-vi.mock("@/shims/node-crypto", () => ({}));
-
-vi.mock("@clerk/expo", () => ({
-  ClerkProvider: ({ children }: { children: ReactNode }) => <>{children}</>,
-  useAuth: () => ({ getToken, userId }),
-}));
-
-vi.mock("@copilotkit/react-native/headless", () => ({
-  ToolCallStatus: { InProgress: "inProgress", Executing: "executing", Complete: "complete" },
-  CopilotKitProvider: ({ children, ...props }: { children: ReactNode }) => {
-    providerProps.push(props);
-    return <>{children}</>;
-  },
-  useAgent: () => ({ agent }),
-  useCopilotKit: () => ({ copilotkit, executingToolCallIds: new Set<string>() }),
-  useFrontendTool: (tool: Record<string, unknown>) => {
-    frontendTools.push(tool);
-    if (typeof tool.name === "string") {
-      copilotkit.renderToolCalls.push({
-        name: tool.name,
-        agentId: tool.agentId as string | undefined,
-        render: tool.render as ComponentType<Record<string, unknown>>,
-      });
-    }
-  },
-  useRenderToolCall:
-    () =>
-    ({ toolCall }: { toolCall: { id: string; function: { name: string; arguments: string } } }) => {
-      const entry = copilotkit.renderToolCalls.find((rc) => rc.name === toolCall.function.name);
-      if (!entry) return null;
-      let args: Record<string, unknown> = {};
-      try {
-        args = JSON.parse(toolCall.function.arguments) as Record<string, unknown>;
-      } catch {
-        args = {};
-      }
-      return createElement(entry.render, {
-        name: toolCall.function.name,
-        toolCallId: toolCall.id,
-        args,
-        status: "complete",
-      });
-    },
-}));
-
-vi.mock("expo-constants", () => ({
-  default: {
-    expoConfig: {
-      extra: {
-        agentsBaseUrl: "https://agents.example.com",
-        clerkPublishableKey: "pk_test",
-        copilotKitRuntimeUrl: "https://app.example.com/api/copilotkit",
-      },
-    },
-  },
-}));
-
-vi.mock("expo-secure-store", () => ({
-  getItemAsync: vi.fn(async () => null),
-  setItemAsync: vi.fn(async () => undefined),
-}));
-
-vi.mock("expo-status-bar", () => ({ StatusBar: () => null }));
-
-vi.mock("@/native-markdown", () => ({
-  NativeMarkdown: ({ children }: { children: ReactNode }) => createElement("Text", null, children),
-}));
 
 function Host({ children }: { children?: ReactNode }) {
   return <>{children}</>;
@@ -124,37 +86,98 @@ Tabs.Screen = ({
   options?: { tabBarIcon?: ComponentType<{ color: string; size: number }> };
 }) => (options?.tabBarIcon ? createElement(options.tabBarIcon, { color: "#111", size: 20 }) : null);
 
-vi.mock("expo-router", () => ({
-  Redirect: ({ href }: { href: string }) => createElement("Redirect", { href }),
+const navigation: Navigation = {
   Tabs,
-}));
+  Redirect: ({ href }) => createElement("Redirect", { href }),
+  icons: { travel: Host, grocery: Host, fitness: Host, wellness: Host },
+};
 
-vi.mock("@sentry/react-native", () => ({
-  init: vi.fn(),
-  wrap: (component: ComponentType) => component,
-}));
-
-vi.mock("lucide-react-native", () => ({
-  Dumbbell: Host,
-  HeartPulse: Host,
-  Plane: Host,
-  ShoppingCart: Host,
-}));
-
-vi.mock("../modules/health-data", () => ({
-  default: {
-    getAvailabilityAsync: vi.fn(async () => ({ status: "unavailable", providerPackage: "" })),
-    getPermissionStatusAsync: vi.fn(),
-    readActivitiesAsync: vi.fn(),
-    requestPermissionsAsync: vi.fn(),
+const runtime: AppRuntime = {
+  session: {
+    getToken,
+    get userId() {
+      return userId;
+    },
   },
-}));
+  health: {
+    healthData,
+    storage: store,
+    now: () => new Date(),
+    postActivities: createPostActivities("https://agents.example.com", httpFetch),
+  },
+  ConversationProvider: ({ children }) => (
+    <ConversationProvider value={{ conversation, renderToolCall }}>{children}</ConversationProvider>
+  ),
+  ProductTool: ({ tool }) => {
+    frontendTools.push(tool);
+    toolRenderers.push({ name: tool.name, agentId: tool.agentId, render: tool.render });
+
+    return null;
+  },
+};
+
+const renderToolCall: ConversationValue["renderToolCall"] = ({ toolCall }) => {
+  const entry = toolRenderers.find((rc) => rc.name === toolCall.function.name);
+
+  if (!entry?.render) return null;
+  let args: Partial<ProductResults> = {};
+
+  try {
+    const parsed = productResultsSchema.safeParse(JSON.parse(toolCall.function.arguments));
+    args = parsed.success ? parsed.data : {};
+  } catch {
+    args = {};
+  }
+
+  return createElement(entry.render, {
+    name: toolCall.function.name,
+    toolCallId: toolCall.id,
+    args,
+    status: ToolCallStatus.Complete,
+  });
+};
+
+function RuntimeProvider({ children }: { children: ReactNode }) {
+  return <AppRuntimeProvider value={runtime}>{children}</AppRuntimeProvider>;
+}
+
+function Harness({ children }: { children: ReactNode }) {
+  return (
+    <RuntimeProvider>
+      <NavigationProvider value={navigation}>{children}</NavigationProvider>
+    </RuntimeProvider>
+  );
+}
+
+const StatusBar = () => null;
+
+const bindings: LayoutBindings = {
+  navigation,
+  StatusBar,
+  wrap: (component) => component,
+  providers: {
+    AuthProvider: Host,
+    AgentProvider: ({ children, ...props }) => {
+      providerProps.push(props);
+
+      return <>{children}</>;
+    },
+    RuntimeProvider,
+    publishableKey: "pk_test",
+    runtimeUrl: "https://app.example.com/api/copilotkit",
+  },
+};
+
+const NativeLayout = createRootLayout(bindings, createTokenCache(store));
+
+const WebLayout = createRootLayout(bindings);
 
 async function render(element: React.ReactElement) {
   let tree: ReactTestRenderer;
   await act(async () => {
-    tree = create(element, { unstable_isConcurrent: false });
+    tree = create(<Harness>{element}</Harness>, { unstable_isConcurrent: false });
   });
+
   return tree!;
 }
 
@@ -167,19 +190,16 @@ describe("mobile real feature surface", () => {
     ];
     providerProps.length = 0;
     frontendTools.length = 0;
-    copilotkit.renderToolCalls.length = 0;
+    toolRenderers.length = 0;
     userId = "user-123";
     addMessage.mockClear();
     getToken.mockReset().mockResolvedValue("session-jwt");
     runAgent.mockReset().mockResolvedValue(undefined);
-    httpFetch.mockReset();
+    httpFetch.mockReset().mockRejectedValue(new Error("Unexpected HTTP request in unit test"));
     setHeaders.mockClear();
   });
 
   it("mounts native and web providers around the four real tabs", async () => {
-    const { default: NativeLayout } = await import("./app/_layout");
-    const { default: WebLayout } = await import("./app/_layout.web");
-
     const native = await render(<NativeLayout />);
     const web = await render(<WebLayout />);
 
@@ -327,8 +347,6 @@ describe("mobile real feature surface", () => {
   });
 
   it("shows partial health sync, resumes page six, and isolates another account", async () => {
-    const { default: healthData } = await import("../modules/health-data");
-    const store = await import("expo-secure-store");
     const saved = new Map<string, string>();
     vi.mocked(store.getItemAsync).mockImplementation(async (key) => saved.get(key) ?? null);
     vi.mocked(store.setItemAsync).mockImplementation(async (key, value) => {
@@ -346,13 +364,13 @@ describe("mobile real feature surface", () => {
     vi.spyOn(healthData, "readActivitiesAsync").mockImplementation(
       async (_after, _before, token) => {
         const index = Number(token ?? 0);
+
         return { activities: [], nextPageToken: index < 5 ? String(index + 1) : undefined };
       },
     );
-    httpFetch.mockImplementation(async () => ({
-      ok: true,
-      json: async () => ({ accepted: 1, synced_at: "2026-10-02T00:00:00.000Z" }),
-    }));
+    httpFetch.mockImplementation(async () =>
+      Response.json({ accepted: 1, synced_at: "2026-10-02T00:00:00.000Z" }),
+    );
     const { default: Screen } = await import("./app/fitness");
     const tree = await render(<Screen />);
     const syncButton = () => tree.root.findAllByType("Pressable")[0];
@@ -370,7 +388,11 @@ describe("mobile real feature surface", () => {
     expect(httpFetch).toHaveBeenCalledTimes(6);
     await act(async () => {
       userId = "another-user";
-      tree.update(<Screen />);
+      tree.update(
+        <Harness>
+          <Screen />
+        </Harness>,
+      );
     });
     expect(JSON.stringify(tree.toJSON())).toContain("Ready to sync the last 30 days");
     expect(JSON.stringify(tree.toJSON())).not.toContain("6 workouts synced");
@@ -446,8 +468,6 @@ describe("mobile real feature surface", () => {
   });
 
   it("insets agent chrome and the fitness health card below the status bar", async () => {
-    const { StatusBar } = await import("expo-status-bar");
-    const { default: NativeLayout } = await import("./app/_layout");
     const { default: TravelScreen } = await import("./app/travel");
     const { default: FitnessScreen } = await import("./app/fitness");
 

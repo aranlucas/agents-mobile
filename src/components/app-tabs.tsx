@@ -1,29 +1,36 @@
-import { Tabs } from "expo-router";
-import { Dumbbell, HeartPulse, Plane, ShoppingCart } from "lucide-react-native";
-import { useColorScheme, type ColorValue } from "react-native";
-
-type TabIconProps = {
-  color: ColorValue;
-  size: number;
-};
+import { useNavigation, type TabIconProps } from "@/runtime/navigation";
+import { useColorScheme } from "react-native";
 
 function TravelIcon({ color, size }: TabIconProps) {
-  return <Plane color={String(color)} size={size} />;
+  const { icons } = useNavigation();
+  const Icon = icons.travel;
+
+  return <Icon color={String(color)} size={size} />;
 }
 
 function GroceryIcon({ color, size }: TabIconProps) {
-  return <ShoppingCart color={String(color)} size={size} />;
+  const { icons } = useNavigation();
+  const Icon = icons.grocery;
+
+  return <Icon color={String(color)} size={size} />;
 }
 
 function FitnessIcon({ color, size }: TabIconProps) {
-  return <Dumbbell color={String(color)} size={size} />;
+  const { icons } = useNavigation();
+  const Icon = icons.fitness;
+
+  return <Icon color={String(color)} size={size} />;
 }
 
 function WellnessIcon({ color, size }: TabIconProps) {
-  return <HeartPulse color={String(color)} size={size} />;
+  const { icons } = useNavigation();
+  const Icon = icons.wellness;
+
+  return <Icon color={String(color)} size={size} />;
 }
 
 export function AppTabs() {
+  const { Tabs } = useNavigation();
   const isDark = useColorScheme() === "dark";
 
   return (

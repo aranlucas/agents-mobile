@@ -1,29 +1,39 @@
-import { ClerkProvider, type TokenCache } from "@clerk/expo";
-import { CopilotKitProvider } from "@copilotkit/react-native/headless";
-import Constants from "expo-constants";
-import type { ReactNode } from "react";
-import { getCopilotKitRuntimeUrl } from "@/utils/agent-config";
+import type { TokenCache } from "@clerk/expo";
+import type { ComponentType, ReactNode } from "react";
 
-type AppProvidersProps = {
-  children: ReactNode;
-  tokenCache?: TokenCache;
+export type ProviderBindings = {
+  AuthProvider: ComponentType<{
+    children: ReactNode;
+    publishableKey: string;
+    tokenCache?: TokenCache;
+  }>;
+  AgentProvider: ComponentType<{
+    children: ReactNode;
+    runtimeUrl: string;
+    defaultThrottleMs: number;
+    useSingleEndpoint: boolean;
+  }>;
+  RuntimeProvider: ComponentType<{ children: ReactNode }>;
+  publishableKey: string;
+  runtimeUrl: string;
 };
 
-export function AppProviders({ children, tokenCache }: AppProvidersProps) {
-  const publishableKey =
-    Constants.expoConfig?.extra?.clerkPublishableKey ??
-    process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY ??
-    "";
+export function AppProviders({
+  children,
+  tokenCache,
+  bindings,
+}: {
+  children: ReactNode;
+  tokenCache?: TokenCache;
+  bindings: ProviderBindings;
+}) {
+  const { AuthProvider, AgentProvider, RuntimeProvider, publishableKey, runtimeUrl } = bindings;
 
   return (
-    <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
-      <CopilotKitProvider
-        defaultThrottleMs={0}
-        runtimeUrl={getCopilotKitRuntimeUrl()}
-        useSingleEndpoint={false}
-      >
-        {children}
-      </CopilotKitProvider>
-    </ClerkProvider>
+    <AuthProvider publishableKey={publishableKey} tokenCache={tokenCache}>
+      <AgentProvider defaultThrottleMs={0} runtimeUrl={runtimeUrl} useSingleEndpoint={false}>
+        <RuntimeProvider>{children}</RuntimeProvider>
+      </AgentProvider>
+    </AuthProvider>
   );
 }

@@ -2,10 +2,13 @@ import type { HealthDataActivity, HealthDataAvailability } from "../../modules/h
 import type HealthData from "../../modules/health-data";
 
 const INITIAL_SYNC_DAYS = 30;
+
 const PAGE_SIZE = 100;
+
 const MAX_PAGES = 5;
 
 export type SyncResponse = { accepted: number; synced_at: string };
+
 export type HealthSyncState = {
   phase:
     | "checking"
@@ -29,7 +32,9 @@ type Checkpoint = {
   pageToken: string | null;
   accepted: number;
 };
+
 type Progress = { lastSyncedAt?: string; pending?: Checkpoint };
+
 type Dependencies = {
   healthData: typeof HealthData;
   storage: {
@@ -44,18 +49,23 @@ type Dependencies = {
 /** Owns the bounded window, acknowledgement checkpoints, and single active run. */
 export function createHealthSync(accountId: string, dependencies: Dependencies) {
   const { healthData, storage, getToken, postActivities, now } = dependencies;
+
   // SecureStore keys only allow alphanumerics, '.', '-' and '_'. Encode without collisions.
   const accountKey = Array.from(accountId, (character) =>
     character.codePointAt(0)!.toString(16),
   ).join("-");
+
   const key = `fitness.health-connect.progress.v1.${accountKey}`;
   let inFlight: Promise<HealthSyncState> | undefined;
 
   async function readProgress(): Promise<Progress> {
     const stored = await storage.getItemAsync(key);
+
     if (!stored) return {};
     const progress: unknown = JSON.parse(stored);
+
     if (!isProgress(progress)) throw new Error("Saved fitness sync progress is invalid.");
+
     return progress;
   }
 
@@ -64,8 +74,10 @@ export function createHealthSync(accountId: string, dependencies: Dependencies) 
       const progress = await readProgress();
       const availability = await healthData.getAvailabilityAsync();
       const state = stateFromProgress(progress, availability);
+
       if (availability.status !== "available") return { ...state, phase: "unavailable" };
       const permission = await healthData.getPermissionStatusAsync();
+
       return { ...state, phase: permission.granted ? state.phase : "permission_required" };
     } catch (cause) {
       return failed(cause);
@@ -75,14 +87,19 @@ export function createHealthSync(accountId: string, dependencies: Dependencies) 
   async function run(): Promise<HealthSyncState> {
     let progress: Progress = {};
     let availability: HealthDataAvailability | undefined;
+
     try {
       progress = await readProgress();
       availability = await healthData.getAvailabilityAsync();
+
       if (availability.status !== "available") {
         return { ...stateFromProgress(progress, availability), phase: "unavailable" };
       }
+
       let permission = await healthData.getPermissionStatusAsync();
+
       if (!permission.granted) permission = await healthData.requestPermissionsAsync();
+
       if (!permission.granted) {
         return { ...stateFromProgress(progress, availability), phase: "permission_required" };
       }
@@ -90,9 +107,11 @@ export function createHealthSync(accountId: string, dependencies: Dependencies) 
       // Establish auth before starting a new window. Refresh before every write so
       // the production adapter can also reject an account change during a native read.
       await requireToken();
+
       if (!progress.pending) {
         const before = now();
         const after = new Date(before.getTime() - INITIAL_SYNC_DAYS * 24 * 60 * 60 * 1000);
+
         const started: Progress = {
           ...progress,
           pending: {
@@ -102,12 +121,14 @@ export function createHealthSync(accountId: string, dependencies: Dependencies) 
             accepted: 0,
           },
         };
+
         await storage.setItemAsync(key, JSON.stringify(started));
         progress = started;
       }
 
       for (let index = 0; index < MAX_PAGES; index += 1) {
         const checkpoint = progress.pending!;
+
         // Page tokens are sequential, and must be saved only after acknowledgement.
         // oxlint-disable-next-line eslint/no-await-in-loop
         const page = await healthData.readActivitiesAsync(
@@ -116,25 +137,31 @@ export function createHealthSync(accountId: string, dependencies: Dependencies) 
           checkpoint.pageToken,
           PAGE_SIZE,
         );
+
         // oxlint-disable-next-line eslint/no-await-in-loop
         const token = await requireToken();
         // oxlint-disable-next-line eslint/no-await-in-loop
         const response = await postActivities(page.activities, token);
+
         if (!isSyncResponse(response))
           throw new Error("Fitness sync returned an invalid response.");
         const accepted = checkpoint.accepted + response.accepted;
         const nextPageToken = page.nextPageToken === "" ? null : (page.nextPageToken ?? null);
+
         const next: Progress = nextPageToken
           ? { ...progress, pending: { ...checkpoint, accepted, pageToken: nextPageToken } }
           : { lastSyncedAt: response.synced_at };
+
         // Completion and removal of the pending window are one atomic storage write.
         // oxlint-disable-next-line eslint/no-await-in-loop
         await storage.setItemAsync(key, JSON.stringify(next));
         progress = next;
+
         if (!nextPageToken) {
           return { ...stateFromProgress(progress, availability), accepted, phase: "synced" };
         }
       }
+
       return { ...stateFromProgress(progress, availability), phase: "partial" };
     } catch (cause) {
       return {
@@ -148,12 +175,15 @@ export function createHealthSync(accountId: string, dependencies: Dependencies) 
 
   async function requireToken() {
     let token: string | null;
+
     try {
       token = await getToken();
     } catch {
       throw new Error("Your session changed or you are offline. Sign in and try again.");
     }
+
     if (!token) throw new Error("Sign in before syncing fitness data.");
+
     return token;
   }
 
@@ -163,6 +193,7 @@ export function createHealthSync(accountId: string, dependencies: Dependencies) 
       inFlight ??= run().finally(() => {
         inFlight = undefined;
       });
+
       return inFlight;
     },
   };
@@ -196,9 +227,12 @@ function isDate(value: unknown): value is string {
 
 function isProgress(value: unknown): value is Progress {
   if (typeof value !== "object" || value === null) return false;
+
   if ("lastSyncedAt" in value && !isDate(value.lastSyncedAt)) return false;
+
   if (!("pending" in value)) return true;
   const pending = value.pending;
+
   return (
     typeof pending === "object" &&
     pending !== null &&

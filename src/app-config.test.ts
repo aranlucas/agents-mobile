@@ -1,3 +1,4 @@
+import { z } from "zod";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { dirname, join } from "node:path";
@@ -17,10 +18,19 @@ function readExpoConfig(extraEnv: Record<string, string>) {
   });
 
   assert.equal(result.status, 0, result.stderr ?? result.stdout);
-  return JSON.parse(result.stdout) as {
-    extra?: Record<string, string>;
-    web?: { output?: string };
-  };
+
+  return z
+    .object({
+      extra: z
+        .object({
+          clerkPublishableKey: z.string().optional(),
+          copilotKitRuntimeUrl: z.string().optional(),
+          agentsBaseUrl: z.string().optional(),
+        })
+        .optional(),
+      web: z.object({ output: z.string().optional() }).optional(),
+    })
+    .parse(JSON.parse(result.stdout));
 }
 
 describe("Expo app config", () => {

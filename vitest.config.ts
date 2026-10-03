@@ -1,9 +1,22 @@
 import { resolve } from "node:path";
 import { defineConfig } from "vitest/config";
+import { transformWithOxc } from "vite";
 
 // Pure-logic unit tests only. `react-native` is aliased to a small Node stub so
 // modules that import `StyleSheet`/`Platform` can run outside the RN runtime.
 export default defineConfig({
+  plugins: [
+    {
+      name: "native-markdown-jsx",
+      enforce: "pre",
+      transform(code, id) {
+        if (!id.includes("/react-native-markdown-display/") || !id.split("?")[0]?.endsWith(".js"))
+          return null;
+
+        return transformWithOxc(code, id, { lang: "jsx", jsx: { runtime: "automatic" } });
+      },
+    },
+  ],
   resolve: {
     alias: [
       {
@@ -23,6 +36,13 @@ export default defineConfig({
     ],
   },
   test: {
+    // Convert the installed CJS FitImage package to ESM so its React Native
+    // imports use the same Node host adapter as the rest of the renderer.
+    deps: {
+      optimizer: {
+        ssr: { enabled: true, include: ["react-native-markdown-display > react-native-fit-image"] },
+      },
+    },
     // Bound memory and CPU use when running validation on a development machine.
     maxWorkers: 1,
     server: {
@@ -31,7 +51,15 @@ export default defineConfig({
       // `text-encoding` CJS, which Node cannot bind ESM names from. Inlined
       // modules go through Vite, where the alias above redirects it to the
       // node:util stub. `react-native` itself stays stubbed via its alias.
-      deps: { inline: [/@copilotkit\/react-native/, "text-encoding"] },
+      deps: {
+        inline: [
+          /@copilotkit\/react-native/,
+          /@copilotkit\/react-core/,
+          "text-encoding",
+          "react-native-markdown-display",
+          "react-native-fit-image",
+        ],
+      },
     },
     environment: "node",
     testTimeout: 30_000,

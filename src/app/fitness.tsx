@@ -1,3 +1,4 @@
+import { fitnessSummarySchema } from "@/utils/agent-summary-schemas";
 import type { FitnessState } from "@agents/types";
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -6,6 +7,7 @@ import { useHealthDataSync } from "@/hooks/use-health-data-sync";
 
 const FITNESS_CONFIG = {
   id: "fitness" as const,
+  summarySchema: fitnessSummarySchema,
   title: "Fitness Planner",
   subtitle: "Connect Health Connect, sync recent workouts, and build a tailored plan.",
   placeholder: "Plan my training...",
@@ -34,13 +36,16 @@ export default function FitnessScreen() {
 function HealthConnectCard() {
   const { accepted, availability, canResume, error, lastSyncedAt, phase, sync } =
     useHealthDataSync();
+
   const busy = phase === "checking" || phase === "syncing";
+
   const label =
     phase === "permission_required"
       ? "Connect Health Connect"
       : canResume
         ? "Continue sync"
         : "Sync workouts";
+
   const status =
     phase === "checking"
       ? "Checking Health Connect..."
