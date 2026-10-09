@@ -1,6 +1,7 @@
 name: CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
   pull_request:
@@ -10,17 +11,33 @@ permissions:
 
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  check:
-    name: Check mobile app
+  ci:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v7
-      - uses: pnpm/setup@fbda4c85fc2e1e08721cd8763afea8f48d60f024 # v3.0.0
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up pnpm, Node.js, and dependencies
+        uses: pnpm/setup@fbda4c85fc2e1e08721cd8763afea8f48d60f024 # v3.0.0
         with:
           cache: true
           require-lockfile: true
-      - name: Check and test
-        run: pnpm check && pnpm test
+
+      - parallel:
+          - name: Lint
+            run: pnpm exec oxlint src test modules scripts packages --threads=2
+
+          - name: Check formatting
+            run: pnpm exec oxfmt --threads=2 --check src test modules scripts packages package.json app.config.js metro.config.js app.json tsconfig.json vitest.config.ts pnpm-workspace.yaml .oxlintrc.json .oxfmtrc.json
+
+          - name: Typecheck
+            run: pnpm typecheck
+
+          - name: Test
+            run: pnpm test
