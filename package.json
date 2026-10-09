@@ -9,7 +9,7 @@
     "postinstall": "node scripts/expo-postinstall.mjs",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "web": "expo start --web",
+    "web": "portless run --name agents-mobile expo start --web --localhost",
     "eas:env:production": "pnpm dlx eas-cli env:list production --format long",
     "eas:env:pull:production": "pnpm dlx eas-cli env:pull production --path .env.local",
     "build": "node scripts/with-android-sdk-env.mjs pnpm dlx eas-cli build --profile production --platform android --local",
@@ -26,7 +26,8 @@
     "check": "oxlint src test modules scripts packages --threads=2 && oxfmt --check src test modules scripts packages package.json app.config.js metro.config.js app.json tsconfig.json vitest.config.ts pnpm-workspace.yaml .oxlintrc.json .oxfmtrc.json && tsc --noEmit",
     "test": "vitest run",
     "coverage": "vitest run --coverage",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "web:direct": "expo start --web"
   },
   "dependencies": {
     "@agents/types": "workspace:*",

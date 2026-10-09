@@ -51,6 +51,35 @@ pnpm web
 
 When using an Android emulator, local gateway URLs are rewritten to the emulator host `10.0.2.2`.
 
+
+## Local URLs with Portless
+
+This command serves the Expo web client in a browser on the development machine.
+
+The standard development command uses [Portless](https://github.com/vercel-labs/portless).
+Install its pinned CLI once with Node.js 24 or newer, then run this repository's command after the
+normal dependency and environment setup:
+
+```sh
+npm install -g portless@0.15.7
+pnpm web
+```
+
+The main checkout uses `https://agents-mobile.localhost` with the default proxy settings.
+Use the URL printed by Portless if you have changed its proxy port, TLS, or TLD.
+Linked Git worktrees get a branch prefix, so each checkout has its own origin.
+The first HTTPS run can request local administrator permission to bind port 443,
+trust its development certificate, and synchronize local hostnames. Ctrl+C stops
+the child server and removes its route. The direct fallback below starts the
+server without the proxy.
+
+Use `pnpm web:direct` for the direct browser server and `pnpm start`, `pnpm android`,
+or `pnpm ios` for native development. A phone or emulator does not resolve your
+computer's `.localhost` name to your computer; keep its existing gateway URL and
+native development-client workflow. For browser sign-in, use your development
+Clerk instance and authorize the actual browser origin where required. The gateway
+must allow that exact origin for browser API calls.
+
 ## Peek under the hood
 
 - `src/app/` contains the Travel, Grocery, Fitness, and Wellness routes.
