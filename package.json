@@ -26,8 +26,7 @@
     "check": "oxlint src test modules scripts packages --threads=2 && oxfmt --check src test modules scripts packages package.json app.config.js metro.config.js app.json tsconfig.json vitest.config.ts pnpm-workspace.yaml .oxlintrc.json .oxfmtrc.json && tsc --noEmit",
     "test": "vitest run",
     "coverage": "vitest run --coverage",
-    "test:watch": "vitest",
-    "web:direct": "expo start --web"
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@agents/types": "workspace:*",
