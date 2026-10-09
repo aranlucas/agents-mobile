@@ -49,6 +49,8 @@ pnpm ios
 pnpm web
 ~~~
 
+`pnpm web` serves the web build at https://agents-mobile.localhost through [Portless](https://github.com/vercel-labs/portless) (a dev dependency); its first run may ask for `sudo` to bind port 443 and trust a local certificate.
+
 When using an Android emulator, local gateway URLs are rewritten to the emulator host `10.0.2.2`.
 
 ## Peek under the hood
