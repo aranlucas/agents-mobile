@@ -1,5 +1,5 @@
 {
-  "name": "mobile",
+  "name": "agents-mobile",
   "version": "1.0.1",
   "private": true,
   "main": "expo-router/entry",
@@ -9,7 +9,7 @@
     "postinstall": "node scripts/expo-postinstall.mjs",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "web": "portless run --name agents-mobile expo start --web --localhost",
+    "web": "portless run expo start --web",
     "eas:env:production": "pnpm dlx eas-cli env:list production --format long",
     "eas:env:pull:production": "pnpm dlx eas-cli env:pull production --path .env.local",
     "build": "node scripts/with-android-sdk-env.mjs pnpm dlx eas-cli build --profile production --platform android --local",
@@ -77,6 +77,7 @@
     "oxlint": "1.87.0",
     "oxlint-tsgolint": "^7.0.2003",
     "pnpm-sync-dependencies-meta-injected": "^0.0.15",
+    "portless": "0.15.7",
     "react-test-renderer": "19.3.0",
     "supports-color": "11.0.0",
     "typescript": "~6.0.3",
