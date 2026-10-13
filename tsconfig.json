@@ -18,14 +18,6 @@
     }
   },
   "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"],
-  "exclude": [
-    "node_modules",
-    "metro.config.js",
-    "android",
-    "ios",
-    "**/*.test.ts",
-    "**/*.test.tsx",
-    "tools/oxlint/anti-slop"
-  ],
+  "exclude": ["node_modules", "metro.config.js", "android", "ios", "**/*.test.ts", "**/*.test.tsx"],
   "extends": "expo/tsconfig.base"
 }
