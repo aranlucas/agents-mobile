@@ -24,8 +24,7 @@
     "android",
     "ios",
     "**/*.test.ts",
-    "**/*.test.tsx",
-    "tools/oxlint/anti-slop"
+    "**/*.test.tsx"
   ],
   "extends": "expo/tsconfig.base"
 }
