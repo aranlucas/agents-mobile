@@ -111,15 +111,6 @@ describe("NativeMarkdown table rendering", () => {
   it("widens columns for emoji and CJK content", () => {
     const styles = { _VIEW_SAFE_td: {} };
 
-    const buildTable = (text: string, prefix: string) => {
-      const cell = astNode("td", `${prefix}-cell`, text);
-      const row = astNode("tr", `${prefix}-row`, "", [cell]);
-      const body = astNode("tbody", `${prefix}-body`, "", [row]);
-      const tableNode = astNode("table", `${prefix}-table`, "", [body]);
-
-      return { cell, parents: [row, body, tableNode] };
-    };
-
     const ascii = buildTable("apples and pears jam", "ascii");
     const emoji = buildTable("🍎🍐🍞🥛🧀🍗🍚🥦🥕🧅🍋🍊🍇🫐🍓🥔🌽🍅🥬🥒", "emoji");
     const asciiCell = markdownRules.td?.(ascii.cell, [], ascii.parents, styles);
@@ -313,3 +304,12 @@ it("renders images through the installed FitImage lifecycle without native netwo
     tree!.unmount();
   });
 });
+
+const buildTable = (text: string, prefix: string) => {
+  const cell = astNode("td", `${prefix}-cell`, text);
+  const row = astNode("tr", `${prefix}-row`, "", [cell]);
+  const body = astNode("tbody", `${prefix}-body`, "", [row]);
+  const tableNode = astNode("table", `${prefix}-table`, "", [body]);
+
+  return { cell, parents: [row, body, tableNode] };
+};

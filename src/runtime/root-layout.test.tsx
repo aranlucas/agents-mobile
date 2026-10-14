@@ -47,10 +47,6 @@ it("preserves native secure token storage and leaves web cache to Clerk", async 
 
   Tabs.Screen = () => null;
 
-  function Icon() {
-    return null;
-  }
-
   const wrap = vi.fn((component: React.ComponentType) => component);
 
   const bindings: LayoutBindings = {
@@ -106,3 +102,7 @@ it("preserves native secure token storage and leaves web cache to Clerk", async 
     tree.unmount();
   });
 });
+
+function Icon() {
+  return null;
+}
