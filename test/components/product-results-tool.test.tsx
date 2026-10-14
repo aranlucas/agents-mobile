@@ -4,7 +4,7 @@ import {
   krogerProductImageUrl,
   ProductResultsCard,
   productResultsSchema,
-} from "./product-results-tool";
+} from "@/components/product-results-tool";
 
 Object.defineProperty(globalThis, "IS_REACT_ACT_ENVIRONMENT", {
   configurable: true,

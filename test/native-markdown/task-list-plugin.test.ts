@@ -1,7 +1,7 @@
 import MarkdownIt from "markdown-it";
 import { describe, expect, it } from "vitest";
 
-import { taskListPlugin } from "./task-list-plugin";
+import { taskListPlugin } from "@/native-markdown/task-list-plugin";
 
 describe("taskListPlugin", () => {
   it("replaces task markers with checkbox tokens and strips their text", () => {

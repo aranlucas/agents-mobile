@@ -2,7 +2,7 @@ import type { TokenCache } from "@clerk/expo";
 import type { ReactNode } from "react";
 import { act, create } from "react-test-renderer";
 import { expect, it, vi } from "vitest";
-import { createRootLayout, createTokenCache, type LayoutBindings } from "./root-layout";
+import { createRootLayout, createTokenCache, type LayoutBindings } from "@/runtime/root-layout";
 
 it("preserves native secure token storage and leaves web cache to Clerk", async () => {
   const storage = {
