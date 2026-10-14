@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { splitMarkdownBlocks } from "./blocks";
+import { splitMarkdownBlocks } from "@/native-markdown/blocks";
 
 describe("splitMarkdownBlocks", () => {
   it("keeps fenced code with interior blank lines together", () => {

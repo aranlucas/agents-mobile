@@ -33,6 +33,7 @@ export default defineConfig({
       // exports for Node to bind. Redirected to node:util globals.
       { find: /^text-encoding$/, replacement: resolve(__dirname, "./test/text-encoding-stub.ts") },
       { find: "@", replacement: resolve(__dirname, "./src") },
+      { find: "@test", replacement: resolve(__dirname, "./test") },
     ],
   },
   test: {
@@ -63,12 +64,11 @@ export default defineConfig({
     },
     environment: "node",
     testTimeout: 30_000,
-    include: ["src/**/*.test.{ts,tsx}", "test/**/*.test.{ts,tsx}"],
+    include: ["test/**/*.test.{ts,tsx}"],
     coverage: {
       provider: "v8",
       reporter: ["text"],
       include: ["src/**/*.{ts,tsx}"],
-      exclude: ["src/**/*.test.{ts,tsx}"],
     },
   },
 });

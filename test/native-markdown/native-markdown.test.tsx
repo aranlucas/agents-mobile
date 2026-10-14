@@ -5,8 +5,8 @@ import type { ASTNode } from "react-native-markdown-display";
 import { describe, expect, it } from "vitest";
 
 import { act, create, type ReactTestRenderer } from "react-test-renderer";
-import { NativeMarkdown, prepareMarkdownBlocks } from "./native-markdown";
-import { createMarkdownRules, markdownRules } from "./rules";
+import { NativeMarkdown, prepareMarkdownBlocks } from "@/native-markdown/native-markdown";
+import { createMarkdownRules, markdownRules } from "@/native-markdown/rules";
 
 describe("NativeMarkdown table rendering", () => {
   it("wraps tables in a nested horizontal scroll view", () => {

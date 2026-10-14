@@ -5,15 +5,15 @@ import {
   type Conversation,
   type ConversationValue,
   type ProductTool,
-} from "./runtime/app-runtime";
-import { NavigationProvider, type Navigation } from "./runtime/navigation";
-import { createRootLayout, createTokenCache, type LayoutBindings } from "./runtime/root-layout";
-import { createPostActivities } from "./runtime/health-http";
+} from "@/runtime/app-runtime";
+import { NavigationProvider, type Navigation } from "@/runtime/navigation";
+import { createRootLayout, createTokenCache, type LayoutBindings } from "@/runtime/root-layout";
+import { createPostActivities } from "@/runtime/health-http";
 import { createHealthDataAdapter } from "../modules/health-data/src/health-data-adapter";
 import type { TripState, GroceryState, FitnessState, WellnessState } from "@agents/types";
 import { ToolCallStatus } from "@copilotkit/react-native/headless";
 
-import { productResultsSchema, type ProductResults } from "./components/product-results-tool";
+import { productResultsSchema, type ProductResults } from "@/components/product-results-tool";
 import type { ComponentType, ReactNode } from "react";
 import { createElement } from "react";
 import { act, create, type ReactTestRenderer } from "react-test-renderer";
@@ -225,10 +225,10 @@ describe("mobile real feature surface", () => {
   });
 
   it.each([
-    ["travel", () => import("./app/travel"), { destination: "Kyoto", status: "ready" }],
-    ["grocery", () => import("./app/grocery"), { meal_plan: "Dinner", status: "ready" }],
-    ["fitness", () => import("./app/fitness"), { training_plan: "Run", status: "ready" }],
-    ["wellness", () => import("./app/wellness"), { weekly_plan: "Week", status: "ready" }],
+    ["travel", () => import("@/app/travel"), { destination: "Kyoto", status: "ready" }],
+    ["grocery", () => import("@/app/grocery"), { meal_plan: "Dinner", status: "ready" }],
+    ["fitness", () => import("@/app/fitness"), { training_plan: "Run", status: "ready" }],
+    ["wellness", () => import("@/app/wellness"), { weekly_plan: "Week", status: "ready" }],
   ])("renders and sends from the %s agent", async (_name, load, state) => {
     currentState = state;
     const { default: Screen } = await load();
@@ -265,7 +265,7 @@ describe("mobile real feature surface", () => {
         resolve = done;
       }),
     );
-    const { default: Screen } = await import("./app/travel");
+    const { default: Screen } = await import("@/app/travel");
     const tree = await render(<Screen />);
     const input = tree.root.findByType("TextInput");
     await act(async () => {
@@ -296,7 +296,7 @@ describe("mobile real feature surface", () => {
 
   it("keeps an unsent draft and displays recovery when token refresh rejects", async () => {
     getToken.mockRejectedValueOnce(new Error("Offline"));
-    const { default: Screen } = await import("./app/travel");
+    const { default: Screen } = await import("@/app/travel");
     const tree = await render(<Screen />);
     const input = tree.root.findByType("TextInput");
     await act(async () => {
@@ -322,7 +322,7 @@ describe("mobile real feature surface", () => {
 
   it("shows an uncertain run outcome without re-adding or replaying the message", async () => {
     runAgent.mockRejectedValueOnce(new Error("Connection dropped"));
-    const { default: Screen } = await import("./app/travel");
+    const { default: Screen } = await import("@/app/travel");
     const tree = await render(<Screen />);
     const input = tree.root.findByType("TextInput");
     await act(async () => {
@@ -371,7 +371,7 @@ describe("mobile real feature surface", () => {
     httpFetch.mockImplementation(async () =>
       Response.json({ accepted: 1, synced_at: "2026-10-02T00:00:00.000Z" }),
     );
-    const { default: Screen } = await import("./app/fitness");
+    const { default: Screen } = await import("@/app/fitness");
     const tree = await render(<Screen />);
     const syncButton = () => tree.root.findAllByType("Pressable")[0];
     await act(async () => {
@@ -407,7 +407,7 @@ describe("mobile real feature surface", () => {
   });
 
   it("redirects the root route to travel", async () => {
-    const { default: Index } = await import("./app/index");
+    const { default: Index } = await import("@/app/index");
     const tree = await render(<Index />);
 
     expect(tree.root.findByType("Redirect").props.href).toBe("/travel");
@@ -417,7 +417,7 @@ describe("mobile real feature surface", () => {
   });
 
   it("declares Kroger product results as a grocery frontend tool", async () => {
-    const { default: GroceryScreen } = await import("./app/grocery");
+    const { default: GroceryScreen } = await import("@/app/grocery");
     const tree = await render(<GroceryScreen />);
 
     expect(frontendTools).toEqual([
@@ -453,7 +453,7 @@ describe("mobile real feature surface", () => {
         ],
       },
     ];
-    const { default: GroceryScreen } = await import("./app/grocery");
+    const { default: GroceryScreen } = await import("@/app/grocery");
     const tree = await render(<GroceryScreen />);
 
     expect(
@@ -468,8 +468,8 @@ describe("mobile real feature surface", () => {
   });
 
   it("insets agent chrome and the fitness health card below the status bar", async () => {
-    const { default: TravelScreen } = await import("./app/travel");
-    const { default: FitnessScreen } = await import("./app/fitness");
+    const { default: TravelScreen } = await import("@/app/travel");
+    const { default: FitnessScreen } = await import("@/app/fitness");
 
     const native = await render(<NativeLayout />);
     const travel = await render(<TravelScreen />);

@@ -4,7 +4,7 @@ import {
   tripSummarySchema,
   fitnessSummarySchema,
   wellnessSummarySchema,
-} from "./agent-summary-schemas";
+} from "@/utils/agent-summary-schemas";
 
 describe("agent summary boundaries", () => {
   it("omits malformed streaming fields without hiding valid summary text", () => {

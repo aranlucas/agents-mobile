@@ -7,8 +7,8 @@ import {
   useConversation,
   type AppRuntime,
   type ConversationValue,
-} from "./app-runtime";
-import { SdkConversationProvider, SdkProductTool } from "./sdk-runtime";
+} from "@/runtime/app-runtime";
+import { SdkConversationProvider, SdkProductTool } from "@/runtime/sdk-runtime";
 import { GroceryProductResultsTool } from "@/components/product-results-tool";
 import { createHealthDataAdapter } from "../../modules/health-data/src/health-data-adapter";
 import { runWithCurrentClerkToken } from "@/utils/copilotkit-auth";

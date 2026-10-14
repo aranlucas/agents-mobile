@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { createHealthSync, isSyncResponse } from "./health-sync";
+import { createHealthSync, isSyncResponse } from "@/utils/health-sync";
 import type {
   HealthDataActivity,
   HealthDataActivityPage,

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { runWithCurrentClerkToken } from "./copilotkit-auth";
+import { runWithCurrentClerkToken } from "@/utils/copilotkit-auth";
 
 describe("runWithCurrentClerkToken", () => {
   it("refreshes Clerk auth before starting every agent run", async () => {

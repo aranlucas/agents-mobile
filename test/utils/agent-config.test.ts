@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "vitest";
-import { getAgentsBaseUrl, getCopilotKitRuntimeBaseUrl } from "./agent-config-core";
+import { getAgentsBaseUrl, getCopilotKitRuntimeBaseUrl } from "@/utils/agent-config-core";
 
 describe("getCopilotKitRuntimeBaseUrl", () => {
   it("normalizes the configured runtime", () => {
