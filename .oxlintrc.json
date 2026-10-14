@@ -17,7 +17,6 @@
   "rules": {
     "react/self-closing-comp": "warn",
     "react/react-in-jsx-scope": "off",
-    "react-hooks/exhaustive-deps": "warn",
     "jsx-a11y/prefer-tag-over-role": "off",
     "import/no-unassigned-import": [
       "warn",
@@ -53,18 +52,8 @@
     "anti-slop/no-unsafe-dictionary-type": "error",
     "anti-slop/no-widen-then-assert": "error",
     "anti-slop/require-readable-spacing": "error",
-    "anti-slop/require-safety-comment-for-type-assertion": "error",
-    "oxc/no-accumulating-spread": "error"
+    "anti-slop/require-safety-comment-for-type-assertion": "error"
   },
-  "overrides": [
-    {
-      "files": ["**/*.test.{ts,tsx}", "**/test/**"],
-      "rules": {
-        "jsx-a11y/aria-role": "off",
-        "jsx-a11y/heading-has-content": "off"
-      }
-    }
-  ],
   "ignorePatterns": [
     ".expo/**",
     ".agent/**",
