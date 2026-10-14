@@ -10,7 +10,7 @@ import {
 } from "@/runtime/app-runtime";
 import { SdkConversationProvider, SdkProductTool } from "@/runtime/sdk-runtime";
 import { GroceryProductResultsTool } from "@/components/product-results-tool";
-import { createHealthDataAdapter } from "../../modules/health-data/src/health-data-adapter";
+import { createHealthDataAdapter } from "@health-data/adapter";
 import { runWithCurrentClerkToken } from "@/utils/copilotkit-auth";
 
 const toolCall = {
