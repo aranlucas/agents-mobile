@@ -32,6 +32,10 @@ export default defineConfig({
       // Deprecated CJS polyfill (see test/text-encoding-stub.ts): no ESM named
       // exports for Node to bind. Redirected to node:util globals.
       { find: /^text-encoding$/, replacement: resolve(__dirname, "./test/text-encoding-stub.ts") },
+      {
+        find: "@health-data/adapter",
+        replacement: resolve(__dirname, "./modules/health-data/src/health-data-adapter.ts"),
+      },
       { find: "@", replacement: resolve(__dirname, "./src") },
       { find: "@test", replacement: resolve(__dirname, "./test") },
     ],

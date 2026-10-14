@@ -278,8 +278,8 @@ importers:
         version: 4.6.5
     devDependencies:
       '@aranlucas/oxforge':
-        specifier: ^0.2.0
-        version: 0.2.0(oxfmt@0.73.0)(oxlint-tsgolint@7.0.2004)(oxlint@1.88.0(oxlint-tsgolint@7.0.2004))
+        specifier: ^0.2.2
+        version: 0.2.2(oxfmt@0.73.0)(oxlint-tsgolint@7.0.2004)(oxlint@1.88.0(oxlint-tsgolint@7.0.2004))
       '@aranlucas/oxlint-plugin-anti-slop':
         specifier: 0.1.0
         version: 0.1.0(oxlint@1.88.0(oxlint-tsgolint@7.0.2004))
@@ -396,8 +396,8 @@ packages:
   '@antfu/install-pkg@2.1.0':
     resolution: {integrity: sha512-sdg9NxU3zR4Mnawfbc/x6GB5Wf17WYud5qOuEuxXjaKpYpMkISSJEjItGebXJ2bQ4DIcly4NYH23mtkGJjvKUw==}
 
-  '@aranlucas/oxforge@0.2.0':
-    resolution: {integrity: sha512-fba4paqnWrKEWHvi+0nWrgZoeEZfjgOVRyjRuAn5K6CVzYuqbFT8KST7+hCvt0Ijo3l5aLL0HywUTgtzo57Jyg==}
+  '@aranlucas/oxforge@0.2.2':
+    resolution: {integrity: sha512-5zmYmM1r4Y+F2TGKwGnzD4lS5wBS+IVVm6bOngWAMxyvuz1ipKtOCjoqRqMBP95b/p+iUtZmQqPsZ+OvoM5/6w==}
     engines: {node: '>=22.18.0'}
     hasBin: true
     peerDependencies:
@@ -6877,7 +6877,7 @@ snapshots:
       package-manager-detector: 1.8.0
       tinyexec: 1.3.1
 
-  '@aranlucas/oxforge@0.2.0(oxfmt@0.73.0)(oxlint-tsgolint@7.0.2004)(oxlint@1.88.0(oxlint-tsgolint@7.0.2004))':
+  '@aranlucas/oxforge@0.2.2(oxfmt@0.73.0)(oxlint-tsgolint@7.0.2004)(oxlint@1.88.0(oxlint-tsgolint@7.0.2004))':
     dependencies:
       '@aranlucas/oxlint-plugin-anti-slop': 0.1.0(oxlint@1.88.0(oxlint-tsgolint@7.0.2004))
       '@oxlint/plugins': 1.88.0

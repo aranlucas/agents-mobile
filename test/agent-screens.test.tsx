@@ -9,7 +9,7 @@ import {
 import { NavigationProvider, type Navigation } from "@/runtime/navigation";
 import { createRootLayout, createTokenCache, type LayoutBindings } from "@/runtime/root-layout";
 import { createPostActivities } from "@/runtime/health-http";
-import { createHealthDataAdapter } from "../modules/health-data/src/health-data-adapter";
+import { createHealthDataAdapter } from "@health-data/adapter";
 import type { TripState, GroceryState, FitnessState, WellnessState } from "@agents/types";
 import { ToolCallStatus } from "@copilotkit/react-native/headless";
 

@@ -1,9 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import {
-  createHealthDataAdapter,
-  type HealthDataModule,
-} from "../modules/health-data/src/health-data-adapter";
+import { createHealthDataAdapter, type HealthDataModule } from "@health-data/adapter";
 
 const requireOptionalNativeModule = vi.fn<(name: string) => HealthDataModule | null>();
 
