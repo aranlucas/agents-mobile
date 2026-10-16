@@ -24,7 +24,7 @@
     "fmt": "oxfmt --threads=2 .",
     "fmt:check": "oxfmt --threads=2 --check .",
     "typecheck": "GOMAXPROCS=2 tsc --noEmit",
-    "check": "oxlint src test modules scripts packages --threads=2 && oxfmt --check src test modules scripts packages package.json app.config.js metro.config.js app.json tsconfig.json vitest.config.ts pnpm-workspace.yaml .oxlintrc.json oxfmt.config.mts && tsc --noEmit",
+    "check": "oxlint src test modules scripts packages --threads=2 && oxfmt --check src test modules scripts packages package.json app.config.js metro.config.js app.json tsconfig.json vitest.config.ts pnpm-workspace.yaml .oxlintrc.json oxfmt.config.ts && tsc --noEmit",
     "test": "vitest run",
     "coverage": "vitest run --coverage",
     "test:watch": "vitest"
