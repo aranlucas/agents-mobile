@@ -1,5 +1,5 @@
 import { tripSummarySchema } from "@/utils/agent-summary-schemas";
-import type { TripState } from "@agents/types";
+import type { TripState } from "@/types";
 import { AgentScreen, Field, SummaryCard } from "@/components/agent-screen";
 
 const TRAVEL_CONFIG = {

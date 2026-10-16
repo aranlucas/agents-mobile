@@ -7,16 +7,17 @@ import {
   Platform,
   Pressable,
   ScrollView,
+  type ScrollViewInstance,
   StyleSheet,
   Text,
   TextInput,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { ScreenSafeArea } from "@/components/screen-safe-area";
 import { useAppRuntime, useConversation } from "@/runtime/app-runtime";
 import type { ToolCall, useAgent } from "@copilotkit/react-native/headless";
 import { NativeMarkdown, type NativeMarkdownStyle } from "@/native-markdown";
-import type { FitnessState, GroceryState, TripState, WellnessState } from "@agents/types";
+import type { FitnessState, GroceryState, TripState, WellnessState } from "@/types";
 import type { AgentId } from "@/utils/agent-config";
 import { runWithCurrentClerkToken } from "@/utils/copilotkit-auth";
 
@@ -114,7 +115,7 @@ function AgentScreenContent<TState extends AgentState>({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [sendError, setSendError] = useState<string>();
   const submitting = useRef(false);
-  const scrollRef = useRef<ScrollView>(null);
+  const scrollRef = useRef<ScrollViewInstance>(null);
 
   const { session } = useAppRuntime();
   const { conversation: agent, renderToolCall } = useConversation();
@@ -169,7 +170,7 @@ function AgentScreenContent<TState extends AgentState>({
   const summary = config.renderSummary(state);
 
   return (
-    <SafeAreaView style={styles.container} edges={safeArea ? ["top"] : []}>
+    <ScreenSafeArea style={styles.container} top={safeArea}>
       <KeyboardAvoidingView
         style={styles.fill}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -258,7 +259,7 @@ function AgentScreenContent<TState extends AgentState>({
           </Pressable>
         </View>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </ScreenSafeArea>
   );
 }
 

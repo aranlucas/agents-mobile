@@ -5,7 +5,6 @@ const dsn = process.env.EXPO_PUBLIC_SENTRY_DSN;
 const tracePropagationTargets = [
   "localhost",
   process.env.EXPO_PUBLIC_COPILOTKIT_RUNTIME_URL,
-  process.env.EXPO_PUBLIC_AGENTS_BASE_URL,
 ].filter((target): target is string => Boolean(target));
 
 Sentry.init({

@@ -8,9 +8,7 @@ import {
 } from "@/runtime/app-runtime";
 import { NavigationProvider, type Navigation } from "@/runtime/navigation";
 import { createRootLayout, createTokenCache, type LayoutBindings } from "@/runtime/root-layout";
-import { createPostActivities } from "@/runtime/health-http";
-import { createHealthDataAdapter } from "@health-data/adapter";
-import type { TripState, GroceryState, FitnessState, WellnessState } from "@agents/types";
+import type { TripState, GroceryState, FitnessState, WellnessState } from "@/types";
 import { ToolCallStatus } from "@copilotkit/react-native/headless";
 
 import { productResultsSchema, type ProductResults } from "@/components/product-results-tool";
@@ -47,14 +45,10 @@ const getToken = vi.fn(async () => "session-jwt");
 
 let userId = "user-123";
 
-const httpFetch = vi.fn<typeof globalThis.fetch>();
-
 const store = {
   getItemAsync: vi.fn<(key: string) => Promise<string | null>>(async () => null),
   setItemAsync: vi.fn<(key: string, value: string) => Promise<void>>(async () => undefined),
 };
-
-const healthData = createHealthDataAdapter(() => null);
 
 const conversation: Conversation = {
   addMessage,
@@ -98,12 +92,6 @@ const runtime: AppRuntime = {
     get userId() {
       return userId;
     },
-  },
-  health: {
-    healthData,
-    storage: store,
-    now: () => new Date(),
-    postActivities: createPostActivities("https://agents.example.com", httpFetch),
   },
   ConversationProvider: ({ children }) => (
     <ConversationProvider value={{ conversation, renderToolCall }}>{children}</ConversationProvider>
@@ -195,7 +183,6 @@ describe("mobile real feature surface", () => {
     addMessage.mockClear();
     getToken.mockReset().mockResolvedValue("session-jwt");
     runAgent.mockReset().mockResolvedValue(undefined);
-    httpFetch.mockReset().mockRejectedValue(new Error("Unexpected HTTP request in unit test"));
     setHeaders.mockClear();
   });
 
@@ -346,66 +333,6 @@ describe("mobile real feature surface", () => {
     });
   });
 
-  it("shows partial health sync, resumes page six, and isolates another account", async () => {
-    const saved = new Map<string, string>();
-    vi.mocked(store.getItemAsync).mockImplementation(async (key) => saved.get(key) ?? null);
-    vi.mocked(store.setItemAsync).mockImplementation(async (key, value) => {
-      saved.set(key, value);
-    });
-    vi.spyOn(healthData, "getAvailabilityAsync").mockResolvedValue({
-      status: "available",
-      providerPackage: "test",
-    });
-    vi.spyOn(healthData, "getPermissionStatusAsync").mockResolvedValue({
-      granted: true,
-      grantedPermissions: [],
-      requiredPermissions: [],
-    });
-    vi.spyOn(healthData, "readActivitiesAsync").mockImplementation(
-      async (_after, _before, token) => {
-        const index = Number(token ?? 0);
-
-        return { activities: [], nextPageToken: index < 5 ? String(index + 1) : undefined };
-      },
-    );
-    httpFetch.mockImplementation(async () =>
-      Response.json({ accepted: 1, synced_at: "2026-10-02T00:00:00.000Z" }),
-    );
-    const { default: Screen } = await import("@/app/fitness");
-    const tree = await render(<Screen />);
-    const syncButton = () => tree.root.findAllByType("Pressable")[0];
-    await act(async () => {
-      syncButton().props.onPress();
-    });
-    expect(JSON.stringify(tree.toJSON())).toContain(
-      "5 workouts synced so far. More workouts remain.",
-    );
-    expect(JSON.stringify(tree.toJSON())).toContain("Continue sync");
-    await act(async () => {
-      syncButton().props.onPress();
-    });
-    expect(JSON.stringify(tree.toJSON())).toContain("6 workouts synced");
-    expect(httpFetch).toHaveBeenCalledTimes(6);
-    await act(async () => {
-      userId = "another-user";
-      tree.update(
-        <Harness>
-          <Screen />
-        </Harness>,
-      );
-    });
-    expect(JSON.stringify(tree.toJSON())).toContain("Ready to sync the last 30 days");
-    expect(JSON.stringify(tree.toJSON())).not.toContain("6 workouts synced");
-    await act(async () => {
-      tree.unmount();
-    });
-    vi.spyOn(healthData, "getAvailabilityAsync").mockResolvedValue({
-      status: "unavailable",
-      providerPackage: "",
-    });
-    vi.mocked(store.getItemAsync).mockResolvedValue(null);
-  });
-
   it("redirects the root route to travel", async () => {
     const { default: Index } = await import("@/app/index");
     const tree = await render(<Index />);
@@ -467,7 +394,7 @@ describe("mobile real feature surface", () => {
     });
   });
 
-  it("insets agent chrome and the fitness health card below the status bar", async () => {
+  it("insets travel and fitness agent chrome below the status bar", async () => {
     const { default: TravelScreen } = await import("@/app/travel");
     const { default: FitnessScreen } = await import("@/app/fitness");
 
@@ -483,7 +410,6 @@ describe("mobile real feature surface", () => {
 
     expect(fitness.root.findAllByType("SafeAreaView").map((node) => node.props.edges)).toEqual([
       ["top"],
-      [],
     ]);
 
     await act(async () => {

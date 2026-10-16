@@ -2,7 +2,6 @@ import { createContext, useContext, type ReactNode, type ComponentType } from "r
 import type { ToolCall, useFrontendTool, useAgent } from "@copilotkit/react-native/headless";
 import type { ProductResults } from "@/components/product-results-tool";
 import type { AgentId } from "@/utils/agent-config";
-import type { createHealthSync } from "@/utils/health-sync";
 
 export type Session = {
   userId: string | null | undefined;
@@ -21,12 +20,9 @@ export type Conversation = {
 
 export type ProductTool = Parameters<typeof useFrontendTool<ProductResults>>[0];
 
-export type HealthServices = Omit<Parameters<typeof createHealthSync>[1], "getToken">;
-
 /** Application ports. SDK hooks stay in the production adapter, native I/O at the root. */
 export type AppRuntime = {
   session: Session;
-  health: HealthServices;
   ConversationProvider: ComponentType<{ agentId: AgentId; children: ReactNode }>;
   ProductTool: ComponentType<{ tool: ProductTool }>;
 };

@@ -1,5 +1,5 @@
 import { grocerySummarySchema } from "@/utils/agent-summary-schemas";
-import type { GroceryState } from "@agents/types";
+import type { GroceryState } from "@/types";
 import { AgentScreen, Field, SummaryCard } from "@/components/agent-screen";
 import { GroceryProductResultsTool } from "@/components/product-results-tool";
 

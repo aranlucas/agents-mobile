@@ -15,11 +15,10 @@
     "strict": true,
     "paths": {
       "@/*": ["./src/*"],
-      "@test/*": ["./test/*"],
-      "@health-data/adapter": ["./modules/health-data/src/health-data-adapter.ts"]
+      "@test/*": ["./test/*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"],
   "exclude": ["node_modules", "metro.config.js", "android", "ios", "**/*.test.ts", "**/*.test.tsx"],
-  "extends": "expo/tsconfig.base"
+  "extends": "expo/tsconfig.base.json"
 }
