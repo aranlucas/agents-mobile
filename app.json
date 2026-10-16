@@ -41,20 +41,11 @@
       "expo-web-browser",
       ["expo-system-ui", { "android": { "edgeToEdge": true } }],
       "expo-secure-store",
-      "./modules/health-data/app.plugin.js",
-      [
-        "expo-build-properties",
-        {
-          "android": {
-            "minSdkVersion": 26
-          }
-        }
-      ]
+      "expo-status-bar"
     ],
     "extra": {
       "clerkPublishableKey": "pk_test_bG9naWNhbC12aXBlci0zMy5jbGVyay5hY2NvdW50cy5kZXYk",
-      "copilotKitRuntimeUrl": "https://agents-gateway-production.up.railway.app",
-      "agentsBaseUrl": "https://agents-gateway-production.up.railway.app",
+      "copilotKitRuntimeUrl": "https://agents-gateway.up.railway.app",
       "router": {},
       "eas": {
         "projectId": "55635582-fffb-4745-913d-ae2dae61fbe8"

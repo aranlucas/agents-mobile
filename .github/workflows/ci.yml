@@ -29,15 +29,8 @@ jobs:
           cache: true
           require-lockfile: true
 
-      - parallel:
-          - name: Lint
-            run: pnpm exec oxlint src test modules scripts packages --threads=2
+      - name: Check
+        run: pnpm check
 
-          - name: Check formatting
-            run: pnpm exec oxfmt --threads=2 --check src test modules scripts packages package.json app.config.js metro.config.js app.json tsconfig.json vitest.config.ts pnpm-workspace.yaml .oxlintrc.json oxfmt.config.ts
-
-          - name: Typecheck
-            run: pnpm typecheck
-
-          - name: Test
-            run: pnpm test
+      - name: Test
+        run: pnpm test

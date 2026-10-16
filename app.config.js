@@ -36,7 +36,6 @@ module.exports = ({ config }) => {
         "EXPO_PUBLIC_COPILOTKIT_RUNTIME_URL",
         baseExtra.copilotKitRuntimeUrl,
       ),
-      agentsBaseUrl: envOrFallback("EXPO_PUBLIC_AGENTS_BASE_URL", baseExtra.agentsBaseUrl),
     },
   };
 };

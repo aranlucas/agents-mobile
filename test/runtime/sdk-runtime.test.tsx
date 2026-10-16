@@ -10,7 +10,6 @@ import {
 } from "@/runtime/app-runtime";
 import { SdkConversationProvider, SdkProductTool } from "@/runtime/sdk-runtime";
 import { GroceryProductResultsTool } from "@/components/product-results-tool";
-import { createHealthDataAdapter } from "@health-data/adapter";
 import { runWithCurrentClerkToken } from "@/utils/copilotkit-auth";
 
 const toolCall = {
@@ -62,14 +61,6 @@ it("uses the installed SDK for discovery, live conversation updates, authenticat
 
   const runtime: AppRuntime = {
     session: { userId: "fixture-user", getToken: async () => "fixture-token" },
-    health: {
-      healthData: createHealthDataAdapter(() => null),
-      storage: { getItemAsync: async () => null, setItemAsync: async () => undefined },
-      now: () => new Date(0),
-      postActivities: async () => {
-        throw new Error("Unexpected health request");
-      },
-    },
     ConversationProvider: SdkConversationProvider,
     ProductTool: SdkProductTool,
   };

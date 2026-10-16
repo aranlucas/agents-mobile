@@ -1,9 +1,6 @@
 export type AgentRuntimeConfig = {
-  agentsBaseUrl?: string;
   copilotKitRuntimeUrl?: string;
 };
-
-const AGENTS_BASE_ENV_KEY = "EXPO_PUBLIC_AGENTS_BASE_URL";
 
 const COPILOTKIT_RUNTIME_ENV_KEY = "EXPO_PUBLIC_COPILOTKIT_RUNTIME_URL";
 
@@ -47,15 +44,4 @@ export function getCopilotKitRuntimeBaseUrl(
   if (!url) return undefined;
 
   return normalizeLocalhostForPlatform(stripTrailingSlash(url), os);
-}
-
-export function getAgentsBaseUrl(
-  config: AgentRuntimeConfig,
-  os: string,
-  env: Record<string, string | undefined> = process.env,
-): string {
-  const configured = envOrConfig(env, AGENTS_BASE_ENV_KEY, config.agentsBaseUrl);
-  const baseUrl = configured ?? `http://${os === "android" ? "10.0.2.2" : "localhost"}:8000`;
-
-  return stripTrailingSlash(normalizeLocalhostForPlatform(baseUrl, os));
 }

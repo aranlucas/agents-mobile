@@ -1,5 +1,5 @@
 import { wellnessSummarySchema } from "@/utils/agent-summary-schemas";
-import type { WellnessState } from "@agents/types";
+import type { WellnessState } from "@/types";
 import { AgentScreen, Field, SummaryCard } from "@/components/agent-screen";
 
 const WELLNESS_CONFIG = {

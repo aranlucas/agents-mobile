@@ -25,7 +25,6 @@ function readExpoConfig(extraEnv: Record<string, string>) {
         .object({
           clerkPublishableKey: z.string().optional(),
           copilotKitRuntimeUrl: z.string().optional(),
-          agentsBaseUrl: z.string().optional(),
         })
         .optional(),
       web: z.object({ output: z.string().optional() }).optional(),
@@ -38,12 +37,10 @@ describe("Expo app config", () => {
     const config = readExpoConfig({
       EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY: "pk_test_eas",
       EXPO_PUBLIC_COPILOTKIT_RUNTIME_URL: "https://app.example.com/api/copilotkit",
-      EXPO_PUBLIC_AGENTS_BASE_URL: "https://agents.example.com",
     });
 
     assert.equal(config.extra?.clerkPublishableKey, "pk_test_eas");
     assert.equal(config.extra?.copilotKitRuntimeUrl, "https://app.example.com/api/copilotkit");
-    assert.equal(config.extra?.agentsBaseUrl, "https://agents.example.com");
   });
 
   it("keeps server web output off Android EAS builds", () => {

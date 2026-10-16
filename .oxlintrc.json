@@ -1,9 +1,9 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "extends": ["./packages/oxlint-config/base.json"],
   "plugins": ["import", "jsx-a11y", "react", "typescript", "unicorn"],
   "env": {
     "browser": true,
+    "node": true,
     "es2026": true
   },
   "globals": {
@@ -11,19 +11,36 @@
   },
   "settings": {
     "react": {
-      "version": "19.2.3"
+      "version": "19.3.0"
     }
   },
   "rules": {
-    "react/self-closing-comp": "warn",
-    "react/react-in-jsx-scope": "off",
-    "jsx-a11y/prefer-tag-over-role": "off",
+    "eslint/no-underscore-dangle": "off",
+    "unicorn/filename-case": [
+      "error",
+      {
+        "ignore": ["^_"]
+      }
+    ],
+    "unicorn/prefer-node-protocol": "warn",
+    "unicorn/throw-new-error": "warn",
+    "unicorn/prefer-optional-catch-binding": "warn",
+    "unicorn/prefer-at": "warn",
+    "unicorn/no-array-for-each": "warn",
+    "typescript/prefer-optional-chain": "warn",
+    "typescript/prefer-nullish-coalescing": "warn",
+    "typescript/no-explicit-any": "warn",
+    "typescript/prefer-function-type": "warn",
+    "import/no-cycle": "warn",
     "import/no-unassigned-import": [
       "warn",
       {
         "allow": ["**/*.css", "**/env", "expo", "whatwg-fetch", "react-native/**"]
       }
     ],
+    "react/self-closing-comp": "warn",
+    "react/react-in-jsx-scope": "off",
+    "jsx-a11y/prefer-tag-over-role": "off",
     "react/style-prop-object": [
       "warn",
       {
@@ -55,10 +72,11 @@
     "anti-slop/require-safety-comment-for-type-assertion": "error"
   },
   "ignorePatterns": [
+    "**/coverage/**",
+    ".claude/**",
+    ".agents/**",
     ".expo/**",
     ".agent/**",
-    ".agents/**",
-    ".claude/**",
     ".codex/**",
     ".continue/**",
     ".cursor/**",
@@ -73,5 +91,14 @@
       "name": "anti-slop",
       "specifier": "@aranlucas/oxlint-plugin-anti-slop"
     }
-  ]
+  ],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn",
+    "perf": "warn"
+  },
+  "options": {
+    "typeAware": true,
+    "reportUnusedDisableDirectives": "warn"
+  }
 }

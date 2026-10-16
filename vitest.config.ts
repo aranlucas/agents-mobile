@@ -24,7 +24,6 @@ export default defineConfig({
         find: "react-native/Libraries/Core/InitializeCore",
         replacement: resolve(__dirname, "./test/empty-stub.ts"),
       },
-      { find: "expo/fetch", replacement: resolve(__dirname, "./test/expo-fetch-stub.ts") },
       { find: "react-native", replacement: resolve(__dirname, "./test/react-native-stub.ts") },
       {
         find: "react-native-safe-area-context",
@@ -43,8 +42,6 @@ export default defineConfig({
         ssr: { enabled: true, include: ["react-native-markdown-display > react-native-fit-image"] },
       },
     },
-    // Bound memory and CPU use when running validation on a development machine.
-    maxWorkers: 1,
     server: {
       // Inline the whole chain down to the broken package (vitest docs): the
       // real CopilotKit package whose polyfills import the deprecated
