@@ -23,7 +23,7 @@ Wellness → Coordinate a wellness plan with the agent.
 
 ## Configure the app
 
-Requirements: Node.js from `.node-version`, pnpm from `package.json`. Android builds need an Android SDK; local iOS builds need macOS and Xcode.
+Requirements: Node.js from `.node-version`, pnpm from `package.json`. Android builds need an Android SDK with `ANDROID_HOME` set ([Expo setup](https://docs.expo.dev/get-started/set-up-your-environment/?platform=android&device=physical&mode=development-build&buildEnv=local)); local iOS builds need macOS and Xcode.
 
 ```sh
 pnpm install
