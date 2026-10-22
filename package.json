@@ -76,7 +76,7 @@
     "oxlint": "1.89.0",
     "oxlint-tsgolint": "^7.0.2004",
     "portless": "0.15.8",
-    "react-test-renderer": "19.3.0",
+    "react-test-renderer": "19.3.1",
     "supports-color": "11.0.0",
     "typescript": "~6.0.3",
     "utf-8-validate": "6.0.6",
