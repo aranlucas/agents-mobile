@@ -36,7 +36,7 @@ function isBlank(line: string): boolean {
  * renderer preserves numbering via the list's `start` attribute.
  */
 export function splitMarkdownBlocks(markdown: string): string[] {
-  const lines = markdown.replace(/\r\n?/gu, "\n").split("\n");
+  const lines = markdown.replaceAll(/\r\n?/gu, "\n").split("\n");
   const blocks: string[] = [];
   let current: string[] = [];
   let pendingBlank: string[] = [];
