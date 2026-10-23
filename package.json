@@ -25,7 +25,8 @@
     "check": "expo install --check && pnpm lint && pnpm fmt:check && pnpm typecheck",
     "test": "vitest run",
     "coverage": "vitest run --coverage",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "format": "oxfmt --write ."
   },
   "dependencies": {
     "@clerk/expo": "^4.14.0",
