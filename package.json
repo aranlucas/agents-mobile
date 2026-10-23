@@ -26,7 +26,7 @@
     "test": "vitest run",
     "coverage": "vitest run --coverage",
     "test:watch": "vitest",
-    "format": "oxfmt ."
+    "format": "oxfmt --write ."
   },
   "dependencies": {
     "@clerk/expo": "^4.14.0",
