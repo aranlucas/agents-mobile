@@ -1,0 +1,14 @@
+# Expo's native resolver aligns versions; Git guards are needed because it cannot check committed state.
+set -e
+
+if ! git diff --quiet HEAD -- package.json pnpm-lock.yaml; then
+  echo "Commit or stash dependency edits before pushing; Expo alignment left them untouched." >&2
+  exit 1
+fi
+
+pnpm exec expo install --fix
+
+if ! git diff --quiet HEAD -- package.json pnpm-lock.yaml; then
+  echo "Expo aligned dependencies. Review and commit package.json and pnpm-lock.yaml, then push again." >&2
+  exit 1
+fi

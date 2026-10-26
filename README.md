@@ -70,3 +70,9 @@ pnpm test
 ```
 
 EAS build profiles are in [`eas.json`](eas.json).
+
+Husky’s `pre-push` hook runs Expo’s SDK-compatible dependency alignment. If Expo
+updates `package.json` or `pnpm-lock.yaml`, the push stops so you can review and
+commit both files, then push again. Existing staged or unstaged dependency edits
+are left untouched; commit or stash them before pushing. Network or resolver
+failures also block the push.
