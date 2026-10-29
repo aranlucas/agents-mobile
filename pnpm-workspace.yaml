@@ -13,5 +13,9 @@ allowBuilds:
   bufferutil: true
   "core-js": true
   "core-js-pure": true
+  # EAS logging supports an optional JavaScript fallback without native DTrace.
+  "dtrace-provider": false
   esbuild: true
+  # The pinned EAS dependency only checks protobuf dependency version syntax.
+  protobufjs: true
   "utf-8-validate": true
