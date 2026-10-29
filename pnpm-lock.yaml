@@ -171,11 +171,11 @@ importers:
   .:
     dependencies:
       '@clerk/expo':
-        specifier: ^4.14.0
-        version: 4.14.0(67404e254798e82c63b67bd1f1c0b690)
+        specifier: ^4.14.1
+        version: 4.14.1(67404e254798e82c63b67bd1f1c0b690)
       '@copilotkit/react-native':
-        specifier: 1.79.1
-        version: 1.79.1(a02bac28343d52a06c24bd013ad18565)
+        specifier: 1.80.0
+        version: 1.80.0(b5a85e78eac834f76f77e339f569c447)
       '@expo/metro-runtime':
         specifier: ~58.0.15
         version: 58.0.15(@expo/log-box@58.0.13)(expo@58.0.19)(react-dom@19.3.0(react@19.3.0))(react-native@0.88.0(@babel/core@7.29.7(supports-color@11.0.0))(@react-native/metro-config@0.88.0(@babel/core@7.29.7(supports-color@11.0.0))(bufferutil@4.1.0)(supports-color@11.0.0)(utf-8-validate@6.0.6))(@types/react@19.3.0)(bufferutil@4.1.0)(react@19.3.0)(supports-color@11.0.0)(utf-8-validate@6.0.6))(react@19.3.0)
@@ -268,11 +268,11 @@ importers:
         version: 4.6.7
     devDependencies:
       '@aranlucas/oxforge':
-        specifier: ^0.2.2
-        version: 0.2.2(oxfmt@0.74.0)(oxlint-tsgolint@7.0.2004)(oxlint@1.89.0(oxlint-tsgolint@7.0.2004))
+        specifier: ^0.3.0
+        version: 0.3.0(oxfmt@0.74.0)(oxlint-tsgolint@7.0.2005)(oxlint@1.89.0(oxlint-tsgolint@7.0.2005))
       '@aranlucas/oxlint-plugin-anti-slop':
-        specifier: 0.1.0
-        version: 0.1.0(oxlint@1.89.0(oxlint-tsgolint@7.0.2004))
+        specifier: 0.1.1
+        version: 0.1.1(oxlint@1.89.0(oxlint-tsgolint@7.0.2005))
       '@babel/core':
         specifier: ^7.29.7
         version: 7.29.7(supports-color@11.0.0)
@@ -302,13 +302,13 @@ importers:
         version: 0.74.0
       oxlint:
         specifier: 1.89.0
-        version: 1.89.0(oxlint-tsgolint@7.0.2004)
+        version: 1.89.0(oxlint-tsgolint@7.0.2005)
       oxlint-tsgolint:
-        specifier: ^7.0.2004
-        version: 7.0.2004
+        specifier: ^7.0.2005
+        version: 7.0.2005
       portless:
-        specifier: 0.15.8
-        version: 0.15.8
+        specifier: 0.15.12
+        version: 0.15.12
       react-test-renderer:
         specifier: 19.3.1
         version: 19.3.1(react@19.3.0)
@@ -382,13 +382,13 @@ packages:
   '@antfu/install-pkg@2.1.0':
     resolution: {integrity: sha512-sdg9NxU3zR4Mnawfbc/x6GB5Wf17WYud5qOuEuxXjaKpYpMkISSJEjItGebXJ2bQ4DIcly4NYH23mtkGJjvKUw==}
 
-  '@aranlucas/oxforge@0.2.2':
-    resolution: {integrity: sha512-5zmYmM1r4Y+F2TGKwGnzD4lS5wBS+IVVm6bOngWAMxyvuz1ipKtOCjoqRqMBP95b/p+iUtZmQqPsZ+OvoM5/6w==}
+  '@aranlucas/oxforge@0.3.0':
+    resolution: {integrity: sha512-eTki7RWAi3tlFBuxITl9MbJE47L/ooeygX1Qt3R7ZjZWecEScSZTRj078wHEkQJysqRY/ms5Q1bMvwlABGrGDw==}
     engines: {node: '>=22.18.0'}
     hasBin: true
     peerDependencies:
       '@shadcn/lint': ^0.2.1
-      oxfmt: ^0.73.0
+      oxfmt: '>=0.73.0 <1.0.0'
       oxlint: ^1.88.0
       oxlint-tailwindcss: ^1.16.0
       oxlint-tsgolint: ^7.0.2004
@@ -400,8 +400,8 @@ packages:
       oxlint-tsgolint:
         optional: true
 
-  '@aranlucas/oxlint-plugin-anti-slop@0.1.0':
-    resolution: {integrity: sha512-tu5zQVkzsF6Td/jqD2OEQnDEw5Xo3YLEU+bm3FLxsKf4PnOcvZEyEtudVZVVCBXGhO4YprGRdWrxr+/m4MDfUg==}
+  '@aranlucas/oxlint-plugin-anti-slop@0.1.1':
+    resolution: {integrity: sha512-NZ7bIdojYZojdmC/P9MBCJS8tMs2TjArhJMWTO5nV7cMghWUfM8Il3wj47zPBW1PZJ83Cin7yiGhksQJRGrOkg==}
     engines: {node: '>=22.18.0'}
     peerDependencies:
       oxlint: '>=1.78.0'
@@ -806,12 +806,12 @@ packages:
   '@chevrotain/types@11.1.2':
     resolution: {integrity: sha512-U+HFai5+zmJCkK86QsaJtoITlboZHBqrVketcO2ROv865xfCMSFpELQoz1GkX5GzME8pTa+3kbKrZHQtI0gdbw==}
 
-  '@clerk/clerk-js@6.40.0':
-    resolution: {integrity: sha512-2MnZ/ygvuCmeuqfXQmsxfQaLN/SSJvQbtT2cLXbgr5VKr3KmZFZBVvX977fG3eZ6pprl4J9pO+I2bbe6BvColg==}
+  '@clerk/clerk-js@6.40.1':
+    resolution: {integrity: sha512-Y2Jho5IIiMEhXkpyo7UTAYA/iPJcJSTUSgqoywQNSAbyV8FZZtZVYRmi0/7Mq1LAUVaTbrvNgF3PsxZAHDmt2A==}
     engines: {node: '>=20.9.0'}
 
-  '@clerk/expo@4.14.0':
-    resolution: {integrity: sha512-JB24Yu8U6XHFOQWGU6r/mYlHfHIsLyjzcrhF8e1UjZvaqBrU8P1mMNGhoLLhhnsz1Bnxjqs7yqkQZgGAcJuNEA==}
+  '@clerk/expo@4.14.1':
+    resolution: {integrity: sha512-H1f4GOvB7uUJNqkWfaEmetdw1sWg8SJsQoVmGpRZRZ8k7//WVqNzDuWEjmb0XzcA4Voy1YSUogSRVCapY8vCTA==}
     engines: {node: '>=20.9.0'}
     peerDependencies:
       '@clerk/expo-biometrics': '>=0.1.0'
@@ -855,15 +855,15 @@ packages:
       react-dom:
         optional: true
 
-  '@clerk/react@6.18.0':
-    resolution: {integrity: sha512-MmLhXGtrGByt0ZJjLyh88rP7uESxONji4FFVFKe7U11DIGRVdvgRs/mWfLsNa1R23knxeTw3HMEVLIjQ6v5DgQ==}
+  '@clerk/react@6.18.1':
+    resolution: {integrity: sha512-vCd3qctGaBJ7p7bnf2SLI4ynweaDHqiEgXbFaPVHjY3kduG5uPzHAFE42VwJazXbV81P56rhus3BYna0D1l62g==}
     engines: {node: '>=20.9.0'}
     peerDependencies:
       react: ^18.0.0 || ~19.0.3 || ~19.1.4 || ~19.2.3 || ~19.3.0-0
       react-dom: ^18.0.0 || ~19.0.3 || ~19.1.4 || ~19.2.3 || ~19.3.0-0
 
-  '@clerk/shared@4.41.0':
-    resolution: {integrity: sha512-zLdeVxfPBOwmiDqHh3Z2y3ub/4u84zOSlEUKPDpFAibMdW1OyboPw+DIU/seH9UXDpCQCNHl6lfKUE9LLIBvfw==}
+  '@clerk/shared@4.41.1':
+    resolution: {integrity: sha512-qxy8bzGMV6EGuKqnfEVm/+f9yGncUyOJhxdbM10X52PoMiALJ5VOH+c3C427ETkupYalF81eBlg7aBH50AtbNA==}
     engines: {node: '>=20.9.0'}
     peerDependencies:
       react: ^18.0.0 || ~19.0.3 || ~19.1.4 || ~19.2.3 || ~19.3.0-0
@@ -877,8 +877,8 @@ packages:
   '@coinbase/wallet-sdk@4.3.7':
     resolution: {integrity: sha512-z6e5XDw6EF06RqkeyEa+qD0dZ2ZbLci99vx3zwDY//XO8X7166tqKJrR2XlQnzVmtcUuJtCd5fCvr9Cu6zzX7w==}
 
-  '@copilotkit/a2ui-renderer@1.79.1':
-    resolution: {integrity: sha512-s7vrPjcZ30M7w566Y8Lek3AMO1Lx7lsZwp3vz7/gtCjbhT9QDDViOQ5Yz5svvxtW0mRc9Lo/es1rduoB0Gnlug==}
+  '@copilotkit/a2ui-renderer@1.80.0':
+    resolution: {integrity: sha512-B7luPDGQzepau6prJDHySNnZP0vPk3SBQXJTpoVXswi1GXnQylT+zGJ6nCV3kQPHJnbOtTNHxNREZVvVzJIjRg==}
     peerDependencies:
       react: ^18 || ^19 || ^19.0.0-rc
       react-dom: ^18 || ^19 || ^19.0.0-rc
@@ -888,32 +888,32 @@ packages:
       react-dom:
         optional: true
 
-  '@copilotkit/core@1.79.1':
-    resolution: {integrity: sha512-H4V9VDaCbOnsRW+xmEaLl3o0GuN5/TzSCJk82WrtsWS2mFFUPcNW6EIcqNLGQqtGBvcxzX1sasBhiRvV2Imasw==}
+  '@copilotkit/core@1.80.0':
+    resolution: {integrity: sha512-DiHZhXBk3guw9+t6v2vcArQRh4huXDVIk0sOnRT5V+r+pr9DJegnXJXFeF69yeoqngMX3nYwHpiBZL7P7UOTpw==}
     engines: {node: '>=20'}
 
-  '@copilotkit/learning@0.0.1':
-    resolution: {integrity: sha512-0uh9hTZA4y6f4hMVBDsfr5kupvaHmuKmwMIrTieF/9rKrnB4/bazSl9Nyv5OIYFMpAx03u8KnSEeKe0aHGCy6w==}
+  '@copilotkit/learning@1.80.0':
+    resolution: {integrity: sha512-7zr75gX/Q02xyPfM2O6WZICVkPJYgEP/j0q5QW6jjRGOGVzGg/j5kVhIkvqKwl8vW7jl4Xezai1dJ18q/MJ36A==}
     engines: {node: '>=20'}
 
   '@copilotkit/license-verifier@0.5.0':
     resolution: {integrity: sha512-vrwKtIpYwF0FT9ZoYASH8owa2cGV0dhDvJGaCRaRMStwDxpc6DRdydKkhx8cWZXyBRxEYcq/Vygv4JvevhQQdQ==}
 
-  '@copilotkit/mcp-apps-renderer@1.79.1':
-    resolution: {integrity: sha512-deEGFQNcBkZD+/I9eVceQKTr7RMNb1BckNxrsjXbCA8T9HuID+P3DXVb5enxuDiuu8DHUZFRQ7um2SzpreSlJA==}
+  '@copilotkit/mcp-apps-renderer@1.80.0':
+    resolution: {integrity: sha512-R+g6/QN9GX/r7IBF1F+Lb1wr6TroVjf/QEZgk0PgHzWuBj0dPGeLkfRf2R7PEMb5PZc3bzSoup/Wq7viG1QmhA==}
     peerDependencies:
       '@ag-ui/client': '>=0.0.59'
       zod: '>=3.25'
 
-  '@copilotkit/react-core@1.79.1':
-    resolution: {integrity: sha512-asxn37aDatu4zGdzzaQ6UvOqOeNzDMWbYILYe04hx/5Nz8HwDWPXNLlEA8Ll7yNmIRXr5cUVRKiW5RHo1kQQQA==}
+  '@copilotkit/react-core@1.80.0':
+    resolution: {integrity: sha512-/JXKtt2Keky8ZmpsOQMcoWjK7wSqucFSnBgWPD6I4iJgEzJSOIBJTzbo381+h+HdQR9u3a4sVrpga+Tfh+JWbg==}
     peerDependencies:
       react: ^18 || ^19 || ^19.0.0-rc
       react-dom: ^18 || ^19 || ^19.0.0-rc
       zod: '>=3.25'
 
-  '@copilotkit/react-native@1.79.1':
-    resolution: {integrity: sha512-+6bysAxX3HYvcbr4QJPXz2Fov5borWW/WjLR4IFWzwD36vu4RvAUluHVIoW0vK/16IJyfPWncRpN+jNYUGZhpw==}
+  '@copilotkit/react-native@1.80.0':
+    resolution: {integrity: sha512-21eyRxKn9E/u9OV77nTS1TZdneuV30B2BHC85xapf4Sile/Li1L9eM+S+lDdd3W9Cw+Efp1s52gNtr10M5Y0ig==}
     peerDependencies:
       '@gorhom/bottom-sheet': ^5.0.0
       expo-document-picker: '>=12.0.0'
@@ -940,24 +940,24 @@ packages:
       zod:
         optional: true
 
-  '@copilotkit/runtime-client-gql@1.79.1':
-    resolution: {integrity: sha512-rKHnCMe+/3TlSzVycKt36ZCpo1lO/eHZg84L0lDHE0WiEoAYN6f8sWaqDMD+WpKbzuZ6pUJ2vUfWQiFtKVr4cw==}
+  '@copilotkit/runtime-client-gql@1.80.0':
+    resolution: {integrity: sha512-+t4ORk+8YoymAUbhquM8XODG3m9Gk/UzUWnZ0RJljX5VIizp5QiG1YYDm94l/rNYnab7TmthIr0LTqMIbSvZ8w==}
     peerDependencies:
       react: ^18 || ^19 || ^19.0.0-rc
 
-  '@copilotkit/shared@1.79.1':
-    resolution: {integrity: sha512-raIecBpsKpMJu8dfoEGNtyYIJ6Rwhb93BSLdYhQCW/lfBzrU+4FI/tPbkDf9svvQhltbqL6c5JJoXBOVKNwlLQ==}
+  '@copilotkit/shared@1.80.0':
+    resolution: {integrity: sha512-arXvESYrINnROKtj/+CJjJZOS91tx1PKgdf/8cnAd3PbF8x21sb0aRWrheM0ngPGG1SnmgJ2Hk9vS5fEtQQ30w==}
     peerDependencies:
       '@ag-ui/core': '>=0.0.48'
 
-  '@copilotkit/web-components@1.79.1':
-    resolution: {integrity: sha512-6fE3n9FYamezF2eRY/q5WuL/b4QN77AWK6sh2PSS2YOPN7s8BxozMH80B9uIKh7gapHWjdA7O1p30urd2QFtUA==}
+  '@copilotkit/web-components@1.80.0':
+    resolution: {integrity: sha512-PXnsj6xwCP156D6oOyXA+hSe5MnkAfHOiSUOdlGXNwJXQ9Yu22bzy5PTxNNbQpLzI5SmggC66aSLEKxxoY38PQ==}
     engines: {node: '>=20'}
     peerDependencies:
       lit: ^3.3.2
 
-  '@copilotkit/web-inspector@1.79.1':
-    resolution: {integrity: sha512-MTyGWBE0dSWsSVmRlhziYDMKF2oF7ndtO2+Ern/2ZW/dhjjkAKNa2J/dNMghDyZWUCpDkvNTMHi6XMc9DZB0KQ==}
+  '@copilotkit/web-inspector@1.80.0':
+    resolution: {integrity: sha512-aCH5MHoVdPWE3Scr5U7y7zKORBlgySdHxoAG5v/FMVzZ16QroRYveWh52ZH2B6TGbxJQy1RAj5h00PEDcLXyMA==}
     engines: {node: '>=20'}
 
   '@expo/cli@58.1.15':
@@ -1174,6 +1174,11 @@ packages:
 
   '@floating-ui/utils@0.2.12':
     resolution: {integrity: sha512-HpCo8tmWzLVad5s2d19EhAz5zqrrQ6s69qd6moPMQvkOuSwDT1YgRfWSVuc4ennqrgv3OHppiOGMQ7oC13yIww==}
+
+  '@graphql-typed-document-node/core@3.2.0':
+    resolution: {integrity: sha512-mB9oAsNCm9aM3/SOv4YtBMqZbYj10R7dkq8byBqxGY/ncFwhf2oQzMV+LCRlWoDSEBJ3COiR1yeDvMtsoOsuFQ==}
+    peerDependencies:
+      graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
 
   '@hono/node-server@2.1.5':
     resolution: {integrity: sha512-MgP/I06GdvsilDspMk/qmRzpk8LOUStP6jFAbSRi40W09DhoyUn+Mj7eyKICPqeYKybOjVFLVIAQzvu1bfIa7Q==}
@@ -1462,33 +1467,33 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@oxlint-tsgolint/darwin-arm64@7.0.2004':
-    resolution: {integrity: sha512-uJk3ttju7Lz+Nv8WG4CsLyewoL1qf/Ny8S8OksJ7Bm/F14Tc9gMfW6arM1PCc57IzH/X/I79YsCWTgxX1FKibQ==}
+  '@oxlint-tsgolint/darwin-arm64@7.0.2005':
+    resolution: {integrity: sha512-VqDZxcZVjlonNLuuvraVNgDQt+1ndwa4yJo8OqsK4HYh/61ba9IlMStCVfi/aaIqRoDhNbAKC8gdcTrXqnb+Ug==}
     cpu: [arm64]
     os: [darwin]
 
-  '@oxlint-tsgolint/darwin-x64@7.0.2004':
-    resolution: {integrity: sha512-0BFfHTzDxNDFPcu0UZAXT6CyCJHAXM0dZveyDb4KEHa2qF/DSnOKOrmvK/wFuFol9kvijbGM9JfuOsor+zWXRw==}
+  '@oxlint-tsgolint/darwin-x64@7.0.2005':
+    resolution: {integrity: sha512-4kUfLRNYoVpv0Tm3jPYrvxyfOc/LmdvFC3pKZ4tL6K7lA7K/VS81SAtmxRzbYXYSyb3SBWhwsuX+df4neqzxxA==}
     cpu: [x64]
     os: [darwin]
 
-  '@oxlint-tsgolint/linux-arm64@7.0.2004':
-    resolution: {integrity: sha512-TAehQc+qdRXyDN3nl/r/3/oPrBVrbtrDeGMkFyG6mf+XphpoJ2lAMVFLclyvrVZCw02RbKROjyw8h72XwQQHcw==}
+  '@oxlint-tsgolint/linux-arm64@7.0.2005':
+    resolution: {integrity: sha512-rhUNcPsBlKvhXtrbhbBUidtRBRdJ8fbEHN9H5Q5N59gby18ruGuDA7KUxl7oRnUzp797uykYQhkBDm+0KpfK/Q==}
     cpu: [arm64]
     os: [linux]
 
-  '@oxlint-tsgolint/linux-x64@7.0.2004':
-    resolution: {integrity: sha512-LPunZvm6ZbWPfHMAyfZf9ci3HHvNEzLejO8zdqO3GoVGoSEHqqufHUD7+OgeatVSaJP7uXDJ2HaNOHIoH7go4Q==}
+  '@oxlint-tsgolint/linux-x64@7.0.2005':
+    resolution: {integrity: sha512-tKs9yinDQZOHygM0e8EJnjTU3mzJtdfkOZP6Udu82iLMePUSHOhTJ9zzU/mSd1hQxURI4LTRRiFhfzC+PzwdNA==}
     cpu: [x64]
     os: [linux]
 
-  '@oxlint-tsgolint/win32-arm64@7.0.2004':
-    resolution: {integrity: sha512-FVWplzDImWhiuawnIZVETaQecv4GWom6Jv4Fx2xj7hhXXDZ5okEgiw1gTCImHTIQsi2ycC5oSxVwrn69bMh7iw==}
+  '@oxlint-tsgolint/win32-arm64@7.0.2005':
+    resolution: {integrity: sha512-VYPnu1gjfbSv+ROhuyNfMs382D4zQU2ZRc8Uc3nuEZo1k2kf+1KfTrg4hrlWh73h9GI+dUWyo+DYCQzUBlPwcQ==}
     cpu: [arm64]
     os: [win32]
 
-  '@oxlint-tsgolint/win32-x64@7.0.2004':
-    resolution: {integrity: sha512-7PsxuUx11Ry9DYTWcljTzRbmZY9B6O9fFFfZV+aodQEMy6pfRT3fhoQRv9PtGN/89z1pPz3nFKrsFm6WqNtX7w==}
+  '@oxlint-tsgolint/win32-x64@7.0.2005':
+    resolution: {integrity: sha512-ekU89cTGy9fpQzuvxIsFHrnoP8XoFjGIRgPEW6eqgY2NYjGy9pwpjF79o04WXRMJFKRrcaVqkZXUUBdLsqpQDw==}
     cpu: [x64]
     os: [win32]
 
@@ -1613,10 +1618,6 @@ packages:
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [x64]
     os: [win32]
-
-  '@oxlint/plugins@1.88.0':
-    resolution: {integrity: sha512-G2xbfWTrbqYRhR/vfeKNMQf/sS3/ti0iKJAAkRxHuXWZH/hne/dyIb9QKk5LuR6cJLARxsL6FMoAYmfspd74MQ==}
-    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
 
   '@oxlint/plugins@1.89.0':
     resolution: {integrity: sha512-TJBBNl4KIxbxrSk7gsqlz6iM1kxidfyTizEzfWqXvijF2Ou8/Da58GvjemBVmCmaUamwRij+JwsVc0kpBFuqfg==}
@@ -1744,6 +1745,19 @@ packages:
 
   '@radix-ui/react-menu@2.2.1':
     resolution: {integrity: sha512-G34BsU90SBj5foYpz8pQqq/Q0Dlfyyl6KitWEfRwXC0QvfwhWNAwS49DWP2+rRJ0iwv20Z2Qx7Sk+T03bGo5JA==}
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
+
+  '@radix-ui/react-popover@1.3.1':
+    resolution: {integrity: sha512-ZNxvXRx5W2Wos4fXCXb5lpdqN0Z5chf+mStOUOTr4ik7d+62MRvoe9rzCA/eGNg36lxXqSrKEKmwuZEcUrIstw==}
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
@@ -4816,8 +4830,8 @@ packages:
       vite-plus:
         optional: true
 
-  oxlint-tsgolint@7.0.2004:
-    resolution: {integrity: sha512-vQ9WDF3fiZJvRdSDosNOflerOCOpwol6vWzVDxW76RcU19cjTh7engvkHLvmv+tzedR8fAiJUVUGr6IVZdkzXQ==}
+  oxlint-tsgolint@7.0.2005:
+    resolution: {integrity: sha512-6ccPGu4u4J9bwYPHXBFPee3RZrX3BboRdU7k14zRDDB1lvN3O7J/vPRFdaEfa1+CWx4xnQQOp4ctoaF66oO0uw==}
     hasBin: true
 
   oxlint@1.89.0:
@@ -4914,8 +4928,8 @@ packages:
   points-on-path@0.2.1:
     resolution: {integrity: sha512-25ClnWWuw7JbWZcgqY/gJ4FQWadKxGWk+3kR/7kD0tCaDtPPMj7oHu2ToLaVhfpnHrZzYby2w6tUA0eOIuUg8g==}
 
-  portless@0.15.8:
-    resolution: {integrity: sha512-kzGoG4xLsEytczl7O/COZaBwSAOKsWsZDxHv7/iFHKIC0X71OonpgbsQw58CGO29RklIHIx6yLM31TJMnTtPEw==}
+  portless@0.15.12:
+    resolution: {integrity: sha512-Lbz85zLboOMkvq2unXYfJ/YMpsvFZYQgrwGEbinZErp045y9fLm4obm7E77V2BI2Om0Mh6tX/2w2ftFqRs5kfQ==}
     engines: {node: '>=24'}
     os: [darwin, linux, win32]
     hasBin: true
@@ -6087,20 +6101,20 @@ snapshots:
       package-manager-detector: 1.9.0
       tinyexec: 1.3.1
 
-  '@aranlucas/oxforge@0.2.2(oxfmt@0.74.0)(oxlint-tsgolint@7.0.2004)(oxlint@1.89.0(oxlint-tsgolint@7.0.2004))':
+  '@aranlucas/oxforge@0.3.0(oxfmt@0.74.0)(oxlint-tsgolint@7.0.2005)(oxlint@1.89.0(oxlint-tsgolint@7.0.2005))':
     dependencies:
-      '@aranlucas/oxlint-plugin-anti-slop': 0.1.0(oxlint@1.89.0(oxlint-tsgolint@7.0.2004))
-      '@oxlint/plugins': 1.88.0
+      '@aranlucas/oxlint-plugin-anti-slop': 0.1.1(oxlint@1.89.0(oxlint-tsgolint@7.0.2005))
+      '@oxlint/plugins': 1.89.0
       oxfmt: 0.74.0
-      oxlint: 1.89.0(oxlint-tsgolint@7.0.2004)
+      oxlint: 1.89.0(oxlint-tsgolint@7.0.2005)
     optionalDependencies:
-      oxlint-tsgolint: 7.0.2004
+      oxlint-tsgolint: 7.0.2005
 
-  '@aranlucas/oxlint-plugin-anti-slop@0.1.0(oxlint@1.89.0(oxlint-tsgolint@7.0.2004))':
+  '@aranlucas/oxlint-plugin-anti-slop@0.1.1(oxlint@1.89.0(oxlint-tsgolint@7.0.2005))':
     dependencies:
       '@oxlint/plugins': 1.89.0
     optionalDependencies:
-      oxlint: 1.89.0(oxlint-tsgolint@7.0.2004)
+      oxlint: 1.89.0(oxlint-tsgolint@7.0.2005)
 
   '@babel/code-frame@7.29.7':
     dependencies:
@@ -6612,10 +6626,10 @@ snapshots:
 
   '@chevrotain/types@11.1.2': {}
 
-  '@clerk/clerk-js@6.40.0(@types/react@19.3.0)(bufferutil@4.1.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3)(utf-8-validate@6.0.6)(zod@4.6.7)':
+  '@clerk/clerk-js@6.40.1(@types/react@19.3.0)(bufferutil@4.1.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3)(utf-8-validate@6.0.6)(zod@4.6.7)':
     dependencies:
       '@base-org/account': 2.0.1(@types/react@19.3.0)(bufferutil@4.1.0)(react@19.3.0)(typescript@6.0.3)(utf-8-validate@6.0.6)(zod@4.6.7)
-      '@clerk/shared': 4.41.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      '@clerk/shared': 4.41.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@coinbase/wallet-sdk': 4.3.7(bufferutil@4.1.0)(typescript@6.0.3)(utf-8-validate@6.0.6)(zod@4.6.7)
       '@stripe/stripe-js': 5.6.0
       '@swc/helpers': 0.5.21
@@ -6640,11 +6654,11 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@clerk/expo@4.14.0(67404e254798e82c63b67bd1f1c0b690)':
+  '@clerk/expo@4.14.1(67404e254798e82c63b67bd1f1c0b690)':
     dependencies:
-      '@clerk/clerk-js': 6.40.0(@types/react@19.3.0)(bufferutil@4.1.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3)(utf-8-validate@6.0.6)(zod@4.6.7)
-      '@clerk/react': 6.18.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
-      '@clerk/shared': 4.41.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      '@clerk/clerk-js': 6.40.1(@types/react@19.3.0)(bufferutil@4.1.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(typescript@6.0.3)(utf-8-validate@6.0.6)(zod@4.6.7)
+      '@clerk/react': 6.18.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      '@clerk/shared': 4.41.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       base-64: 1.0.0
       expo: 58.0.19(e5339e57a8be3213d635640e1631ded1)
       react: 19.3.0
@@ -6668,14 +6682,14 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@clerk/react@6.18.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
+  '@clerk/react@6.18.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
     dependencies:
-      '@clerk/shared': 4.41.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      '@clerk/shared': 4.41.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
       tslib: 2.8.1
 
-  '@clerk/shared@4.41.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
+  '@clerk/shared@4.41.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
     dependencies:
       '@tanstack/query-core': 5.104.5
       dequal: 2.0.3
@@ -6699,7 +6713,7 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@copilotkit/a2ui-renderer@1.79.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
+  '@copilotkit/a2ui-renderer@1.80.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
     dependencies:
       '@a2ui/web_core': 0.10.4
       clsx: 2.1.1
@@ -6709,11 +6723,11 @@ snapshots:
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
 
-  '@copilotkit/core@1.79.1(@ag-ui/core@1.0.2(zod@4.6.7))(zod@4.6.7)':
+  '@copilotkit/core@1.80.0(@ag-ui/core@1.0.2(zod@4.6.7))(zod@4.6.7)':
     dependencies:
       '@ag-ui/client': 1.0.2
-      '@copilotkit/learning': 0.0.1
-      '@copilotkit/shared': 1.79.1(@ag-ui/core@1.0.2(zod@4.6.7))
+      '@copilotkit/learning': 1.80.0
+      '@copilotkit/shared': 1.80.0(@ag-ui/core@1.0.2(zod@4.6.7))
       '@tanstack/pacer': 0.20.1
       phoenix: 1.8.16
       rxjs: 7.8.1
@@ -6723,14 +6737,14 @@ snapshots:
       - encoding
       - zod
 
-  '@copilotkit/learning@0.0.1': {}
+  '@copilotkit/learning@1.80.0': {}
 
   '@copilotkit/license-verifier@0.5.0': {}
 
-  '@copilotkit/mcp-apps-renderer@1.79.1(@ag-ui/client@1.0.2)(@ag-ui/core@1.0.2(zod@4.6.7))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(supports-color@11.0.0)(zod@4.6.7)':
+  '@copilotkit/mcp-apps-renderer@1.80.0(@ag-ui/client@1.0.2)(@ag-ui/core@1.0.2(zod@4.6.7))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(supports-color@11.0.0)(zod@4.6.7)':
     dependencies:
       '@ag-ui/client': 1.0.2
-      '@copilotkit/shared': 1.79.1(@ag-ui/core@1.0.2(zod@4.6.7))
+      '@copilotkit/shared': 1.80.0(@ag-ui/core@1.0.2(zod@4.6.7))
       '@modelcontextprotocol/ext-apps': 1.7.5(@modelcontextprotocol/sdk@1.32.1(supports-color@11.0.0)(zod@4.6.7))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(zod@4.6.7)
       '@modelcontextprotocol/sdk': 1.32.1(supports-color@11.0.0)(zod@4.6.7)
       zod: 4.6.7
@@ -6742,19 +6756,20 @@ snapshots:
       - react-dom
       - supports-color
 
-  '@copilotkit/react-core@1.79.1(@types/mdast@4.0.4)(@types/react@19.3.0)(graphql@16.14.2)(micromark-util-types@2.0.3)(micromark@4.0.3(supports-color@11.0.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(supports-color@11.0.0)(zod@4.6.7)':
+  '@copilotkit/react-core@1.80.0(@types/mdast@4.0.4)(@types/react@19.3.0)(micromark-util-types@2.0.3)(micromark@4.0.3(supports-color@11.0.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(supports-color@11.0.0)(zod@4.6.7)':
     dependencies:
       '@ag-ui/client': 1.0.2
       '@ag-ui/core': 1.0.2(zod@4.6.7)
-      '@copilotkit/a2ui-renderer': 1.79.1(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
-      '@copilotkit/core': 1.79.1(@ag-ui/core@1.0.2(zod@4.6.7))(zod@4.6.7)
-      '@copilotkit/mcp-apps-renderer': 1.79.1(@ag-ui/client@1.0.2)(@ag-ui/core@1.0.2(zod@4.6.7))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(supports-color@11.0.0)(zod@4.6.7)
-      '@copilotkit/runtime-client-gql': 1.79.1(@ag-ui/core@1.0.2(zod@4.6.7))(graphql@16.14.2)(react@19.3.0)
-      '@copilotkit/shared': 1.79.1(@ag-ui/core@1.0.2(zod@4.6.7))
-      '@copilotkit/web-components': 1.79.1(lit@3.3.3)
-      '@copilotkit/web-inspector': 1.79.1(@ag-ui/core@1.0.2(zod@4.6.7))(zod@4.6.7)
+      '@copilotkit/a2ui-renderer': 1.80.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      '@copilotkit/core': 1.80.0(@ag-ui/core@1.0.2(zod@4.6.7))(zod@4.6.7)
+      '@copilotkit/mcp-apps-renderer': 1.80.0(@ag-ui/client@1.0.2)(@ag-ui/core@1.0.2(zod@4.6.7))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(supports-color@11.0.0)(zod@4.6.7)
+      '@copilotkit/runtime-client-gql': 1.80.0(@ag-ui/core@1.0.2(zod@4.6.7))(react@19.3.0)
+      '@copilotkit/shared': 1.80.0(@ag-ui/core@1.0.2(zod@4.6.7))
+      '@copilotkit/web-components': 1.80.0(lit@3.3.3)
+      '@copilotkit/web-inspector': 1.80.0(@ag-ui/core@1.0.2(zod@4.6.7))(zod@4.6.7)
       '@jetbrains/websandbox': 1.4.3
       '@radix-ui/react-dropdown-menu': 2.2.1(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      '@radix-ui/react-popover': 1.3.1(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@radix-ui/react-slot': 1.5.0(@types/react@19.3.0)(react@19.3.0)
       '@radix-ui/react-tooltip': 1.4.1(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@scarf/scarf': 1.4.0
@@ -6781,17 +6796,16 @@ snapshots:
       - '@types/react'
       - '@types/react-dom'
       - encoding
-      - graphql
       - micromark
       - micromark-util-types
       - supports-color
 
-  '@copilotkit/react-native@1.79.1(a02bac28343d52a06c24bd013ad18565)':
+  '@copilotkit/react-native@1.80.0(b5a85e78eac834f76f77e339f569c447)':
     dependencies:
       '@ag-ui/client': 1.0.2
-      '@copilotkit/core': 1.79.1(@ag-ui/core@1.0.2(zod@4.6.7))(zod@4.6.7)
-      '@copilotkit/react-core': 1.79.1(@types/mdast@4.0.4)(@types/react@19.3.0)(graphql@16.14.2)(micromark-util-types@2.0.3)(micromark@4.0.3(supports-color@11.0.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(supports-color@11.0.0)(zod@4.6.7)
-      '@copilotkit/shared': 1.79.1(@ag-ui/core@1.0.2(zod@4.6.7))
+      '@copilotkit/core': 1.80.0(@ag-ui/core@1.0.2(zod@4.6.7))(zod@4.6.7)
+      '@copilotkit/react-core': 1.80.0(@types/mdast@4.0.4)(@types/react@19.3.0)(micromark-util-types@2.0.3)(micromark@4.0.3(supports-color@11.0.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(supports-color@11.0.0)(zod@4.6.7)
+      '@copilotkit/shared': 1.80.0(@ag-ui/core@1.0.2(zod@4.6.7))
       react: 19.3.0
       react-native: 0.88.0(@babel/core@7.29.7(supports-color@11.0.0))(@react-native/metro-config@0.88.0(@babel/core@7.29.7(supports-color@11.0.0))(bufferutil@4.1.0)(supports-color@11.0.0)(utf-8-validate@6.0.6))(@types/react@19.3.0)(bufferutil@4.1.0)(react@19.3.0)(supports-color@11.0.0)(utf-8-validate@6.0.6)
       text-encoding: 0.7.0
@@ -6808,25 +6822,25 @@ snapshots:
       - '@types/react'
       - '@types/react-dom'
       - encoding
-      - graphql
       - micromark
       - micromark-util-types
       - react-dom
       - supports-color
 
-  '@copilotkit/runtime-client-gql@1.79.1(@ag-ui/core@1.0.2(zod@4.6.7))(graphql@16.14.2)(react@19.3.0)':
+  '@copilotkit/runtime-client-gql@1.80.0(@ag-ui/core@1.0.2(zod@4.6.7))(react@19.3.0)':
     dependencies:
-      '@copilotkit/shared': 1.79.1(@ag-ui/core@1.0.2(zod@4.6.7))
+      '@copilotkit/shared': 1.80.0(@ag-ui/core@1.0.2(zod@4.6.7))
+      '@graphql-typed-document-node/core': 3.2.0(graphql@16.14.2)
       '@urql/core': 5.2.0(graphql@16.14.2)
+      graphql: 16.14.2
       react: 19.3.0
       untruncate-json: 0.0.1
       urql: 4.2.2(@urql/core@5.2.0(graphql@16.14.2))(react@19.3.0)
     transitivePeerDependencies:
       - '@ag-ui/core'
       - encoding
-      - graphql
 
-  '@copilotkit/shared@1.79.1(@ag-ui/core@1.0.2(zod@4.6.7))':
+  '@copilotkit/shared@1.80.0(@ag-ui/core@1.0.2(zod@4.6.7))':
     dependencies:
       '@ag-ui/a2ui-middleware': 0.0.10(@ag-ui/client@1.0.2)(rxjs@7.8.1)
       '@ag-ui/client': 1.0.2
@@ -6834,7 +6848,6 @@ snapshots:
       '@copilotkit/license-verifier': 0.5.0
       '@segment/analytics-node': 2.3.0
       '@standard-schema/spec': 1.1.0
-      chalk: 4.1.2
       clarinet: 0.12.6
       graphql: 16.14.2
       partial-json: 0.1.7
@@ -6845,15 +6858,15 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@copilotkit/web-components@1.79.1(lit@3.3.3)':
+  '@copilotkit/web-components@1.80.0(lit@3.3.3)':
     dependencies:
       lit: 3.3.3
 
-  '@copilotkit/web-inspector@1.79.1(@ag-ui/core@1.0.2(zod@4.6.7))(zod@4.6.7)':
+  '@copilotkit/web-inspector@1.80.0(@ag-ui/core@1.0.2(zod@4.6.7))(zod@4.6.7)':
     dependencies:
       '@ag-ui/client': 1.0.2
-      '@copilotkit/core': 1.79.1(@ag-ui/core@1.0.2(zod@4.6.7))(zod@4.6.7)
-      '@copilotkit/shared': 1.79.1(@ag-ui/core@1.0.2(zod@4.6.7))
+      '@copilotkit/core': 1.80.0(@ag-ui/core@1.0.2(zod@4.6.7))(zod@4.6.7)
+      '@copilotkit/shared': 1.80.0(@ag-ui/core@1.0.2(zod@4.6.7))
       lit: 3.3.3
       lucide: 0.525.0
       marked: 12.0.2
@@ -7273,6 +7286,10 @@ snapshots:
 
   '@floating-ui/utils@0.2.12': {}
 
+  '@graphql-typed-document-node/core@3.2.0(graphql@16.14.2)':
+    dependencies:
+      graphql: 16.14.2
+
   '@hono/node-server@2.1.5(hono@4.13.13)':
     dependencies:
       hono: 4.13.13
@@ -7472,22 +7489,22 @@ snapshots:
   '@oxfmt/binding-win32-x64-msvc@0.74.0':
     optional: true
 
-  '@oxlint-tsgolint/darwin-arm64@7.0.2004':
+  '@oxlint-tsgolint/darwin-arm64@7.0.2005':
     optional: true
 
-  '@oxlint-tsgolint/darwin-x64@7.0.2004':
+  '@oxlint-tsgolint/darwin-x64@7.0.2005':
     optional: true
 
-  '@oxlint-tsgolint/linux-arm64@7.0.2004':
+  '@oxlint-tsgolint/linux-arm64@7.0.2005':
     optional: true
 
-  '@oxlint-tsgolint/linux-x64@7.0.2004':
+  '@oxlint-tsgolint/linux-x64@7.0.2005':
     optional: true
 
-  '@oxlint-tsgolint/win32-arm64@7.0.2004':
+  '@oxlint-tsgolint/win32-arm64@7.0.2005':
     optional: true
 
-  '@oxlint-tsgolint/win32-x64@7.0.2004':
+  '@oxlint-tsgolint/win32-x64@7.0.2005':
     optional: true
 
   '@oxlint/binding-android-arm-eabi@1.89.0':
@@ -7546,8 +7563,6 @@ snapshots:
 
   '@oxlint/binding-win32-x64-msvc@1.89.0':
     optional: true
-
-  '@oxlint/plugins@1.88.0': {}
 
   '@oxlint/plugins@1.89.0': {}
 
@@ -7662,6 +7677,29 @@ snapshots:
       '@radix-ui/react-roving-focus': 1.2.1(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@radix-ui/react-slot': 1.5.0(@types/react@19.3.0)(react@19.3.0)
       '@radix-ui/react-use-callback-ref': 1.1.5(@types/react@19.3.0)(react@19.3.0)
+      aria-hidden: 1.2.6
+      react: 19.3.0
+      react-dom: 19.3.0(react@19.3.0)
+      react-remove-scroll: 2.7.2(@types/react@19.3.0)(react@19.3.0)
+    optionalDependencies:
+      '@types/react': 19.3.0
+
+  '@radix-ui/react-popover@1.3.1(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
+    dependencies:
+      '@radix-ui/primitive': 1.2.0
+      '@radix-ui/react-compose-refs': 1.1.5(@types/react@19.3.0)(react@19.3.0)
+      '@radix-ui/react-context': 1.3.0(@types/react@19.3.0)(react@19.3.0)
+      '@radix-ui/react-dismissable-layer': 1.2.1(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      '@radix-ui/react-focus-guards': 1.2.0(@types/react@19.3.0)(react@19.3.0)
+      '@radix-ui/react-focus-scope': 1.3.1(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      '@radix-ui/react-id': 1.1.4(@types/react@19.3.0)(react@19.3.0)
+      '@radix-ui/react-popper': 1.4.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      '@radix-ui/react-portal': 1.2.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      '@radix-ui/react-presence': 1.1.11(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      '@radix-ui/react-primitive': 2.2.0(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      '@radix-ui/react-slot': 1.5.0(@types/react@19.3.0)(react@19.3.0)
+      '@radix-ui/react-use-controllable-state': 1.3.0(@types/react@19.3.0)(react@19.3.0)
+      '@radix-ui/react-use-layout-effect': 1.1.4(@types/react@19.3.0)(react@19.3.0)
       aria-hidden: 1.2.6
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
@@ -11263,16 +11301,16 @@ snapshots:
       '@oxfmt/binding-win32-ia32-msvc': 0.74.0
       '@oxfmt/binding-win32-x64-msvc': 0.74.0
 
-  oxlint-tsgolint@7.0.2004:
+  oxlint-tsgolint@7.0.2005:
     optionalDependencies:
-      '@oxlint-tsgolint/darwin-arm64': 7.0.2004
-      '@oxlint-tsgolint/darwin-x64': 7.0.2004
-      '@oxlint-tsgolint/linux-arm64': 7.0.2004
-      '@oxlint-tsgolint/linux-x64': 7.0.2004
-      '@oxlint-tsgolint/win32-arm64': 7.0.2004
-      '@oxlint-tsgolint/win32-x64': 7.0.2004
+      '@oxlint-tsgolint/darwin-arm64': 7.0.2005
+      '@oxlint-tsgolint/darwin-x64': 7.0.2005
+      '@oxlint-tsgolint/linux-arm64': 7.0.2005
+      '@oxlint-tsgolint/linux-x64': 7.0.2005
+      '@oxlint-tsgolint/win32-arm64': 7.0.2005
+      '@oxlint-tsgolint/win32-x64': 7.0.2005
 
-  oxlint@1.89.0(oxlint-tsgolint@7.0.2004):
+  oxlint@1.89.0(oxlint-tsgolint@7.0.2005):
     optionalDependencies:
       '@oxlint/binding-android-arm-eabi': 1.89.0
       '@oxlint/binding-android-arm64': 1.89.0
@@ -11293,7 +11331,7 @@ snapshots:
       '@oxlint/binding-win32-arm64-msvc': 1.89.0
       '@oxlint/binding-win32-ia32-msvc': 1.89.0
       '@oxlint/binding-win32-x64-msvc': 1.89.0
-      oxlint-tsgolint: 7.0.2004
+      oxlint-tsgolint: 7.0.2005
 
   p-limit@3.1.0:
     dependencies:
@@ -11367,7 +11405,7 @@ snapshots:
       path-data-parser: 0.1.0
       points-on-curve: 0.2.0
 
-  portless@0.15.8: {}
+  portless@0.15.12: {}
 
   postcss-value-parser@4.2.0: {}
 
