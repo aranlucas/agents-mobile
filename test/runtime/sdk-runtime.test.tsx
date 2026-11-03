@@ -89,6 +89,10 @@ it("uses the installed SDK for discovery, live conversation updates, authenticat
   expect(requests).toHaveBeenCalled();
 
   if (!client || !tree) throw new Error("SDK provider did not mount");
+  expect(client.getTool({ toolName: "show_product_results", agentId: "grocery" })).toMatchObject({
+    agentId: "grocery",
+    handler: expect.any(Function),
+  });
   const agent = client.getAgent("grocery");
 
   if (!agent) throw new Error("SDK discovery did not provide the grocery agent");
