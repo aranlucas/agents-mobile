@@ -5,18 +5,18 @@
 
 ## Scripts: native first
 
-Before adding a script file (`scripts/`, `bin/`, `tools/`, root `*.sh|*.py|*.mjs`) or a package script that runs one, take the first rung that works:
+Before adding a script file or a package script that runs one, use the first option that works:
 
-1. A flag or subcommand of a tool the repo already uses (`<tool> --help`).
-2. Declarative config for that tool (`app.config.js`, `metro.config.js`, `oxfmt.config.ts`, `pnpm-workspace.yaml`, `tsconfig.json`, `vitest.config.ts`).
+1. An existing tool's flag or subcommand.
+2. Declarative configuration.
 3. A maintained plugin for that tool.
 4. A one-line package.json script that calls a native command.
-5. A test in the existing runner (Vitest), for anything that asserts.
-6. A custom script, only for behavior specific to this repo. Its first comment names the native rung it couldn't use and why. It has a test in the existing runner, and the PR that adds it quotes that comment.
+5. A Vitest test, for assertions.
+6. A custom script for repository-specific behavior: its first comment names the native option that could not cover it and why. Cover it in Vitest and quote that comment in the PR.
 
 ## Code: libraries first
 
-Before hand-writing general-purpose code, use a well-maintained library: actively released, widely adopted, typed, and a fit for this stack. Reach for one already in the dependencies first. Write custom code for domain logic and for the glue no library covers. A PR that adds a dependency says why it was picked; a PR that hand-writes something a library covers names the library and why it didn't fit.
+Prefer existing dependencies, then actively maintained, widely adopted, typed libraries that fit this stack. Reserve custom code for domain logic and uncovered glue. In the PR, justify new dependencies or name the library rejected when writing an equivalent yourself.
 
 - Runtime validation → zod for agent configuration and tool payloads.
 - Secure token storage → expo-secure-store.
