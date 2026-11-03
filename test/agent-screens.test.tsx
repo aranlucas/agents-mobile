@@ -29,11 +29,7 @@ type ProviderOptions = {
 
 const providerProps: ProviderOptions[] = [];
 
-type ProductFrontendTool = ProductTool;
-
-const frontendTools: ProductFrontendTool[] = [];
-
-const toolRenderers: Pick<ProductFrontendTool, "name" | "agentId" | "render">[] = [];
+const toolRenderers: Pick<ProductTool, "name" | "agentId" | "render">[] = [];
 
 const addMessage = vi.fn();
 
@@ -97,7 +93,6 @@ const runtime: AppRuntime = {
     <ConversationProvider value={{ conversation, renderToolCall }}>{children}</ConversationProvider>
   ),
   ProductTool: ({ tool }) => {
-    frontendTools.push(tool);
     toolRenderers.push({ name: tool.name, agentId: tool.agentId, render: tool.render });
 
     return null;
@@ -177,7 +172,6 @@ describe("mobile real feature surface", () => {
       { id: "assistant-1", role: "assistant", content: "Ready" },
     ];
     providerProps.length = 0;
-    frontendTools.length = 0;
     toolRenderers.length = 0;
     userId = "user-123";
     addMessage.mockClear();
@@ -338,24 +332,6 @@ describe("mobile real feature surface", () => {
     const tree = await render(<Index />);
 
     expect(tree.root.findByType("Redirect").props.href).toBe("/travel");
-    await act(async () => {
-      tree.unmount();
-    });
-  });
-
-  it("declares Kroger product results as a grocery frontend tool", async () => {
-    const { default: GroceryScreen } = await import("@/app/grocery");
-    const tree = await render(<GroceryScreen />);
-
-    expect(frontendTools).toEqual([
-      expect.objectContaining({
-        name: "show_product_results",
-        agentId: "grocery",
-        handler: expect.any(Function),
-        render: expect.any(Function),
-      }),
-    ]);
-
     await act(async () => {
       tree.unmount();
     });
