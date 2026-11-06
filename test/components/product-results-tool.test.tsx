@@ -26,8 +26,10 @@ describe("native product results frontend tool", () => {
     const tree = await render(
       <ProductResultsCard args={{ products: [{ upc: "123", name: "Milk", pickup }] }} />,
     );
+
     const labels = tree.root.findAllByType("Text").map((node) => node.props.children);
     expect(labels).toContain(expected);
+
     if (pickup === undefined) expect(labels).not.toContain("Pickup available");
     await act(async () => {
       tree.unmount();

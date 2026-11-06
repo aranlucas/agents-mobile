@@ -112,6 +112,7 @@ function Icon() {
 it("discards account-owned history and drafts, preserving same-account renders", async () => {
   function Client({ children }: { children: ReactNode }) {
     const [history, setHistory] = useState("");
+
     return (
       <>
         <button onClick={() => setHistory("private history")}>{history}</button>
@@ -119,10 +120,13 @@ it("discards account-owned history and drafts, preserving same-account renders",
       </>
     );
   }
+
   function Draft() {
     const [draft, setDraft] = useState("");
+
     return <input value={draft} onChange={() => setDraft("private draft")} />;
   }
+
   const screen = (userId: string | null) => (
     <AccountAgentProvider
       userId={userId}
@@ -134,6 +138,7 @@ it("discards account-owned history and drafts, preserving same-account renders",
       <Draft />
     </AccountAgentProvider>
   );
+
   let tree!: ReturnType<typeof create>;
   await act(async () => {
     tree = create(screen("user-a"));
@@ -147,6 +152,7 @@ it("discards account-owned history and drafts, preserving same-account renders",
   });
   expect(tree.root.findByType("button").props.children).toBe("private history");
   expect(tree.root.findByType("input").props.value).toBe("private draft");
+
   for (const account of ["user-b", null, "user-a"]) {
     await act(async () => {
       tree.update(screen(account));
@@ -158,6 +164,7 @@ it("discards account-owned history and drafts, preserving same-account renders",
       tree.root.findByType("input").props.onChange();
     });
   }
+
   await act(async () => {
     tree.unmount();
   });

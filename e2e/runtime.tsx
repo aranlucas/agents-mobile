@@ -19,6 +19,7 @@ function FixtureConversation({ children, agentId }: { children: ReactNode; agent
   const [messages, setMessages] = useState<Conversation["messages"]>([]);
   const [state, setState] = useState({});
   const lastMessage = useRef("");
+
   const conversation: Conversation = {
     messages,
     state,
@@ -41,6 +42,7 @@ function FixtureConversation({ children, agentId }: { children: ReactNode; agent
       ]);
     },
   };
+
   return (
     <ConversationProvider value={{ conversation, renderToolCall: () => null }}>
       {children}
@@ -50,6 +52,7 @@ function FixtureConversation({ children, agentId }: { children: ReactNode; agent
 
 function RuntimeProvider({ children }: { children: ReactNode }) {
   const attempts = useRef(0);
+
   return (
     <AppRuntimeProvider
       value={{
@@ -57,7 +60,9 @@ function RuntimeProvider({ children }: { children: ReactNode }) {
           userId: "ci-fixture",
           getToken: async () => {
             attempts.current += 1;
+
             if (attempts.current === 1) throw new Error("Controlled offline token refresh");
+
             return "fixture-token";
           },
         },

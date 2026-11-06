@@ -40,3 +40,7 @@ The native fixture replaces only production runtime bindings through an explicit
 Independent review confirmed the four findings and rejected anonymous-auth behavior as a bug. Final implementation review found no further concrete runtime defects and verified the published e2e APIs and fixture isolation. It identified a coverage boundary: the account regression tests provider/state reset through the extracted boundary, while production Clerk wiring is statically reviewed, not exercised with real Clerk. Baseline failure proof covers pickup truthfulness, reference targets and abandoned sends; it does not claim a baseline Clerk integration reproduction. The abandoned-send regression also asserts no header mutation.
 
 PR: https://github.com/aranlucas/agents-mobile/pull/69. CI pending (production APK, native journey, check/test and baseline proofs). No local tests/builds run. Hooks were disabled for commit/push to avoid local dependency mutation/validation; installation used --ignore-scripts after inspecting lifecycle scripts.
+
+### CI follow-up
+
+At `f22d223`, [baseline regression proof](https://github.com/aranlucas/agents-mobile/actions/runs/42300145870/job/128175503200) passed: the new behavior assertions fail against the defective implementations. The main CI job stopped on blank-line lint errors before running tests. Corrected those formatting errors without changing behavior or assertions; full check/test and native build/journey results remain pending.

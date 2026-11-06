@@ -150,6 +150,7 @@ function AgentScreenContent<TState extends AgentState>({
         copilotkit: agent,
         getToken: async () => {
           const token = await getToken();
+
           if (!mounted.current) throw new Error("Conversation closed during authentication");
 
           return token;
