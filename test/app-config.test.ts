@@ -1,23 +1,18 @@
 import { z } from "zod";
 import assert from "node:assert/strict";
-import { spawnSync } from "node:child_process";
+import { getConfig } from "expo/config";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { describe, it } from "vitest";
+import { afterEach, describe, it, vi } from "vitest";
 
 const projectDir = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 function readExpoConfig(extraEnv: Record<string, string>) {
-  const result = spawnSync("npx", ["expo", "config", "--json"], {
-    cwd: projectDir,
-    encoding: "utf8",
-    env: {
-      ...process.env,
-      ...extraEnv,
-    },
-  });
+  vi.stubEnv("EAS_BUILD_PLATFORM", "");
 
-  assert.equal(result.status, 0, result.stderr ?? result.stdout);
+  for (const [key, value] of Object.entries(extraEnv)) vi.stubEnv(key, value);
+
+  const { exp } = getConfig(projectDir);
 
   return z
     .object({
@@ -29,8 +24,10 @@ function readExpoConfig(extraEnv: Record<string, string>) {
         .optional(),
       web: z.object({ output: z.string().optional() }).optional(),
     })
-    .parse(JSON.parse(result.stdout));
+    .parse(exp);
 }
+
+afterEach(() => vi.unstubAllEnvs());
 
 describe("Expo app config", () => {
   it("embeds Clerk and CopilotKit runtime values from EAS environment variables", () => {

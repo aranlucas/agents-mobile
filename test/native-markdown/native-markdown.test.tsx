@@ -196,18 +196,23 @@ describe("NativeMarkdown rendering rules", () => {
     expect(code.props.style[1]).toEqual({ fontFamily: "monospace" });
   });
 
-  it("converts ordered-list starts to numbers before adding the item index", () => {
+  it.each([false, true])("preserves ordered numbering with outer bullet list: %s", (nested) => {
     const item = astNode("list_item", "item", "");
     item.index = 0;
     item.markup = ".";
     const orderedList = astNode("ordered_list", "ordered", "", [], { start: "2" });
 
-    const rendered = markdownRules.list_item?.(item, ["Second"], [orderedList], {
-      _VIEW_SAFE_list_item: {},
-      _VIEW_SAFE_ordered_list_content: {},
-      list_item: {},
-      ordered_list_icon: {},
-    });
+    const rendered = markdownRules.list_item?.(
+      item,
+      ["Second"],
+      nested ? [orderedList, astNode("bullet_list", "outer", "")] : [orderedList],
+      {
+        _VIEW_SAFE_list_item: {},
+        _VIEW_SAFE_ordered_list_content: {},
+        list_item: {},
+        ordered_list_icon: {},
+      },
+    );
 
     const result = elementWithProps(rendered, z.object({ children: z.array(reactElement) }));
 

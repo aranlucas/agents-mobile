@@ -11,7 +11,6 @@ export type LayoutBindings = {
   wrap(component: ComponentType): ComponentType;
 };
 
-/** Both platform entry points share the same provider/navigation ordering. */
 export function createRootLayout(bindings: LayoutBindings, tokenCache?: TokenCache) {
   const { StatusBar } = bindings;
 

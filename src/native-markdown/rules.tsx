@@ -111,7 +111,11 @@ const listItemRule: RenderFunction = (
   const refStyle = { ...inherited, ...listItemStyle };
   const inheritedTextStyle = pickTextStyle(refStyle);
 
-  if (hasParent(parentNodes, "bullet_list")) {
+  const list = parentNodes.find(
+    (parent) => parent.type === "bullet_list" || parent.type === "ordered_list",
+  );
+
+  if (list?.type === "bullet_list") {
     return (
       <View key={node.key} style={styles._VIEW_SAFE_list_item}>
         <Text accessible={false} style={[inheritedTextStyle, styles.bullet_list_icon]}>
@@ -122,7 +126,7 @@ const listItemRule: RenderFunction = (
     );
   }
 
-  const orderedList = parentNodes.find((parent) => parent.type === "ordered_list");
+  const orderedList = list?.type === "ordered_list" ? list : undefined;
 
   if (orderedList) {
     const listItemNumber = Number(orderedList.attributes?.start ?? 1) + node.index;
@@ -144,10 +148,6 @@ const listItemRule: RenderFunction = (
     </View>
   );
 };
-
-function hasParent(parentNodes: ASTNode[], type: string): boolean {
-  return parentNodes.some((parent) => parent.type === type);
-}
 
 function pickTextStyle(style: TextStyle & ViewStyle): TextStyle {
   return Object.fromEntries(

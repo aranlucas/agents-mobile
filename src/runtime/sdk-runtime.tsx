@@ -5,7 +5,7 @@ import {
   useRenderToolCall,
 } from "@copilotkit/react-native/headless";
 import type { ReactNode } from "react";
-import type { AgentId } from "@/utils/agent-config";
+import type { AgentId } from "@/types";
 import { ConversationProvider, type ProductTool } from "./app-runtime";
 import { adaptConversation } from "./sdk-conversation";
 

@@ -1,33 +1,27 @@
 import { useNavigation, type TabIconProps } from "@/runtime/navigation";
 import { useColorScheme } from "react-native";
 
-function TravelIcon({ color, size }: TabIconProps) {
+import { AGENT_ORDER, type AgentId } from "@/types";
+
+const titles: Record<AgentId, string> = {
+  travel: "Travel",
+  grocery: "Grocery",
+  fitness: "Fitness",
+  wellness: "Wellness",
+};
+
+function AgentIcon({ agentId, color, size }: TabIconProps & { agentId: AgentId }) {
   const { icons } = useNavigation();
-  const Icon = icons.travel;
+  const Icon = icons[agentId];
 
   return <Icon color={String(color)} size={size} />;
 }
 
-function GroceryIcon({ color, size }: TabIconProps) {
-  const { icons } = useNavigation();
-  const Icon = icons.grocery;
-
-  return <Icon color={String(color)} size={size} />;
-}
-
-function FitnessIcon({ color, size }: TabIconProps) {
-  const { icons } = useNavigation();
-  const Icon = icons.fitness;
-
-  return <Icon color={String(color)} size={size} />;
-}
-
-function WellnessIcon({ color, size }: TabIconProps) {
-  const { icons } = useNavigation();
-  const Icon = icons.wellness;
-
-  return <Icon color={String(color)} size={size} />;
-}
+const tabOptions = AGENT_ORDER.map((id) => ({
+  id,
+  title: titles[id],
+  tabBarIcon: (props: TabIconProps) => <AgentIcon agentId={id} {...props} />,
+}));
 
 export function AppTabs() {
   const { Tabs } = useNavigation();
@@ -45,10 +39,9 @@ export function AppTabs() {
         tabBarInactiveTintColor: isDark ? "#666" : "#999",
       }}
     >
-      <Tabs.Screen name="travel" options={{ title: "Travel", tabBarIcon: TravelIcon }} />
-      <Tabs.Screen name="grocery" options={{ title: "Grocery", tabBarIcon: GroceryIcon }} />
-      <Tabs.Screen name="fitness" options={{ title: "Fitness", tabBarIcon: FitnessIcon }} />
-      <Tabs.Screen name="wellness" options={{ title: "Wellness", tabBarIcon: WellnessIcon }} />
+      {tabOptions.map(({ id, title, tabBarIcon }) => (
+        <Tabs.Screen key={id} name={id} options={{ title, tabBarIcon }} />
+      ))}
       <Tabs.Screen name="index" options={{ href: null }} />
     </Tabs>
   );

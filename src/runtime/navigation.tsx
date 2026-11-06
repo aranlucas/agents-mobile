@@ -1,5 +1,6 @@
 import { createContext, useContext, type ComponentType, type ReactNode } from "react";
 import type { ColorValue } from "react-native";
+import type { AgentId } from "@/types";
 
 export type TabIconProps = { color: ColorValue; size: number };
 
@@ -19,10 +20,7 @@ export type Navigation = {
     };
   }> & { Screen: ComponentType<ScreenProps> };
   Redirect: ComponentType<{ href: "/travel" }>;
-  icons: Record<
-    "travel" | "grocery" | "fitness" | "wellness",
-    ComponentType<{ color: string; size: number }>
-  >;
+  icons: Record<AgentId, ComponentType<{ color: string; size: number }>>;
 };
 
 const NavigationContext = createContext<Navigation | null>(null);

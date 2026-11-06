@@ -1,10 +1,7 @@
+import { productResultsSchema } from "@/types/product-results";
 import { act, create, type ReactTestRenderer } from "react-test-renderer";
 import { describe, expect, it } from "vitest";
-import {
-  krogerProductImageUrl,
-  ProductResultsCard,
-  productResultsSchema,
-} from "@/components/product-results-tool";
+import { krogerProductImageUrl, ProductResultsCard } from "@/components/product-results-tool";
 
 Object.defineProperty(globalThis, "IS_REACT_ACT_ENVIRONMENT", {
   configurable: true,
