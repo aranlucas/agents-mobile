@@ -46,3 +46,15 @@ updates `package.json` or `pnpm-lock.yaml`, the push stops so you can review and
 commit both files, then push again. Existing staged or unstaged dependency edits
 are left untouched; commit or stash them before pushing. Network or resolver
 failures also block the push.
+
+## Reliability audit and native regression coverage
+
+See [the audit](docs/reliability-audit.md) for scope, findings and evidence. CI runs
+checks, Vitest regressions, baseline failure proofs, the production Android build,
+and a deterministic native journey using `e2e@0.23.0` with `@e2e-dev/mobile@0.12.6`.
+The native journey builds a separate `dev.agents.mobile.audit` APK with
+`AUDIT_E2E=1`; that build substitutes controlled runtime ports for Clerk and the
+remote gateway. It verifies draft recovery, response/summary rendering and tab
+isolation without model calls or credentials. The fixture does not verify real
+Clerk or gateway interoperability. Failure reports/traces/recordings are uploaded
+as `native-e2e-evidence`. Run tests and builds in CI for this audit.

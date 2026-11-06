@@ -51,9 +51,13 @@ function ProductCard({ product }: { product: Product }) {
             <Text style={styles.regularPrice}>${product.regularPrice?.toFixed(2)}</Text>
           ) : null}
         </View>
-        <View style={[styles.badge, product.pickup === false && styles.badgeMuted]}>
-          <Text style={[styles.badgeText, product.pickup === false && styles.badgeTextMuted]}>
-            {product.pickup === false ? "Pickup unavailable" : "Pickup available"}
+        <View style={[styles.badge, product.pickup !== true && styles.badgeMuted]}>
+          <Text style={[styles.badgeText, product.pickup !== true && styles.badgeTextMuted]}>
+            {product.pickup === undefined
+              ? "Pickup availability unknown"
+              : product.pickup
+                ? "Pickup available"
+                : "Pickup unavailable"}
           </Text>
         </View>
       </View>

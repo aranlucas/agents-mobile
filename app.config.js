@@ -22,6 +22,12 @@ module.exports = ({ config }) => {
 
   return {
     ...baseConfig,
+    name: process.env.AUDIT_E2E === "1" ? "Agents Audit" : baseConfig.name,
+    android: {
+      ...baseConfig.android,
+      package:
+        process.env.AUDIT_E2E === "1" ? "dev.agents.mobile.audit" : baseConfig.android?.package,
+    },
     web: {
       ...baseConfig.web,
       output: shouldUseStaticWebOutputForNativeBuild() ? "static" : baseConfig.web?.output,

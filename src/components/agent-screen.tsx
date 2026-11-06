@@ -1,6 +1,6 @@
 import { z } from "zod";
 import type { ReactNode } from "react";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -115,6 +115,14 @@ function AgentScreenContent<TState extends AgentState>({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [sendError, setSendError] = useState<string>();
   const submitting = useRef(false);
+  const mounted = useRef(true);
+  useEffect(() => {
+    mounted.current = true;
+
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
   const scrollRef = useRef<ScrollViewInstance>(null);
 
   const { session } = useAppRuntime();
@@ -140,9 +148,17 @@ function AgentScreenContent<TState extends AgentState>({
     try {
       await runWithCurrentClerkToken({
         copilotkit: agent,
-        getToken,
+        getToken: async () => {
+          const token = await getToken();
+
+          if (!mounted.current) throw new Error("Conversation closed during authentication");
+
+          return token;
+        },
         userId,
         run: () => {
+          if (!mounted.current) return Promise.resolve();
+
           agent.addMessage({
             id: `user_${Date.now()}_${Math.random().toString(36).slice(2)}`,
             role: "user",
@@ -243,6 +259,7 @@ function AgentScreenContent<TState extends AgentState>({
             style={styles.input}
             value={input}
             onChangeText={setInput}
+            accessibilityLabel="Message"
             placeholder={config.placeholder}
             placeholderTextColor="#777"
             onSubmitEditing={onSend}

@@ -40,3 +40,29 @@ jobs:
 
       - name: Test
         run: pnpm test
+
+  regression-proof:
+    name: Confirm pre-fix regressions
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3.1.2
+        with:
+          cache: true
+      - name: Restore only defective implementations from audited baseline
+        run: git checkout 666871bb96ab46c8b124b29d4647f23947350d46 -- src/components/agent-screen.tsx src/components/product-results-tool.tsx src/native-markdown/native-markdown.tsx
+      - name: Require behavior assertions to fail on baseline
+        run: |
+          if pnpm exec vitest run test/agent-screens.test.tsx test/components/product-results-tool.test.tsx test/native-markdown/native-markdown.test.tsx -t 'reports pickup fact|resolves document-wide|does not dispatch a send' --reporter=json --outputFile=baseline-regressions.json; then
+            echo 'Expected baseline regressions to fail'
+            exit 1
+          fi
+          jq -e '[.testResults[].assertionResults[] | select(.status == "failed") | .fullName] | (any(contains("reports pickup fact")) and any(contains("resolves document-wide")) and any(contains("does not dispatch a send")))' baseline-regressions.json
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: ${{ !cancelled() }}
+        with:
+          name: pre-fix-regressions
+          path: baseline-regressions.json

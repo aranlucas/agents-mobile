@@ -37,3 +37,15 @@ export function AppProviders({
     </AuthProvider>
   );
 }
+
+/** Remount the SDK client and local drafts together when the account changes. */
+export function AccountAgentProvider({
+  userId,
+  Provider,
+  ...props
+}: React.ComponentProps<ProviderBindings["AgentProvider"]> & {
+  userId: string | null | undefined;
+  Provider: ProviderBindings["AgentProvider"];
+}) {
+  return <Provider key={userId ?? "anonymous"} {...props} />;
+}
