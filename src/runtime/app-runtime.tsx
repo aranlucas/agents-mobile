@@ -1,7 +1,7 @@
 import { createContext, useContext, type ReactNode, type ComponentType } from "react";
 import type { ToolCall, useFrontendTool, useAgent } from "@copilotkit/react-native/headless";
-import type { ProductResults } from "@/components/product-results-tool";
-import type { AgentId } from "@/utils/agent-config";
+import type { ProductResults } from "@/types/product-results";
+import type { AgentId } from "@/types";
 
 export type Session = {
   userId: string | null | undefined;

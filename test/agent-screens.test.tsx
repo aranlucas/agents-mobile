@@ -11,7 +11,7 @@ import { createRootLayout, createTokenCache, type LayoutBindings } from "@/runti
 import type { TripState, GroceryState, FitnessState, WellnessState } from "@/types";
 import { ToolCallStatus } from "@copilotkit/react-native/headless";
 
-import { productResultsSchema, type ProductResults } from "@/components/product-results-tool";
+import { productResultsSchema, type ProductResults } from "@/types/product-results";
 import type { ComponentType, ReactNode } from "react";
 import { createElement } from "react";
 import { act, create, type ReactTestRenderer } from "react-test-renderer";

@@ -6,7 +6,6 @@ export function randomUUID() {
   return expoRandomUUID();
 }
 
-// Preserve an existing platform crypto object and its methods.
 if (!globalThis.crypto) {
   Object.defineProperty(globalThis, "crypto", {
     value: { getRandomValues, randomUUID },

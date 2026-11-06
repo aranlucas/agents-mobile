@@ -2,8 +2,6 @@ import { resolve } from "node:path";
 import { defineConfig } from "vitest/config";
 import { transformWithOxc } from "vite";
 
-// Pure-logic unit tests only. `react-native` is aliased to a small Node stub so
-// modules that import `StyleSheet`/`Platform` can run outside the RN runtime.
 export default defineConfig({
   plugins: [
     {

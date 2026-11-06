@@ -9,7 +9,6 @@ const config: AgentRuntimeConfig = {
   copilotKitRuntimeUrl: z.string().optional().catch(undefined).parse(extra.copilotKitRuntimeUrl),
 };
 
-/** Returns the CopilotKit runtime base URL for use with CopilotKitProvider. */
 export function getCopilotKitRuntimeUrl(): string {
   const runtimeUrl = getCopilotKitRuntimeBaseUrl(config, Platform.OS);
 
@@ -19,5 +18,3 @@ export function getCopilotKitRuntimeUrl(): string {
 
   return runtimeUrl;
 }
-
-export type { AgentId } from "@/types";

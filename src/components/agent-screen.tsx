@@ -18,7 +18,7 @@ import { useAppRuntime, useConversation } from "@/runtime/app-runtime";
 import type { ToolCall, useAgent } from "@copilotkit/react-native/headless";
 import { NativeMarkdown, type NativeMarkdownStyle } from "@/native-markdown";
 import type { FitnessState, GroceryState, TripState, WellnessState } from "@/types";
-import type { AgentId } from "@/utils/agent-config";
+import type { AgentId } from "@/types";
 import { runWithCurrentClerkToken } from "@/utils/copilotkit-auth";
 
 type AgentState = TripState | GroceryState | FitnessState | WellnessState;

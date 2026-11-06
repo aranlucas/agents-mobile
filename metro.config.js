@@ -11,14 +11,8 @@ const config = getDefaultConfig(__dirname);
 // crashes on promisify(crypto.verify).
 const STUB_EVERYWHERE = new Set(["@segment/analytics-node"]);
 
-// Node builtins stay real on web (static SSR resolves them to Node itself).
-const STUB_NATIVE_ONLY = new Set([
-  "node:buffer",
-  "node:crypto",
-  "node:events",
-  "node:stream",
-  "node:util",
-]);
+// These native-only stubs leave web SSR builtins available to Node.
+const STUB_NATIVE_ONLY = new Set(["node:buffer", "node:events", "node:stream", "node:util"]);
 
 const innerResolveRequest = config.resolver?.resolveRequest;
 
