@@ -17,6 +17,10 @@ const STUB_NATIVE_ONLY = new Set(["node:buffer", "node:events", "node:stream", "
 const innerResolveRequest = config.resolver?.resolveRequest;
 
 config.resolver.resolveRequest = (context, moduleName, platform) => {
+  if (process.env.AUDIT_E2E === "1" && moduleName === "@/runtime/production") {
+    return { type: "sourceFile", filePath: path.resolve(__dirname, "e2e/runtime.tsx") };
+  }
+
   if (moduleName === "crypto" || moduleName === "node:crypto") {
     return {
       type: "sourceFile",

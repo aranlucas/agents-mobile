@@ -4,9 +4,10 @@ import Constants from "expo-constants";
 import { StatusBar } from "expo-status-bar";
 import { Redirect, Tabs } from "expo-router";
 import { Dumbbell, HeartPulse, Plane, ShoppingCart } from "lucide-react-native";
-import type { ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import { getCopilotKitRuntimeUrl } from "@/utils/agent-config";
 import { Sentry } from "@/utils/sentry";
+import { AccountAgentProvider } from "@/components/app-providers";
 import { AppRuntimeProvider } from "./app-runtime";
 import { SdkConversationProvider, SdkProductTool } from "./sdk-runtime";
 import type { LayoutBindings } from "./root-layout";
@@ -27,10 +28,23 @@ function RuntimeProvider({ children }: { children: ReactNode }) {
   );
 }
 
+function SessionAgentProvider({
+  children,
+  ...props
+}: ComponentProps<LayoutBindings["providers"]["AgentProvider"]>) {
+  const { userId } = useAuth();
+
+  return (
+    <AccountAgentProvider userId={userId} Provider={CopilotKitProvider} {...props}>
+      {children}
+    </AccountAgentProvider>
+  );
+}
+
 export const productionBindings: LayoutBindings = {
   providers: {
     AuthProvider: ClerkProvider,
-    AgentProvider: CopilotKitProvider,
+    AgentProvider: SessionAgentProvider,
     RuntimeProvider,
     publishableKey:
       Constants.expoConfig?.extra?.clerkPublishableKey ??

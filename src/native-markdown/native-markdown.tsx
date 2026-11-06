@@ -80,7 +80,10 @@ export const NativeMarkdown = memo(function NativeMarkdown({
 });
 
 export function prepareMarkdownBlocks(markdown: string, isStreaming = false): string[] {
-  const blocks = splitMarkdownBlocks(markdown);
+  // Reference definitions belong to the entire document, including definitions
+  // nested in lists/quotes. Keep their parser context together. False positives
+  // (e.g. code containing ]:) only opt out of block memoization.
+  const blocks = markdown.includes("]:") ? [markdown] : splitMarkdownBlocks(markdown);
 
   if (!isStreaming || blocks.length === 0) return blocks;
 

@@ -2,7 +2,7 @@ import { z } from "zod";
 import type { ReactElement, ReactNode } from "react";
 import { isValidElement } from "react";
 import type { ASTNode } from "react-native-markdown-display";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { act, create, type ReactTestRenderer } from "react-test-renderer";
 import { NativeMarkdown, prepareMarkdownBlocks } from "@/native-markdown/native-markdown";
@@ -318,3 +318,25 @@ const buildTable = (text: string, prefix: string) => {
 
   return { cell, parents: [row, body, tableNode] };
 };
+
+// CommonMark reference definitions resolve across paragraphs and container blocks.
+it.each([
+  "[Docs][guide]\n\n[guide]: https://example.com/guide",
+  "[Docs][]\n\n> [Docs]: https://example.com/guide",
+  "[guide]\n\n- [guide]: https://example.com/guide",
+])("resolves document-wide reference targets: %s", async (markdown) => {
+  const onLinkPress = vi.fn(() => false);
+  let tree!: ReactTestRenderer;
+  await act(async () => {
+    tree = create(<NativeMarkdown onLinkPress={onLinkPress}>{markdown}</NativeMarkdown>);
+  });
+  const link = tree.root.findAllByType("Text").find((node) => node.props.onPress);
+  expect(link).toBeDefined();
+  await act(async () => {
+    link!.props.onPress();
+  });
+  expect(onLinkPress).toHaveBeenCalledWith("https://example.com/guide");
+  await act(async () => {
+    tree.unmount();
+  });
+});

@@ -18,6 +18,22 @@ async function render(element: React.ReactElement) {
 }
 
 describe("native product results frontend tool", () => {
+  it.each([
+    [undefined, "Pickup availability unknown"],
+    [true, "Pickup available"],
+    [false, "Pickup unavailable"],
+  ])("reports pickup fact %s truthfully", async (pickup, expected) => {
+    const tree = await render(
+      <ProductResultsCard args={{ products: [{ upc: "123", name: "Milk", pickup }] }} />,
+    );
+    const labels = tree.root.findAllByType("Text").map((node) => node.props.children);
+    expect(labels).toContain(expected);
+    if (pickup === undefined) expect(labels).not.toContain("Pickup available");
+    await act(async () => {
+      tree.unmount();
+    });
+  });
+
   it("accepts compact exact product facts and derives the Kroger image from UPC", () => {
     const input = {
       title: "Milk matches",

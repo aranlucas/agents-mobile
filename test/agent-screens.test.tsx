@@ -275,6 +275,35 @@ describe("mobile real feature surface", () => {
     });
   });
 
+  it("does not dispatch a send after its screen unmounts during auth refresh", async () => {
+    let resolve!: (token: string) => void;
+    getToken.mockReturnValueOnce(
+      new Promise((done) => {
+        resolve = done;
+      }),
+    );
+    const { default: Screen } = await import("@/app/travel");
+    const tree = await render(<Screen />);
+    const input = tree.root.findByType("TextInput");
+    await act(async () => {
+      input.props.onChangeText("Do not send after leaving");
+    });
+    let pending!: Promise<void>;
+    await act(async () => {
+      pending = input.props.onSubmitEditing();
+    });
+    await act(async () => {
+      tree.unmount();
+    });
+    await act(async () => {
+      resolve("session-jwt");
+      await pending;
+    });
+    expect(setHeaders).not.toHaveBeenCalled();
+    expect(addMessage).not.toHaveBeenCalled();
+    expect(runAgent).not.toHaveBeenCalled();
+  });
+
   it("keeps an unsent draft and displays recovery when token refresh rejects", async () => {
     getToken.mockRejectedValueOnce(new Error("Offline"));
     const { default: Screen } = await import("@/app/travel");

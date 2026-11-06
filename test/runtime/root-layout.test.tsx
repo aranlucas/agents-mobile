@@ -1,5 +1,6 @@
 import type { TokenCache } from "@clerk/expo";
-import type { ReactNode } from "react";
+import { AccountAgentProvider } from "@/components/app-providers";
+import { useState, type ReactNode } from "react";
 import { act, create } from "react-test-renderer";
 import { expect, it, vi } from "vitest";
 import { createRootLayout, createTokenCache, type LayoutBindings } from "@/runtime/root-layout";
@@ -106,3 +107,58 @@ it("preserves native secure token storage and leaves web cache to Clerk", async 
 function Icon() {
   return null;
 }
+
+// A provider owns conversation history; account transitions must discard it.
+it("discards account-owned history and drafts, preserving same-account renders", async () => {
+  function Client({ children }: { children: ReactNode }) {
+    const [history, setHistory] = useState("");
+    return (
+      <>
+        <button onClick={() => setHistory("private history")}>{history}</button>
+        {children}
+      </>
+    );
+  }
+  function Draft() {
+    const [draft, setDraft] = useState("");
+    return <input value={draft} onChange={() => setDraft("private draft")} />;
+  }
+  const screen = (userId: string | null) => (
+    <AccountAgentProvider
+      userId={userId}
+      Provider={Client}
+      runtimeUrl="https://example.test"
+      defaultThrottleMs={0}
+      useSingleEndpoint={false}
+    >
+      <Draft />
+    </AccountAgentProvider>
+  );
+  let tree!: ReturnType<typeof create>;
+  await act(async () => {
+    tree = create(screen("user-a"));
+  });
+  await act(async () => {
+    tree.root.findByType("button").props.onClick();
+    tree.root.findByType("input").props.onChange();
+  });
+  await act(async () => {
+    tree.update(screen("user-a"));
+  });
+  expect(tree.root.findByType("button").props.children).toBe("private history");
+  expect(tree.root.findByType("input").props.value).toBe("private draft");
+  for (const account of ["user-b", null, "user-a"]) {
+    await act(async () => {
+      tree.update(screen(account));
+    });
+    expect(tree.root.findByType("button").props.children).toBe("");
+    expect(tree.root.findByType("input").props.value).toBe("");
+    await act(async () => {
+      tree.root.findByType("button").props.onClick();
+      tree.root.findByType("input").props.onChange();
+    });
+  }
+  await act(async () => {
+    tree.unmount();
+  });
+});
